@@ -31,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         setupNavDrawer();
         setUpDrawer();
 
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
     }
@@ -43,7 +44,6 @@ public class BaseActivity extends AppCompatActivity {
         return id == R.id.action_settings ||
                 mDrawerToggle.onOptionsItemSelected(item) ||
                 super.onOptionsItemSelected(item);
-
     }
 
     @Override
@@ -75,9 +75,11 @@ public class BaseActivity extends AppCompatActivity {
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
                 new String[]{
                         getString(R.string.home),
-                        getString(R.string.find_trail)
-                        //getString(R.string.title_section2),
-                        //getString(R.string.title_section3)
+                        getString(R.string.find_trail),
+                        getString(R.string.map),
+                        getString(R.string.trail_admin),
+                        getString(R.string.profile),
+                        getString(R.string.settings)
                 }));
 
         //Manage here what happens after item clicked in the Navigation Drawer
@@ -93,33 +95,29 @@ public class BaseActivity extends AppCompatActivity {
                         Intent intent;
                         switch (position) {
                             case 0:
-
                                 intent = new Intent(BaseActivity.this, Home.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-
-
                                 break;
                             case 1:
-
                                 intent = new Intent(BaseActivity.this, FindTrail.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-
                                 break;
-//                            case 2:
-//
-//                                intent = new Intent(BaseActivity.this, Teste2.class);
-//                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-//
-//
-//                                break;
-//                            case 3:
-//
-//                                intent = new Intent(BaseActivity.this, Teste3.class);
-//                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-//
-//
-//                                break;
-
+                            case 2:
+                                intent = new Intent(BaseActivity.this, Map.class);
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                break;
+                            case 3:
+                                intent = new Intent(BaseActivity.this, TrailAdmin.class);
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                break;
+                            case 4:
+                                intent = new Intent(BaseActivity.this, Profile.class);
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                break;
+                            case 5:
+                                intent = new Intent(BaseActivity.this, Settings.class);
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                break;
                         }
                     }
                 }, 200);
@@ -133,6 +131,7 @@ public class BaseActivity extends AppCompatActivity {
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                assert getSupportActionBar() != null;
                 getSupportActionBar().setTitle(mActivityTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
@@ -140,6 +139,7 @@ public class BaseActivity extends AppCompatActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
+                assert getSupportActionBar() != null;
                 getSupportActionBar().setTitle(mActivityTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }

@@ -2,7 +2,6 @@ package com.singlecog.trailkeeper;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 
 public class FindTrail extends BaseActivity {
 
@@ -17,22 +16,9 @@ public class FindTrail extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_find_trail, menu);
+        // right now we won't show anything here, but we may add menu items
+        // to the individual layouts so we won't move this to the super class
+        //getMenuInflater().inflate(R.menu.menu_find_trail, menu);
         return true;
     }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 }

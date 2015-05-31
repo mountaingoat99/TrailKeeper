@@ -24,6 +24,38 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.singlecog.trailkeeper.Home" />
         </activity>
+        <activity
+            android:name=".Map"
+            android:label="@string/title_activity_map"
+            android:parentActivityName=".Home" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.singlecog.trailkeeper.Home" />
+        </activity>
+        <activity
+            android:name=".TrailAdmin"
+            android:label="@string/title_activity_trail_admin"
+            android:parentActivityName=".Home" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.singlecog.trailkeeper.Home" />
+        </activity>
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".Home" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.singlecog.trailkeeper.Home" />
+        </activity>
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".Home" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.singlecog.trailkeeper.Home" />
+        </activity>
     </application>
 
 </manifest>
