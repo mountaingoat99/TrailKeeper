@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".FindTrail"
+            android:label="@string/title_activity_find_trail"
+            android:parentActivityName=".Home" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.singlecog.trailkeeper.Home" />
+        </activity>
     </application>
 
 </manifest>
