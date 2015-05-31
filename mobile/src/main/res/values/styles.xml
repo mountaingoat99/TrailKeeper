@@ -1,8 +1,57 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+
+    <!--<item name="android:windowBackground">@color/background</item>-->
+
+    <!--&lt;!&ndash;Action Bar&ndash;&gt;-->
+    <!--<item name="android:actionBarStyle">@style/MyActionBarTheme</item>-->
+    <!--<item name="actionBarStyle">@style/MyActionBarTheme</item>-->
+    <!--<item name="android:popupMenuStyle">@style/MyPopupMenu</item>-->
+    <!--<item name="popupMenuStyle">@style/MyPopupMenu</item>-->
+
+    <!--&lt;!&ndash; Edit Text Items &ndash;&gt;-->
+    <!--<item name="colorControlNormal">@color/accent</item>-->
+    <!--<item name="colorControlActivated">@color/primary_dark</item>-->
+    <!--<item name="colorControlHighlight">@color/primary_dark</item>-->
+
+    <!--&lt;!&ndash; Menu Item &ndash;&gt;-->
+    <!--<item name="android:itemTextAppearance">@style/TextAppearance</item>-->
+
+    <!--</style>-->
+
+    <!--&lt;!&ndash;Action Bar&ndash;&gt;-->
+    <!--<style name="MyActionBarTheme" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">-->
+    <!--<item name="android:background">@color/primary</item>-->
+    <!--<item name="background">@color/primary</item>-->
+    <!--</style>-->
+
+    <!--<style name="MyPopupMenu" parent="@style/Widget.AppCompat.Light.PopupMenu">-->
+    <!--<item name="android:popupBackground">@color/primary</item>-->
+    <!--</style>-->
+
+    <!--&lt;!&ndash; dialog with spinners and radio buttons &ndash;&gt;-->
+    <!--<style name="Theme.DialogTheme" parent="Theme.AppCompat.Dialog">-->
+
+    <!--&lt;!&ndash; Edit Text Items &ndash;&gt;-->
+    <!--<item name="colorControlNormal">@color/accent</item>-->
+    <!--<item name="colorControlActivated">@color/primary_dark</item>-->
+    <!--<item name="colorControlHighlight">@color/primary_dark</item>-->
+
+    <!--</style>-->
+
+    <!--<style name="TextAppearance">-->
+    <!--<item name="android:textColor">@android:color/white</item>-->
+    <!--</style>-->
+
+    <!--&lt;!&ndash; date picker &ndash;&gt;-->
+    <!--<style name="Theme.SelectDate" parent="@style/Theme.AppCompat.Dialog">-->
+    <!--<item name="android:editTextStyle">@style/Widget.EditText.Black</item>-->
+    <!--</style>-->
+
+    <!--<style name="Widget.EditText.Black" parent="@android:style/Widget.EditText">-->
+    <!--<item name="android:textColor">@color/primary_text</item>-->
+    <!--</style>-->
 
 </resources>
