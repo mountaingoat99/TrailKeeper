@@ -1,7 +1,6 @@
-package Adapters;
+package RecyclerAdapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,19 +12,18 @@ import com.singlecog.trailkeeper.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.DemoModel;
+import models.ModelOpenClosedTrails;
 
 /**
  * Created by Jeremey on 6/2/2015.
  */
-public class RecyclerViewDemoAdapter
-        extends RecyclerView.Adapter
-        <RecyclerViewDemoAdapter.ListItemViewHolder> {
+public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
+        <RecyclerViewTrailOpenClosedAdapter.ListItemViewHolder> {
 
-    private List<DemoModel> items;
+    private List<ModelOpenClosedTrails> items;
     private SparseBooleanArray selectedItems;
 
-    public RecyclerViewDemoAdapter(List<DemoModel> modelData) {
+    public RecyclerViewTrailOpenClosedAdapter(List<ModelOpenClosedTrails> modelData) {
         if (modelData == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
@@ -40,7 +38,7 @@ public class RecyclerViewDemoAdapter
      * @param newModelData The item to add to the data set.
      * @param position The index of the item to remove.
      */
-    public void addData(DemoModel newModelData, int position) {
+    public void addData(ModelOpenClosedTrails newModelData, int position) {
         items.add(position, newModelData);
         notifyItemInserted(position);
     }
@@ -56,7 +54,7 @@ public class RecyclerViewDemoAdapter
         notifyItemRemoved(position);
     }
 
-    public DemoModel getItem(int position) {
+    public ModelOpenClosedTrails getItem(int position) {
         return items.get(position);
     }
 
@@ -70,9 +68,28 @@ public class RecyclerViewDemoAdapter
 
     @Override
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
-        DemoModel model = items.get(position);
-        viewHolder.label.setText(model.label);
+        ModelOpenClosedTrails model = items.get(position);
+        viewHolder.trailName.setText(model.TrailName);
+        String statusName = ConvertTrailStatus(model);
+        viewHolder.trailStatus.setText(statusName);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
+    }
+
+    private String ConvertTrailStatus(ModelOpenClosedTrails model){
+        String statusName = "";
+
+        switch (model.TrailStatus){
+            case 1:
+                statusName = "Closed";
+                break;
+            case 2:
+                statusName = "Open";
+                break;
+            case 3:
+                statusName = "Unknown";
+                break;
+        }
+        return statusName;
     }
 
     @Override
@@ -108,11 +125,13 @@ public class RecyclerViewDemoAdapter
     }
 
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
-        TextView label;
+        TextView trailName;
+        TextView trailStatus;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
-            label = (TextView) itemView.findViewById(R.id.txt_label_item);
+            trailName = (TextView) itemView.findViewById(R.id.txt_label_trail_name);
+            trailStatus = (TextView)itemView.findViewById(R.id.txt_label_trail_status);
         }
     }
 }

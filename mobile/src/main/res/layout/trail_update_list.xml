@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/statelist_item_background">
 
-    <include layout="@layout/common_item_layout" />
+    <include layout="@layout/trail_open_closed_recycler_layout" />
 
 </RelativeLayout>
