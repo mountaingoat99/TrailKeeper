@@ -1,4 +1,4 @@
-package com.singlecog.trailkeeper;
+package com.singlecog.trailkeeper.Activites;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.singlecog.trailkeeper.R;
 
 /**
  * Created by jeremeyrodriguez on 5/31/15.

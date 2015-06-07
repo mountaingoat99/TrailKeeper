@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Home"
+            android:name=".Activites.Home"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,44 +17,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FindTrail"
+            android:name=".Activites.FindTrail"
             android:label="@string/title_activity_find_trail"
-            android:parentActivityName=".Home" >
+            android:parentActivityName=".Activites.Home" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Home" />
+                android:value=".Activites.Home" />
         </activity>
         <activity
-            android:name=".Map"
+            android:name=".Activites.Map"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".Home" >
+            android:parentActivityName=".Activites.Home" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Home" />
+                android:value=".Activites.Home" />
         </activity>
         <activity
-            android:name=".TrailAdmin"
+            android:name=".Activites.TrailAdmin"
             android:label="@string/title_activity_trail_admin"
-            android:parentActivityName=".Home" >
+            android:parentActivityName=".Activites.Home" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Home" />
+                android:value=".Activites.Home" />
         </activity>
         <activity
-            android:name=".Profile"
+            android:name=".Activites.Profile"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".Home" >
+            android:parentActivityName=".Activites.Home" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Home" />
+                android:value=".Activites.Home" />
         </activity>
         <activity
-            android:name=".Settings"
+            android:name=".Activites.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".Home" >
+            android:parentActivityName=".Activites.Home" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Home" />
+                android:value=".Activites.Home" />
         </activity>
     </application>
 
