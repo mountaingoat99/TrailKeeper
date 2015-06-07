@@ -109,12 +109,10 @@ public class RecyclerViewDemoAdapter
 
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
         TextView label;
-        TextView dateTime;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
-            dateTime = (TextView) itemView.findViewById(R.id.txt_date_time);
         }
     }
 }

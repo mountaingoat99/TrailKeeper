@@ -31,7 +31,15 @@ public class RecyclerViewDemoApp extends Application {
         }
     }
 
-    public static final List<DemoModel> getDemoData() {
+    public static List<DemoModel> getDemoData() {
+
+        demoData = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            DemoModel model = new DemoModel();
+            model.label = "Test Label No. " + i;
+            demoData.add(model);
+        }
+
         return new ArrayList<>(demoData);
     }
 
