@@ -14,13 +14,13 @@ import java.util.List;
 
 import models.ModelTrailComments;
 
-public class RecyclerViewTrailCommentsAdapter extends RecyclerView.Adapter
-        <RecyclerViewTrailCommentsAdapter.ListItemViewHolder> {
+public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
+        <RecyclerViewOneTrailCommentAdapter.ListItemViewHolder> {
 
     private List<ModelTrailComments> items;
     private SparseBooleanArray selectedItems;
 
-    public RecyclerViewTrailCommentsAdapter(List<ModelTrailComments> modelData) {
+    public RecyclerViewOneTrailCommentAdapter(List<ModelTrailComments> modelData) {
         if (modelData == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
@@ -59,15 +59,15 @@ public class RecyclerViewTrailCommentsAdapter extends RecyclerView.Adapter
     public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.trail_comment_list, viewGroup, false);
+                inflate(R.layout.one_trail_comment, viewGroup, false);
         return new ListItemViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
         ModelTrailComments model = items.get(position);
-        viewHolder.trailName.setText(model.TrailName);
         viewHolder.trailComment.setText(model.TrailComments);
+        viewHolder.commentDate.setText(model.CommentDate);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
     }
 
@@ -104,13 +104,13 @@ public class RecyclerViewTrailCommentsAdapter extends RecyclerView.Adapter
     }
 
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
-        TextView trailName;
         TextView trailComment;
+        TextView commentDate;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
-            trailName = (TextView) itemView.findViewById(R.id.txt_label_trail_name);
-            trailComment = (TextView)itemView.findViewById(R.id.txt_label_trail_latest_comment);
+            trailComment = (TextView) itemView.findViewById(R.id.txt_trail_comment);
+            commentDate = (TextView)itemView.findViewById(R.id.txt_comment_date);
         }
     }
 }

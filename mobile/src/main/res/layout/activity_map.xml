@@ -31,11 +31,11 @@
                 card_view:cardElevation="4dp"
                 card_view:cardCornerRadius="4dp">
 
-                <TextView
-                    android:text="Google Map of nearby trails - Closed Open Status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:name="com.google.android.gms.maps.MapFragment"/>
 
             </android.support.v7.widget.CardView>
 

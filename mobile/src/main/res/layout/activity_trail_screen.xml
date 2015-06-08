@@ -22,7 +22,7 @@
 
             <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/nearby_trail_updates_card_view"
+                android:id="@+id/trail_status_card_view"
                 android:layout_gravity="center"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
@@ -32,7 +32,6 @@
                 card_view:cardCornerRadius="4dp">
 
                 <LinearLayout
-                    android:id="@+id/trail_status_row_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingLeft="8dp"
@@ -42,19 +41,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:text="@string/trail_status"
+                        android:id="@+id/trail_name"
+                        android:text="Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="bold"/>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_trail_updates"
-                        android:scrollbars="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        tools:context=".Home"
-                        tools:listitem="@layout/trail_update_list"/>
+                    <TextView
+                        android:id="@+id/trail_status"
+                        android:text="Open/Closed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
@@ -62,17 +62,16 @@
 
             <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/latest_updates_card_view"
+                android:id="@+id/trail_comment_card_view"
                 android:layout_gravity="center"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 card_view:cardUseCompatPadding="true"
                 card_view:cardElevation="4dp"
                 card_view:cardCornerRadius="4dp">
 
                 <LinearLayout
-                    android:id="@+id/trail_comments_row_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingLeft="8dp"
@@ -106,7 +105,7 @@
                 android:layout_gravity="center"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 card_view:cardUseCompatPadding="true"
                 card_view:cardElevation="4dp"
                 card_view:cardCornerRadius="4dp">

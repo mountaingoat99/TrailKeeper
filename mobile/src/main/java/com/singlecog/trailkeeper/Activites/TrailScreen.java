@@ -3,11 +3,19 @@ package com.singlecog.trailkeeper.Activites;
 import android.annotation.TargetApi;
 import android.location.Location;
 import android.os.Build;
+import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -19,10 +27,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.singlecog.trailkeeper.R;
 
-public class Map extends BaseActivity implements OnMapReadyCallback,
+import java.util.List;
+
+import AsyncAdapters.RecyclerViewAsyncOneTrailComments;
+import RecyclerAdapters.DividerItemDecoration;
+import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
+import models.ModelTrailComments;
+
+import static AsyncAdapters.RecyclerViewAsyncOneTrailComments.getTrailCommentData;
+
+public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    protected static final String TAG = "homeActivity";
+    protected static final String TAG = "trailScreenActivity";
+
+    private RecyclerView mTrailCommentRecyclerView;
+    private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
+
+    GestureDetectorCompat gestureDetector;
 
     /**
      * Provides the entry point to Google Play services.
@@ -39,19 +61,79 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        Firebase.setAndroidContext(this);
+        setContentView(R.layout.activity_trail_screen);
         super.onCreateDrawer();
 
         // get the latest device location
         buildGoogleApiClient();
+
+        // sets the tap event on the recycler views
+        gestureDetector =
+                new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
+                    @Override public boolean onSingleTapUp(MotionEvent e) {
+                        return true;
+                    }
+                });
+
+        // set up the RecyclerViews
+        SetUpTrailCommentRecyclerView();
+    }
+
+    // sets up the trail comment recycler view
+    private void SetUpTrailCommentRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+
+        mTrailCommentRecyclerView = (RecyclerView) findViewById(R.id.recycler_trail_comments);
+        mTrailCommentRecyclerView.setLayoutManager(layoutManager);
+        mTrailCommentRecyclerView.setHasFixedSize(true);
+
+        // call the async class to load the trail info data
+        RecyclerViewAsyncOneTrailComments trailInfo = new RecyclerViewAsyncOneTrailComments();
+        trailInfo.onCreate();
+        List<ModelTrailComments> items = getTrailCommentData();
+        mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(items);
+        mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
+
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+        mTrailCommentRecyclerView.addItemDecoration(itemDecoration);
+
+        mTrailCommentRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mTrailCommentRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(){
+
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                //TODO call the new activity here instead of the Toast
+                if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
+                    Toast.makeText(TrailScreen.this, "Comment Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
+
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        // right now we won't show anything here, but we may add menu items
-        // to the individual layouts so we won't move this to the super class
-        //getMenuInflater().inflate(R.menu.menu_map, menu);
+        //getMenuInflater().inflate(R.menu.menu_trail_screen, menu);
         return true;
     }
 

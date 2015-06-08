@@ -14,6 +14,7 @@ public class ModelTrailComments {
 
     public String TrailName;
     public String TrailComments;
+    public String CommentDate;
 
     //TODO I think we'll use what the db sends us after we get that hooked up
     public int CommentId = ++nextId;

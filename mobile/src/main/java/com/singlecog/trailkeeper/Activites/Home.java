@@ -1,6 +1,8 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +49,7 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
         ConnectionCallbacks, OnConnectionFailedListener{
 
     protected static final String TAG = "homeActivity";
+    private final Context context = this;
 
     private RecyclerView mTrailOpenRecyclerView;
     private RecyclerViewTrailOpenClosedAdapter mTrailOpenAdapter;
@@ -122,7 +125,9 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
 
                 //TODO call the new activity here instead of the Toast
                 if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
-                    Toast.makeText(Home.this, "Trail Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Home.this, "Trail Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, TrailScreen.class);
+                    startActivity(intent);
 
                     return true;
                 }
