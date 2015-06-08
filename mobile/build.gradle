@@ -18,6 +18,10 @@ android {
     }
     productFlavors {
     }
+    packagingOptions{
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -26,4 +30,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:22.2.0'
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.firebase:firebase-client-android:2.3.0'
+    compile 'com.google.android.gms:play-services:7.5.0'
 }
