@@ -11,13 +11,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.singlecog.trailkeeper.R;
 
 public class BaseActivity extends AppCompatActivity {
@@ -33,16 +30,6 @@ public class BaseActivity extends AppCompatActivity {
         //Instantiate Navigation Drawer
         setupNavDrawer();
         setUpDrawer();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
-        } else {
-            SystemBarTintManager mTintManager = new SystemBarTintManager(this);
-            mTintManager.setStatusBarTintEnabled(true);
-            mTintManager.setTintColor(getResources().getColor(R.color.primary_dark));
-        }
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

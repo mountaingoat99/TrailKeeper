@@ -12,7 +12,7 @@ import com.singlecog.trailkeeper.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.ModelOpenClosedTrails;
+import models.ModelTrails;
 
 /**
  * Created by Jeremey on 6/2/2015.
@@ -20,10 +20,10 @@ import models.ModelOpenClosedTrails;
 public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
         <RecyclerViewTrailOpenClosedAdapter.ListItemViewHolder> {
 
-    private List<ModelOpenClosedTrails> items;
+    private List<ModelTrails> items;
     private SparseBooleanArray selectedItems;
 
-    public RecyclerViewTrailOpenClosedAdapter(List<ModelOpenClosedTrails> modelData) {
+    public RecyclerViewTrailOpenClosedAdapter(List<ModelTrails> modelData) {
         if (modelData == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
@@ -38,7 +38,7 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
      * @param newModelData The item to add to the data set.
      * @param position The index of the item to remove.
      */
-    public void addData(ModelOpenClosedTrails newModelData, int position) {
+    public void addData(ModelTrails newModelData, int position) {
         items.add(position, newModelData);
         notifyItemInserted(position);
     }
@@ -54,7 +54,7 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
         notifyItemRemoved(position);
     }
 
-    public ModelOpenClosedTrails getItem(int position) {
+    public ModelTrails getItem(int position) {
         return items.get(position);
     }
 
@@ -62,20 +62,20 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
     public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.trail_update_list, viewGroup, false);
+                inflate(R.layout.trail_open_closed_list, viewGroup, false);
         return new ListItemViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
-        ModelOpenClosedTrails model = items.get(position);
+        ModelTrails model = items.get(position);
         viewHolder.trailName.setText(model.TrailName);
         String statusName = ConvertTrailStatus(model);
         viewHolder.trailStatus.setText(statusName);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
     }
 
-    private String ConvertTrailStatus(ModelOpenClosedTrails model){
+    private String ConvertTrailStatus(ModelTrails model){
         String statusName = "";
 
         switch (model.TrailStatus){

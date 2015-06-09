@@ -14,13 +14,13 @@ import java.util.List;
 
 import models.ModelTrailComments;
 
-public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
-        <RecyclerViewOneTrailCommentAdapter.ListItemViewHolder> {
+public class RecyclerViewCommentFeedAdapter extends RecyclerView.Adapter
+        <RecyclerViewCommentFeedAdapter.ListItemViewHolder> {
 
     private List<ModelTrailComments> items;
     private SparseBooleanArray selectedItems;
 
-    public RecyclerViewOneTrailCommentAdapter(List<ModelTrailComments> modelData) {
+    public RecyclerViewCommentFeedAdapter(List<ModelTrailComments> modelData) {
         if (modelData == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
@@ -33,7 +33,7 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
      * at the position passed into the method.
      *
      * @param newModelData The item to add to the data set.
-     * @param position The index of the item to remove.
+     * @param position     The index of the item to remove.
      */
     public void addData(ModelTrailComments newModelData, int position) {
         items.add(position, newModelData);
@@ -59,13 +59,14 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.one_trail_comment_list, viewGroup, false);
+                inflate(R.layout.trail_comment_feed_list, viewGroup, false);
         return new ListItemViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
         ModelTrailComments model = items.get(position);
+        viewHolder.trailName.setText(model.TrailName);
         viewHolder.trailComment.setText(model.TrailComments);
         viewHolder.commentDate.setText(model.CommentDate);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
@@ -79,8 +80,7 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     public void toggleSelection(int pos) {
         if (selectedItems.get(pos, false)) {
             selectedItems.delete(pos);
-        }
-        else {
+        } else {
             selectedItems.put(pos, true);
         }
         notifyItemChanged(pos);
@@ -104,13 +104,15 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     }
 
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
+        TextView trailName;
         TextView trailComment;
         TextView commentDate;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
+            trailName = (TextView) itemView.findViewById(R.id.txt_trail_name);
             trailComment = (TextView) itemView.findViewById(R.id.txt_trail_comment);
-            commentDate = (TextView)itemView.findViewById(R.id.txt_comment_date);
+            commentDate = (TextView) itemView.findViewById(R.id.txt_comment_date);
         }
     }
 }

@@ -11,13 +11,17 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.singlecog.trailkeeper.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import AsyncAdapters.RecyclerViewAsyncTrailComments;
@@ -35,7 +40,7 @@ import RecyclerAdapters.DividerItemDecoration;
 import AsyncAdapters.RecyclerViewAsyncTrailInfo;
 import RecyclerAdapters.RecyclerViewTrailCommentsAdapter;
 import RecyclerAdapters.RecyclerViewTrailOpenClosedAdapter;
-import models.ModelOpenClosedTrails;
+import models.ModelTrails;
 import models.ModelTrailComments;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -46,7 +51,8 @@ import static AsyncAdapters.RecyclerViewAsyncTrailComments.getTrailCommentData;
 import static AsyncAdapters.RecyclerViewAsyncTrailInfo.*;
 
 public class Home extends BaseActivity implements OnMapReadyCallback,
-        ConnectionCallbacks, OnConnectionFailedListener{
+        ConnectionCallbacks, OnConnectionFailedListener, GoogleMap.OnMapClickListener
+        , GoogleMap.OnMapLongClickListener{
 
     protected static final String TAG = "homeActivity";
     private final Context context = this;
@@ -58,7 +64,7 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
     private RecyclerViewTrailCommentsAdapter mTrailCommentAdapter;
 
     GestureDetectorCompat gestureDetector;
-
+    GoogleMap googleMap;
     /**
      * Provides the entry point to Google Play services.
      */
@@ -69,6 +75,9 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
      */
     protected Location mLastLocation;
     private LatLng home;
+
+    //firebase
+    private List<ModelTrails> trailOpenData;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -89,6 +98,32 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
                     }
                 });
 
+        // Firebase
+        // TODO set a loading dialog until we have retrieved the results from Firebase
+//        Firebase ref = new Firebase("https://luminous-heat-2687.firebaseio.com/trailKeeper/trails");
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                trailOpenData = new ArrayList<>();
+//                ModelTrails model = new ModelTrails();
+//                for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                    for (DataSnapshot nextChild : child.getChildren()){
+//                        model.TrailName = nextChild.child("trailName").toString();
+//                        model.TrailStatus = Integer.getInteger(nextChild.child("status").toString());
+//                        model.TrailState = nextChild.child("state").toString();
+//
+//                        trailOpenData.add(model);
+//                    }
+//                }
+//                SetUpTrailStatusRecyclerView();
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+
         // set up the RecyclerViews
         SetUpTrailStatusRecyclerView();
         SetUpTrailCommentRecyclerView();
@@ -107,7 +142,7 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
         // call the async class to load the trail info data
         RecyclerViewAsyncTrailInfo trailInfo = new RecyclerViewAsyncTrailInfo();
         trailInfo.onCreate();
-        List<ModelOpenClosedTrails> items = getTrailOpenData();
+        List<ModelTrails> items = getTrailOpenData();
         mTrailOpenAdapter = new RecyclerViewTrailOpenClosedAdapter(items);
         mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
 
@@ -177,8 +212,9 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
 
                 //TODO call the new activity here instead of the Toast
                 if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
-                    Toast.makeText(Home.this, "Comment Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
-
+                    //Toast.makeText(Home.this, "Comment Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, Comments.class);
+                    startActivity(intent);
                     return true;
                 }
                 return false;
@@ -266,6 +302,9 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        googleMap = mapFragment.getMap();
+        googleMap.setOnMapClickListener(this);
+        googleMap.setOnMapLongClickListener(this);
     }
 
     @Override
@@ -282,5 +321,16 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
         // attempt to re-establish the connection.
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Toast.makeText(this,"You tapped the map yo!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        Intent intent = new Intent(context, Map.class);
+        startActivity(intent);
     }
 }

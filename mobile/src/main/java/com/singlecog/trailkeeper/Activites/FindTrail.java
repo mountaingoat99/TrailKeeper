@@ -2,6 +2,7 @@ package com.singlecog.trailkeeper.Activites;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.Window;
 
 import com.singlecog.trailkeeper.R;
 
@@ -12,7 +13,6 @@ public class FindTrail extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_trail);
         super.onCreateDrawer();
-
     }
 
     @Override

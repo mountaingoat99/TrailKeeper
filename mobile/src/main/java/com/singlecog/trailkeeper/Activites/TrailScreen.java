@@ -1,6 +1,8 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
@@ -37,15 +39,18 @@ import models.ModelTrailComments;
 import static AsyncAdapters.RecyclerViewAsyncOneTrailComments.getTrailCommentData;
 
 public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+        , GoogleMap.OnMapClickListener
+        , GoogleMap.OnMapLongClickListener{
 
     protected static final String TAG = "trailScreenActivity";
+    private final Context context = this;
 
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
 
     GestureDetectorCompat gestureDetector;
-
+    GoogleMap googleMap;
     /**
      * Provides the entry point to Google Play services.
      */
@@ -198,6 +203,9 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        googleMap = mapFragment.getMap();
+        googleMap.setOnMapClickListener(this);
+        googleMap.setOnMapLongClickListener(this);
     }
 
     @Override
@@ -214,5 +222,16 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         // attempt to re-establish the connection.
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Toast.makeText(this,"You tapped the map yo!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        Intent intent = new Intent(context, TrailMap.class);
+        startActivity(intent);
     }
 }
