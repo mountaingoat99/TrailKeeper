@@ -1,15 +1,13 @@
 package AsyncAdapters;
 
 import android.app.Application;
-import android.app.DownloadManager;
 import android.util.SparseArray;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ public class RecyclerViewAsyncTrailInfo extends Application {
 
     @Override
     public void onCreate() {
-        Firebase.setAndroidContext(this);
+        //Firebase.setAndroidContext(this);
         super.onCreate();
 
         // Firebase
@@ -52,17 +50,37 @@ public class RecyclerViewAsyncTrailInfo extends Application {
 //            }
 //        });
 
-
+        //Parse
         trailOpenData = new ArrayList<>();
-        trailOpenMap = new SparseArray<>();
-        for (int i = 1; i < 21; i++) {
-            ModelTrails model = new ModelTrails();
-            model.TrailName = "Test Label No. " + i;
-            model.TrailStatus = 2;
-            model.TrailState = "WI";
-            trailOpenData.add(model);
-            trailOpenMap.put(model.TrailId, model);
-        }
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null){
+                    for (ParseObject parseObject : list){
+                        ModelTrails model = new ModelTrails();
+                        model.TrailName = parseObject.get("TrailName").toString();
+                        model.TrailStatus = Integer.valueOf(parseObject.get("Status").toString());
+                        model.TrailState = parseObject.get("State").toString();
+
+                        trailOpenData.add(model);
+                    }
+                } else {
+                    // lets do something else
+                }
+            }
+        });
+
+
+//        trailOpenMap = new SparseArray<>();
+//        for (int i = 1; i < 21; i++) {
+//            ModelTrails model = new ModelTrails();
+//            model.TrailName = "Test Label No. " + i;
+//            model.TrailStatus = 2;
+//            model.TrailState = "WI";
+//            trailOpenData.add(model);
+//            trailOpenMap.put(model.TrailId, model);
+//        }
     }
 
     public static List<ModelTrails> getTrailOpenData() {

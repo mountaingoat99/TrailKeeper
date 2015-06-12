@@ -13,13 +13,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
 import com.singlecog.trailkeeper.R;
 
 import java.util.List;
 
 import AsyncAdapters.RecyclerViewAsyncCommentFeed;
-import AsyncAdapters.RecyclerViewAsyncTrailComments;
 import AsyncAdapters.RecyclerViewAsyncTrailInfo;
 import RecyclerAdapters.DividerItemDecoration;
 import RecyclerAdapters.RecyclerViewCommentFeedAdapter;
@@ -44,7 +42,6 @@ public class Comments extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_comments);
         super.onCreateDrawer();
 
