@@ -31,7 +31,6 @@ import com.singlecog.trailkeeper.R;
 import java.util.List;
 
 import AsyncAdapters.RecyclerViewAsyncOneTrailComments;
-import RecyclerAdapters.DividerItemDecoration;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
 
@@ -99,12 +98,6 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         List<ModelTrailComments> items = getTrailCommentData();
         mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(items);
         mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
-
-        RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-        mTrailCommentRecyclerView.addItemDecoration(itemDecoration);
-
-        mTrailCommentRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mTrailCommentRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(){
 

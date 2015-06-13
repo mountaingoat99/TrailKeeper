@@ -4,11 +4,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,18 +24,13 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import AsyncAdapters.RecyclerViewAsyncTrailComments;
-import RecyclerAdapters.DividerItemDecoration;
+import AsyncAdapters.AsyncTrailComments;
+import AsyncAdapters.AsyncTrailInfo;
 import RecyclerAdapters.RecyclerViewTrailCommentsAdapter;
 import RecyclerAdapters.RecyclerViewTrailOpenClosedAdapter;
 import models.ModelTrails;
@@ -47,14 +40,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
-import static AsyncAdapters.RecyclerViewAsyncTrailComments.getTrailCommentData;
-
 public class Home extends BaseActivity implements OnMapReadyCallback,
         ConnectionCallbacks, OnConnectionFailedListener, GoogleMap.OnMapClickListener
         , GoogleMap.OnMapLongClickListener{
 
     protected static final String TAG = "homeActivity";
-    private final Context context = this;
 
     private RecyclerView mTrailOpenRecyclerView;
     private RecyclerViewTrailOpenClosedAdapter mTrailOpenAdapter;
@@ -77,6 +67,7 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
 
     private List<ModelTrails> trails;
     private List<ModelTrailComments> comments;
+    private final Context context = this;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -84,8 +75,6 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         super.onCreateDrawer();
-
-        Parse.initialize(this, "uU8JsEF9eLEYcFzUrwqmrWzblj65IoQ0G6S4DkI8", "4S7u2tedpm9yeE6DR3J6mDyJHHpgmUgktu6Q6QvD");
 
         // get the latest device location
         buildGoogleApiClient();
@@ -98,8 +87,23 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
                     }
                 });
 
-        AsyncTrails aTask = new AsyncTrails();
-        aTask.execute();
+        // calls the AsyncTask for the Trails
+        try {
+            AsyncTrailInfo ati = new AsyncTrailInfo(this, context);
+            trails = new ArrayList<>();
+            ati.execute(trails);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // calls the AsyncTask for the comments
+        try {
+            AsyncTrailComments atc = new AsyncTrailComments(this, context);
+            comments = new ArrayList<>();
+            atc.execute(comments);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // set up the RecyclerViews
         SetUpTrailStatusCard();
@@ -136,7 +140,7 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
     }
 
     // Fills the Trail Status Recycler View
-    private void SetUpTrailStatusRecyclerView(){
+    public void SetUpTrailStatusRecyclerView(){
         mTrailOpenAdapter = new RecyclerViewTrailOpenClosedAdapter(trails);
         mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
 
@@ -148,7 +152,6 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
 
                 //TODO call the new activity here instead of the Toast
                 if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
-                    //Toast.makeText(Home.this, "Trail Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, TrailScreen.class);
                     startActivity(intent);
 
@@ -170,7 +173,7 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
     }
 
     // Fills up the trail comment recycler view
-    private void SetUpTrailCommentRecyclerView(){
+    public void SetUpTrailCommentRecyclerView(){
         mTrailCommentAdapter = new RecyclerViewTrailCommentsAdapter(comments);
         mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
 
@@ -200,8 +203,6 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
             }
         });
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -303,74 +304,5 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
     public void onMapLongClick(LatLng latLng) {
         Intent intent = new Intent(context, Map.class);
         startActivity(intent);
-    }
-
-    // Inner async class
-    public class AsyncTrails extends AsyncTask<Void, Integer, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            //Parse
-            ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("trails");
-            tQuery.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    if (e == null) {
-                        trails = new ArrayList<>();
-                        for (ParseObject parseObject : list) {
-                            ModelTrails trail = new ModelTrails();
-                            trail.TrailName = parseObject.get("TrailName").toString();
-                            trail.TrailStatus = Integer.valueOf(parseObject.get("Status").toString());
-                            trail.TrailState = parseObject.get("State").toString();
-
-                            trails.add(trail);
-                        }
-                        SetUpTrailStatusRecyclerView();
-                    } else {
-                        // lets do something else
-                    }
-                }
-            });
-
-            ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("comments");
-            cQuery.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    if (e == null) {
-                        comments = new ArrayList<>();
-                        for (ParseObject parseObject : list) {
-                            ModelTrailComments comment = new ModelTrailComments();
-                            comment.TrailName = parseObject.get("TrailName").toString();
-                            comment.TrailComments = parseObject.get("comment").toString();
-
-                            comments.add(comment);
-                        }
-                        SetUpTrailCommentRecyclerView();
-                    } else {
-                        // lets do something else
-                    }
-                }
-            });
-            return null;
-        }
-
-        protected void onPreExecute(){
-
-            Log.d("Asyntask", "On preExceute...");
-        }
-
-
-
-        protected void onProgressUpdate(Integer...a){
-
-            Log.d("Asyntask","You are in progress update ... " + a[0]);
-        }
-
-        protected void onPostExecute(String result) {
-
-            Log.d("Asyntask",result);
-        }
-
     }
 }

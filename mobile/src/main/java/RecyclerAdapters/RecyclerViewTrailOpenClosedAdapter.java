@@ -14,9 +14,6 @@ import java.util.List;
 
 import models.ModelTrails;
 
-/**
- * Created by Jeremey on 6/2/2015.
- */
 public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
         <RecyclerViewTrailOpenClosedAdapter.ListItemViewHolder> {
 
