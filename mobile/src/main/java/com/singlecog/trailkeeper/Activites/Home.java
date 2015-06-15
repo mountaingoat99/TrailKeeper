@@ -108,12 +108,6 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
         // set up the RecyclerViews
         SetUpTrailStatusCard();
         SetUpCommentCard();
-
-        // Enable Local Datastore.
-//        Parse.enableLocalDatastore(this);
-//        ParseObject testObject = new ParseObject("TestObject");
-//        testObject.put("foo", "bar");
-//        testObject.saveInBackground();
     }
 
     // Sets up the Trail Status Recycler View

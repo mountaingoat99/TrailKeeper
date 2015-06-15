@@ -2,42 +2,27 @@ package ParseObjects;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.Date;
 
 @ParseClassName("comments")
 public class ParseComments extends ParseObject {
 
-    public Integer getCommentID() {
-        return getInt("commentID");
-    }
-
-    public void SetCommentID(Integer commentId) {
-        put("commentID", commentId);
-    }
-
     public Integer getTrailID() {
-        return getInt("trailID");
+        return getInt("TrailID");
     }
 
     public void SetTrailID(Integer trailID) {
-        put("trailID", trailID);
-    }
-
-    public String getTrailName() {
-        return getString("TrailName");
-    }
-
-    public void SetTrailName(String trailName) {
-        put("TrailName", trailName);
+        put("TrailID", trailID);
     }
 
     public String getComment() {
-        return getString("comment");
+        return getString("Comment");
     }
 
     public void SetComment(String comment) {
-        put("comment", comment);
+        put("Cmment", comment);
     }
 
     public Date getCreatedAt(){
@@ -46,5 +31,9 @@ public class ParseComments extends ParseObject {
 
     public void setCreatedAt(Date createdAt) {
         put("createdAt", createdAt);
+    }
+
+    public static ParseQuery<ParseComments> getQuery() {
+        return ParseQuery.getQuery(ParseComments.class);
     }
 }

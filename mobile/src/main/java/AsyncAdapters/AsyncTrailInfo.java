@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -15,6 +14,7 @@ import com.singlecog.trailkeeper.Activites.Home;
 
 import java.util.List;
 
+import ParseObjects.ParseTrails;
 import models.ModelTrails;
 
 public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<ModelTrails>> {
@@ -46,11 +46,11 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
     @SafeVarargs
     @Override
     protected final List<ModelTrails> doInBackground(List<ModelTrails>... trails) {
-        Parse.initialize(context, "uU8JsEF9eLEYcFzUrwqmrWzblj65IoQ0G6S4DkI8", "4S7u2tedpm9yeE6DR3J6mDyJHHpgmUgktu6Q6QvD");
         final List<ModelTrails> passedTrails = trails[0];
 
         //Parse
         ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("trails");
+        tQuery.fromLocalDatastore();
         tQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
