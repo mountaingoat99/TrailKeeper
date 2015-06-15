@@ -7,7 +7,6 @@ import android.location.Location;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,13 +27,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.singlecog.trailkeeper.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import AsyncAdapters.RecyclerViewAsyncOneTrailComments;
+import AsyncAdapters.AsyncOneTrailComments;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
-
-import static AsyncAdapters.RecyclerViewAsyncOneTrailComments.getTrailCommentData;
 
 public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
@@ -42,7 +40,8 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         , GoogleMap.OnMapLongClickListener{
 
     protected static final String TAG = "trailScreenActivity";
-    private final Context context = this;
+
+    private int trailId;
 
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
@@ -60,12 +59,22 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
     protected Location mLastLocation;
     private LatLng home;
 
+    private List<ModelTrailComments> comments;
+    private final Context context = this;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_screen);
         super.onCreateDrawer();
+
+        Intent intent = getIntent();
+        trailId = intent.getIntExtra("trailID", 0);
+
+        // instantiate the views for trailname and status
+
+        // call method to get items from Local DataStore to fill the Views
 
         // get the latest device location
         buildGoogleApiClient();
@@ -78,25 +87,22 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
                     }
                 });
 
-        // set up the RecyclerViews
-        SetUpTrailCommentRecyclerView();
+        // Call the Async method
+        try {
+            AsyncOneTrailComments atc = new AsyncOneTrailComments(this, context);
+            comments = new ArrayList<>();
+            atc.execute(comments);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // set up the Recycler View
+        SetupCommentCard();
     }
 
     // sets up the trail comment recycler view
-    private void SetUpTrailCommentRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        layoutManager.scrollToPosition(0);
-
-        mTrailCommentRecyclerView = (RecyclerView) findViewById(R.id.recycler_trail_comments);
-        mTrailCommentRecyclerView.setLayoutManager(layoutManager);
-        mTrailCommentRecyclerView.setHasFixedSize(true);
-
-        // call the async class to load the trail info data
-        RecyclerViewAsyncOneTrailComments trailInfo = new RecyclerViewAsyncOneTrailComments();
-        trailInfo.onCreate();
-        List<ModelTrailComments> items = getTrailCommentData();
-        mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(items);
+    public void SetUpTrailCommentRecyclerView() {
+        mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(comments);
         mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
 
         mTrailCommentRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(){
@@ -124,6 +130,16 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
 
             }
         });
+    }
+
+    private void SetupCommentCard() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+
+        mTrailCommentRecyclerView = (RecyclerView) findViewById(R.id.recycler_trail_comments);
+        mTrailCommentRecyclerView.setLayoutManager(layoutManager);
+        mTrailCommentRecyclerView.setHasFixedSize(true);
     }
 
     @Override

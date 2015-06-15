@@ -146,7 +146,10 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
 
                 //TODO call the new activity here instead of the Toast
                 if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
+                    ModelTrails trail = mTrailOpenAdapter.getItem(1);
+                    int id = trail.getTrailID();
                     Intent intent = new Intent(context, TrailScreen.class);
+                    intent.putExtra("trailID", id);
                     startActivity(intent);
 
                     return true;

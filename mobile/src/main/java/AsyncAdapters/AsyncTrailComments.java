@@ -53,6 +53,7 @@ public class AsyncTrailComments extends AsyncTask<List<ModelTrailComments>, Inte
 
         ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("trails");
         cQuery.fromLocalDatastore();
+        cQuery.addAscendingOrder("createdAt");
         cQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {

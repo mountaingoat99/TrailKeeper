@@ -9,10 +9,19 @@ public class ModelTrails {
 
     }
 
+    public int getTrailID() {
+        return TrailID;
+    }
+
+    public void setTrailID(int trailID) {
+        TrailID = trailID;
+    }
+
+    public int TrailID;
     public String TrailName;
     public int TrailStatus;
     public String TrailState;
 
     //TODO I think we'll use what the db sends us after we get that hooked up
-    public int TrailId = ++nextId;
+    //public int TrailId = ++nextId;
 }
