@@ -22,8 +22,6 @@
         android:id="@+id/txt_trail_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

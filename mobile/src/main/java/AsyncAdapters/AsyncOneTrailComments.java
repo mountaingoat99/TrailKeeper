@@ -12,6 +12,7 @@ import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
 import java.util.List;
+import java.util.Objects;
 
 import models.ModelTrailComments;
 
@@ -20,10 +21,12 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
     ProgressDialog dialog;
     private TrailScreen activity;
     private Context context;
+    private int mTrailID;
 
-    public AsyncOneTrailComments(TrailScreen activity, Context context) {
+    public AsyncOneTrailComments(TrailScreen activity, Context context, int mTrailID) {
         this.activity = activity;
         this.context = context;
+        this.mTrailID = mTrailID;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
 
         ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("trails");
         cQuery.fromLocalDatastore();
-        cQuery.whereEqualTo("TrailID", 1);
+        cQuery.whereEqualTo("TrailID", mTrailID);
         cQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -51,11 +54,15 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
                         for (ParseObject parseObject : list) {
                             // get the commentArray from the class
                             List<Object> commentList = parseObject.getList("Comments");
+                            List<Object> commentDateList = parseObject.getList("CommentDate");
+                            int count = 0;
                             for (Object cList : commentList){
                                 ModelTrailComments comment = new ModelTrailComments();
                                 comment.TrailComments = cList.toString();
+                                comment.CommentDate = commentDateList.get(count).toString();
                                 // add it to the list
                                 passedComments.add(comment);
+                                count++;
                             }
                         }
                         if (activity != null)

@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,7 +26,13 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +40,7 @@ import java.util.List;
 import AsyncAdapters.AsyncOneTrailComments;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
+import models.ModelTrails;
 
 public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
@@ -45,6 +53,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
 
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
+    private TextView trailName, trailStatus, trailCity, trailState;
 
     GestureDetectorCompat gestureDetector;
     GoogleMap googleMap;
@@ -69,12 +78,14 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         setContentView(R.layout.activity_trail_screen);
         super.onCreateDrawer();
 
+        SetUpViews();
+
+        // get the trailID from the previous view
         Intent intent = getIntent();
         trailId = intent.getIntExtra("trailID", 0);
 
-        // instantiate the views for trailname and status
-
         // call method to get items from Local DataStore to fill the Views
+        GetTrailData();
 
         // get the latest device location
         buildGoogleApiClient();
@@ -89,7 +100,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
 
         // Call the Async method
         try {
-            AsyncOneTrailComments atc = new AsyncOneTrailComments(this, context);
+            AsyncOneTrailComments atc = new AsyncOneTrailComments(this, context, trailId);
             comments = new ArrayList<>();
             atc.execute(comments);
         }catch (Exception e) {
@@ -98,6 +109,34 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
 
         // set up the Recycler View
         SetupCommentCard();
+    }
+
+    private void SetUpViews() {
+        trailName = (TextView)findViewById(R.id.txtTrail_name);
+        trailStatus = (TextView)findViewById(R.id.txtTrail_status);
+        trailCity = (TextView)findViewById(R.id.txtTrail_city);
+        trailState = (TextView)findViewById(R.id.txtTrail_state);
+    }
+
+    private void GetTrailData() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        query.fromLocalDatastore();
+        query.whereEqualTo("TrailID", trailId);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null){
+                    for (ParseObject object : list) {
+                        trailName.setText(object.get("TrailName").toString());
+                        trailStatus.setText(object.get("Status").toString());
+                        trailCity.setText(object.get("City").toString());
+                        trailState.setText(object.get("State").toString());
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     // sets up the trail comment recycler view

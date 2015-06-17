@@ -18,6 +18,7 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
         <RecyclerViewTrailOpenClosedAdapter.ListItemViewHolder> {
 
     private List<ModelTrails> items;
+    public static ModelTrails model;
     private SparseBooleanArray selectedItems;
 
     public RecyclerViewTrailOpenClosedAdapter(List<ModelTrails> modelData) {
@@ -55,6 +56,15 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
         return items.get(position);
     }
 
+    public int getTrailID(RecyclerView.ViewHolder item){
+        // use the view holder to get the Adapter Position
+        int id =  item.getAdapterPosition();
+        // then use the AdapterPosition to get the Model
+        ModelTrails m = items.get(id);
+        // return the TrailID from the model
+        return m.TrailID;
+    }
+
     @Override
     public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.
@@ -65,7 +75,8 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
-        ModelTrails model = items.get(position);
+        model = items.get(position);
+        viewHolder.trailID.setText(String.valueOf(model.TrailID));
         viewHolder.trailName.setText(model.TrailName);
         String statusName = ConvertTrailStatus(model);
         viewHolder.trailStatus.setText(statusName);
@@ -124,11 +135,13 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
         TextView trailName;
         TextView trailStatus;
+        TextView trailID;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
             trailName = (TextView) itemView.findViewById(R.id.txt_label_trail_name);
             trailStatus = (TextView)itemView.findViewById(R.id.txt_label_trail_status);
+            trailID = (TextView)itemView.findViewById(R.id.txt_label_trailID);
         }
     }
 }

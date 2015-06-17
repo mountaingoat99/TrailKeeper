@@ -14,9 +14,6 @@ import java.util.List;
 
 import models.ModelTrails;
 
-/**
- * Created by Jeremey on 6/8/2015.
- */
 public class RecyclerViewTrailListAdapter extends RecyclerView.Adapter
         <RecyclerViewTrailListAdapter.ListItemViewHolder>{
 

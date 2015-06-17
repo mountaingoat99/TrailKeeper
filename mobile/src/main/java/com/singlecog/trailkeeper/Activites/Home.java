@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -146,8 +147,10 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
 
                 //TODO call the new activity here instead of the Toast
                 if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
-                    ModelTrails trail = mTrailOpenAdapter.getItem(1);
-                    int id = trail.getTrailID();
+                    // get a ViewHolder from the recyclerView
+                    RecyclerView.ViewHolder v = recyclerView.getChildViewHolder(child);
+                    // then call the class and using the ViewHolder and the the trailID
+                    int id = mTrailOpenAdapter.getTrailID(v);
                     Intent intent = new Intent(context, TrailScreen.class);
                     intent.putExtra("trailID", id);
                     startActivity(intent);
@@ -270,10 +273,12 @@ public class Home extends BaseActivity implements OnMapReadyCallback,
         // even if the connection is not successful we still want to call and show the map
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        googleMap = mapFragment.getMap();
-        googleMap.setOnMapClickListener(this);
-        googleMap.setOnMapLongClickListener(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            googleMap = mapFragment.getMap();
+            googleMap.setOnMapClickListener(this);
+            googleMap.setOnMapLongClickListener(this);
+        }
     }
 
     @Override
