@@ -12,6 +12,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.Comments;
 import com.singlecog.trailkeeper.Activites.Home;
+import com.singlecog.trailkeeper.Activites.HomeScreen;
 
 import org.json.JSONArray;
 
@@ -24,6 +25,7 @@ public class AsyncTrailComments extends AsyncTask<List<ModelTrailComments>, Inte
 
     ProgressDialog dialog;
     private Home homeActivity;
+    private HomeScreen homeScreenActivity;
     private Comments commentActivity;
     private Context context;
 
@@ -34,6 +36,15 @@ public class AsyncTrailComments extends AsyncTask<List<ModelTrailComments>, Inte
 
     public AsyncTrailComments(Comments activity, Context context) {
         this.commentActivity = activity;
+        this.context = context;
+    }
+
+    public AsyncTrailComments(HomeScreen homeScreenActivity, Context context){
+        this.homeScreenActivity = homeScreenActivity;
+        this.context = context;
+    }
+
+    public AsyncTrailComments(Context context) {
         this.context = context;
     }
 
@@ -72,6 +83,8 @@ public class AsyncTrailComments extends AsyncTask<List<ModelTrailComments>, Inte
                         }
                         if (homeActivity != null)
                             homeActivity.SetUpTrailCommentRecyclerView();
+//                        if (homeScreenActivity != null)
+//                            homeScreenActivity.SetUpTrailCommentRecyclerView();
                         if (commentActivity != null)
                             commentActivity.SetUpCommentsRecyclerView();
                     }

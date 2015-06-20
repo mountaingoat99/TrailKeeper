@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:background="@color/background"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="8dp"
+    card_view:cardCornerRadius="16dp">
+
+    <LinearLayout
+        android:id="@+id/trail_status_row_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/txt_label_trail_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <TextView
+            android:id="@+id/txt_label_trail_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_trail_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Home"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <Button
+                android:id="@+id/btn_trail_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Comments"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <Button
+                android:id="@+id/btn_trail_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Map"
+                android:textSize="18sp"
+                android:textColor="@color/primary_text"
+                style="?android:attr/borderlessButtonStyle"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

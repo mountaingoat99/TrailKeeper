@@ -27,5 +27,8 @@
     <!-- Parse Stuff -->
     <string name="ApplicationID">"uU8JsEF9eLEYcFzUrwqmrWzblj65IoQ0G6S4DkI8"</string>
     <string name="ClientKEey">"4S7u2tedpm9yeE6DR3J6mDyJHHpgmUgktu6Q6QvD"</string>
+    <string name="title_activity_home_screen">HomeScreen</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

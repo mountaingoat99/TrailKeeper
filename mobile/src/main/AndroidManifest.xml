@@ -28,6 +28,11 @@
         <activity
             android:name=".Activites.Home"
             android:label="@string/app_name" >
+
+        </activity>
+        <activity
+            android:name=".Activites.HomeScreen"
+            android:label="@string/title_activity_home_screen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +42,7 @@
         <activity
             android:name=".Activites.FindTrail"
             android:label="@string/title_activity_find_trail"
-            android:parentActivityName=".Activites.Home" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activites.Home" />
@@ -45,7 +50,7 @@
         <activity
             android:name=".Activites.Map"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".Activites.Home" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activites.Home" />
@@ -53,7 +58,7 @@
         <activity
             android:name=".Activites.TrailAdmin"
             android:label="@string/title_activity_trail_admin"
-            android:parentActivityName=".Activites.Home" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activites.Home" />
@@ -61,7 +66,7 @@
         <activity
             android:name=".Activites.Profile"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".Activites.Home" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activites.Home" />
@@ -69,7 +74,7 @@
         <activity
             android:name=".Activites.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".Activites.Home" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activites.Home" />
@@ -77,7 +82,7 @@
         <activity
             android:name=".Activites.TrailScreen"
             android:label="@string/title_activity_trail_screen"
-            android:parentActivityName=".Activites.Home" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.singlecog.trailkeeper.Activites.Home" />
@@ -85,7 +90,7 @@
         <activity
             android:name=".Activites.Comments"
             android:label="@string/title_activity_comments"
-            android:parentActivityName=".Activites.Home" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.singlecog.trailkeeper.Activites.Home" />
@@ -98,6 +103,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.singlecog.trailkeeper.Activites.TrailScreen" />
         </activity>
+
     </application>
 
 </manifest>
