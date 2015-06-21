@@ -1,5 +1,8 @@
 package models;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.parse.ParseGeoPoint;
+
 public class ModelTrails {
 
     private static int nextId = 0;
@@ -20,8 +23,14 @@ public class ModelTrails {
     public int TrailID;
     public String TrailName;
     public int TrailStatus;
+    public String TrailCity;
     public String TrailState;
+    public ParseGeoPoint GeoLocation;
+    public float distance;
 
-    //TODO I think we'll use what the db sends us after we get that hooked up
+    public float getDistance() {
+        return distance;
+    }
+//TODO I think we'll use what the db sends us after we get that hooked up
     //public int TrailId = ++nextId;
 }

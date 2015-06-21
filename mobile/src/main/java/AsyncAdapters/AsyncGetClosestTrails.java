@@ -2,60 +2,41 @@ package AsyncAdapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.singlecog.trailkeeper.Activites.Comments;
-import com.singlecog.trailkeeper.Activites.Home;
-import com.singlecog.trailkeeper.Activites.HomeScreen;
+import com.singlecog.trailkeeper.Activites.Map;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import ParseObjects.ParseTrails;
 import models.ModelTrails;
 
-public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<ModelTrails>> {
+
+public class AsyncGetClosestTrails extends AsyncTask<List<ModelTrails>, Integer, List<ModelTrails>> {
 
     ProgressDialog dialog;
-    private Home homeActivity;
-    private Comments commentActivity;
-    private HomeScreen homeScreenActivity;
+    private Map mapActivity;
     private Context context;
+    private LatLng currentLocation;
 
-    public AsyncTrailInfo(Home activity, Context context){
-        this.homeActivity = activity;
+    public AsyncGetClosestTrails(Map mapActivity, Context context, LatLng currentLocation) {
+        this.mapActivity = mapActivity;
         this.context = context;
-    }
-
-    public AsyncTrailInfo(Comments activity, Context context){
-        this.commentActivity = activity;
-        this.context = context;
-    }
-
-    public AsyncTrailInfo(HomeScreen activity, Context context){
-        this.homeScreenActivity = activity;
-        this.context = context;
-    }
-
-    @Override
-    protected void onPreExecute(){
-        dialog = new ProgressDialog(context);
-        dialog.setTitle("Updating Trails...");
-        dialog.setMessage("Please wait...");
-        dialog.setIndeterminate(true);
-        dialog.show();
+        this.currentLocation = currentLocation;
     }
 
     @SafeVarargs
     @Override
     protected final List<ModelTrails> doInBackground(List<ModelTrails>... trails) {
         final List<ModelTrails> passedTrails = trails[0];
-
-        //Parse
         ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("trails");
         tQuery.fromLocalDatastore();
         tQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -66,19 +47,10 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
                         ModelTrails trail = new ModelTrails();
                         trail.TrailID = parseObject.getInt("TrailID");
                         trail.TrailName = parseObject.get("TrailName").toString();
-                        trail.TrailStatus = Integer.valueOf(parseObject.get("Status").toString());
-                        trail.TrailState = parseObject.get("State").toString();
-                        trail.TrailCity = parseObject.get("City").toString();
                         trail.GeoLocation = parseObject.getParseGeoPoint("GeoLocation");
 
                         passedTrails.add(trail);
                     }
-                    if (homeActivity != null)
-                        homeActivity.SetUpTrailStatusRecyclerView();
-                    if (homeScreenActivity != null)
-                        homeScreenActivity.SetUpTrailStatusRecyclerView();
-                    if (commentActivity != null)
-                        commentActivity.SetUpTrailRecyclerView();
                 } else {
                     e.printStackTrace();
                     dialog.dismiss();
@@ -86,7 +58,17 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
                 }
             }
         });
+
         return passedTrails;
+    }
+
+    @Override
+    protected void onPreExecute(){
+        dialog = new ProgressDialog(context);
+        dialog.setTitle("Updating Trails...");
+        dialog.setMessage("Please wait...");
+        dialog.setIndeterminate(true);
+        dialog.show();
     }
 
     protected void onPostExecute(List<ModelTrails> passedTrails) {

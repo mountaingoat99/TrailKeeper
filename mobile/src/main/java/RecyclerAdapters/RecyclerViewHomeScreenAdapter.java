@@ -1,5 +1,9 @@
 package RecyclerAdapters;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.AvoidXfermode;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -8,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.parse.ParseGeoPoint;
+import com.singlecog.trailkeeper.Activites.Map;
+import com.singlecog.trailkeeper.Activites.TrailScreen;
 import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
@@ -16,18 +24,20 @@ import java.util.List;
 import models.ModelTrails;
 
 public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
-        <RecyclerViewHomeScreenAdapter.ListItemViewHolder> {
+        <RecyclerViewHomeScreenAdapter.HomeScreenListViewHolder> {
 
     private List<ModelTrails> items;
     public static ModelTrails model;
     private SparseBooleanArray selectedItems;
+    private Context context;
 
-    public RecyclerViewHomeScreenAdapter(List<ModelTrails> modelData) {
+    public RecyclerViewHomeScreenAdapter(List<ModelTrails> modelData, Context context) {
         if (modelData == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
         items = modelData;
         selectedItems = new SparseBooleanArray();
+        this.context = context;
     }
 
     /**
@@ -66,22 +76,60 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         return m.TrailID;
     }
 
-    @Override
-    public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.home_screen_card_view, viewGroup, false);
-        return new ListItemViewHolder(itemView);
+    public ParseGeoPoint getLocation(RecyclerView.ViewHolder item){
+        int id = item.getAdapterPosition();
+        ModelTrails m = items.get(id);
+        return m.GeoLocation;
+    }
+
+    public ModelTrails getTrailModel(RecyclerView.ViewHolder item) {
+        int id = item.getAdapterPosition();
+        return items.get(id);
     }
 
     @Override
-    public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
+    public HomeScreenListViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View itemView = LayoutInflater.
+                from(viewGroup.getContext()).
+                inflate(R.layout.home_screen_card_view, viewGroup, false);
+        return new HomeScreenListViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(final HomeScreenListViewHolder viewHolder, int position) {
 
         model = items.get(position);
         viewHolder.trailName.setText(model.TrailName);
+        viewHolder.trailCity.setText(model.TrailCity);
+        viewHolder.trailState.setText(model.TrailState);
         String statusName = ConvertTrailStatus(model);
         viewHolder.trailStatus.setText(statusName);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
+
+        viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = getTrailID(viewHolder);
+                Intent intent = new Intent(context, TrailScreen.class);
+                intent.putExtra("trailID", id);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        viewHolder.btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ModelTrails model  = getTrailModel(viewHolder);
+                ParseGeoPoint point = model.GeoLocation;
+                LatLng geoPoint = new LatLng(point.getLatitude(), point.getLongitude());
+                Intent intent = new Intent(context, Map.class);
+                Bundle args = new Bundle();
+                args.putParcelable("geoPoint", geoPoint);
+                args.putString("trailName", model.TrailName);
+                intent.putExtra("bundle", args);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     private String ConvertTrailStatus(ModelTrails model){
@@ -133,19 +181,21 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         return items;
     }
 
-    public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
+    public final static class HomeScreenListViewHolder extends RecyclerView.ViewHolder {
         TextView trailName;
+        TextView trailCity;
+        TextView trailState;
         TextView trailStatus;
         Button btnHome;
-        Button btnComments;
         Button btnMap;
 
-        public ListItemViewHolder(View itemView) {
+        public HomeScreenListViewHolder(View itemView) {
             super(itemView);
             trailName = (TextView) itemView.findViewById(R.id.txt_label_trail_name);
+            trailCity = (TextView) itemView.findViewById(R.id.txt_label_trail_city);
+            trailState = (TextView) itemView.findViewById(R.id.txt_label_trail_state);
             trailStatus = (TextView)itemView.findViewById(R.id.txt_label_trail_status);
             btnHome = (Button)itemView.findViewById(R.id.btn_trail_home);
-            btnComments = (Button)itemView.findViewById(R.id.btn_trail_comments);
             btnMap = (Button)itemView.findViewById(R.id.btn_trail_map);
         }
     }

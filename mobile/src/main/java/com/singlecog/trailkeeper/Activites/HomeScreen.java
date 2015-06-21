@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -24,8 +26,11 @@ import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import AsyncAdapters.AsyncTrailInfo;
+import RecyclerAdapters.DividerItemDecoration;
 import RecyclerAdapters.RecyclerViewHomeScreenAdapter;
 import models.ModelTrails;
 
@@ -43,7 +48,6 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
     private RecyclerView mTrailOpenRecyclerView;
     private RecyclerViewHomeScreenAdapter mTrailOpenAdapter;
     private List<ModelTrails> trails;
-    GestureDetectorCompat gestureDetector;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -53,14 +57,6 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
         super.onCreateDrawer();
         // get the latest device location
         buildGoogleApiClient();
-
-        // sets the tap event on the recycler views
-        gestureDetector =
-                new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
-                    @Override public boolean onSingleTapUp(MotionEvent e) {
-                        return true;
-                    }
-                });
 
         // calls the AsyncTask for the Trails
         try {
@@ -74,6 +70,7 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
         // set up the RecyclerViews
         SetUpTrailStatusCard();
     }
+
     // Sets up the Trail Status Recycler View
     private void SetUpTrailStatusCard() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -87,40 +84,13 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
 
     // Fills the Trail Status Recycler View
     public void SetUpTrailStatusRecyclerView(){
-        mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails);
+        mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails, context);
         mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
 
-        // sets the touch listener
-        mTrailOpenRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
-                //TODO call the new activity here instead of the Toast
-                if (child != null && gestureDetector.onTouchEvent(motionEvent)) {
-                    // get a ViewHolder from the recyclerView
-                    RecyclerView.ViewHolder v = recyclerView.getChildViewHolder(child);
-                    // then call the class and using the ViewHolder and the the trailID
-                    int id = mTrailOpenAdapter.getTrailID(v);
-                    Intent intent = new Intent(context, TrailScreen.class);
-                    intent.putExtra("trailID", id);
-                    startActivity(intent);
-
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
+        RecyclerView.ItemDecoration itemDecoration =
+                              new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+        mTrailOpenRecyclerView.addItemDecoration(itemDecoration);
+        mTrailOpenRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override

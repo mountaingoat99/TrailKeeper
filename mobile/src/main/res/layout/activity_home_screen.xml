@@ -15,9 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg"
-            tools:context="com.singlecog.trailkeeper.Activites.HomeScreen">
-
-        </android.support.v7.widget.RecyclerView>
+            tools:context="com.singlecog.trailkeeper.Activites.HomeScreen"/>
 
         <include layout="@layout/nav_drawer"/>
 

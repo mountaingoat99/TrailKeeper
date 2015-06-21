@@ -1,6 +1,8 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,9 +18,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.singlecog.trailkeeper.R;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import AsyncAdapters.AsyncGetClosestTrails;
+import models.ModelTrails;
 
 public class Map extends BaseActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -35,6 +46,10 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
      */
     protected Location mLastLocation;
     private LatLng home;
+    private LatLng trailLocation;
+    private String trailName;
+    private final Context context = this;
+    private List<ModelTrails> trails;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -43,8 +58,52 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
         setContentView(R.layout.activity_map);
         super.onCreateDrawer();
 
+        // get the trailID from the previous view
+        Bundle bundle = getIntent().getParcelableExtra("bundle");
+        if (bundle != null) {
+            trailLocation = bundle.getParcelable("geoPoint");
+            trailName = bundle.getString("trailName");
+        }
+
         // get the latest device location
         buildGoogleApiClient();
+
+        // calls the AsyncTask for the distance
+        try {
+            AsyncGetClosestTrails ati = new AsyncGetClosestTrails(this, context, home);
+            trails = new ArrayList<>();
+            ati.execute(trails);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void SortTrails() {
+        Collections.sort(trails, new Comparator<ModelTrails>() {
+            @Override
+            public int compare(ModelTrails lhs, ModelTrails rhs) {
+                Float dis1 = lhs.getDistance();
+                Float dis2 = rhs.getDistance();
+
+                if (dis1.compareTo(dis2) < 0)
+                    return -1;
+                else if (dis1.compareTo(dis2) > 0)
+                    return 1;
+                else
+                return 0;
+            }
+        });
+    }
+
+    private float GetClosestTrails(ModelTrails trail){
+        double latTrail = trail.GeoLocation.getLatitude();
+        double longTrail = trail.GeoLocation.getLongitude();
+        double latLocation = home.latitude;
+        double longLocation = home.longitude;
+
+        float[] dist = new float[1];
+        Location.distanceBetween(latLocation, longLocation, latTrail, longTrail, dist);
+        return dist[0] * 0.000621371192f;
     }
 
     @Override
@@ -60,14 +119,46 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
-
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
+
+        if(trails != null) {
+            for (int i = 0; trails.size() > i; i++){
+                trails.get(i).distance = GetClosestTrails(trails.get(i));
+            }
+
+            SortTrails();
+            for (int i = 0; i < 3; i++) {
+                LatLng trail = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
+
+                googleMap.addMarker(new MarkerOptions()
+                        .title(trails.get(i).TrailName)
+                        .position(trail)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }
+        }
+        if (trailLocation != null && mLastLocation != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
+            googleMap.addMarker(new MarkerOptions()
+                    .title(trailName)
+                    .position(trailLocation)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
+            googleMap.addMarker(new MarkerOptions()
+                    .title("Current Location")
+                    .position(home));
+        }
+        else if (mLastLocation != null && trailLocation == null) {
             home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
             googleMap.addMarker(new MarkerOptions()
-                    .title("Home")
+                    .title("Current Location")
                     .position(home));
+        }
+        else if (trailLocation != null && mLastLocation == null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
+            googleMap.addMarker(new MarkerOptions()
+                .title(trailName)
+                    .position(trailLocation)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         } else {
             Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }
