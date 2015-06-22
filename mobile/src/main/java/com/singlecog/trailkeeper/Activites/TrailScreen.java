@@ -38,12 +38,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import AsyncAdapters.AsyncOneTrailComments;
+import Helpers.TrailStatusHelper;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
 import models.ModelTrails;
 
-public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         , GoogleMap.OnMapClickListener
         , GoogleMap.OnMapLongClickListener{
 
@@ -57,16 +57,13 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
 
     GestureDetectorCompat gestureDetector;
     GoogleMap googleMap;
-    /**
-     * Provides the entry point to Google Play services.
-     */
-    protected GoogleApiClient mGoogleApiClient;
 
     /**
      * Represents a geographical location.
      */
     protected Location mLastLocation;
-    private LatLng home;
+    private LatLng trailLocation;
+    private String trailNameString;
 
     private List<ModelTrailComments> comments;
     private final Context context = this;
@@ -87,9 +84,6 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
         // call method to get items from Local DataStore to fill the Views
         GetTrailData();
 
-        // get the latest device location
-        buildGoogleApiClient();
-
         // sets the tap event on the recycler views
         gestureDetector =
                 new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
@@ -109,6 +103,17 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
 
         // set up the Recycler View
         SetupCommentCard();
+        ShowGoogleMap();
+    }
+
+    private void ShowGoogleMap() {
+        // even if the connection is not successful we still want to call and show the map
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        googleMap = mapFragment.getMap();
+        googleMap.setOnMapClickListener(this);
+        googleMap.setOnMapLongClickListener(this);
     }
 
     private void SetUpViews() {
@@ -127,10 +132,13 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null){
                     for (ParseObject object : list) {
-                        trailName.setText(object.get("TrailName").toString());
-                        trailStatus.setText(object.get("Status").toString());
+                        trailNameString = object.get("TrailName").toString();
+                        trailName.setText(trailNameString);
+                        String statusName = TrailStatusHelper.ConvertTrailStatus(object.getInt("Status"));
+                        trailStatus.setText(statusName);
                         trailCity.setText(object.get("City").toString());
                         trailState.setText(object.get("State").toString());
+                        trailLocation = new LatLng(object.getParseGeoPoint("GeoLocation").getLatitude(), object.getParseGeoPoint("GeoLocation").getLongitude());
                     }
                 } else {
                     e.printStackTrace();
@@ -193,81 +201,15 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
 
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
+        if (trailLocation != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
             googleMap.addMarker(new MarkerOptions()
-                    .title("Home")
-                    .position(home));
+                    .title(trailNameString)
+                    .position(trailLocation)).showInfoWindow();
+
         } else {
             Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }
-    }
-
-    /**
-     * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
-     */
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-    /**
-     * Runs when a GoogleApiClient object successfully connects.
-     */
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        // Provides a simple way of getting a device's location and is well suited for
-        // applications that do not require a fine-grained location and that do not need location
-        // updates. Gets the best and most recent location currently available, which may be null
-        // in rare cases when a location is not available.
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        } else {
-            Toast.makeText(this,"Please Turn On GPS", Toast.LENGTH_LONG).show();
-        }
-
-        // even if the connection is not successful we still want to call and show the map
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        googleMap = mapFragment.getMap();
-        googleMap.setOnMapClickListener(this);
-        googleMap.setOnMapLongClickListener(this);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
-        // onConnectionFailed.
-        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-    }
-
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-        // The connection to Google Play services was lost for some reason. We call connect() to
-        // attempt to re-establish the connection.
-        Log.i(TAG, "Connection suspended");
-        mGoogleApiClient.connect();
     }
 
     @Override

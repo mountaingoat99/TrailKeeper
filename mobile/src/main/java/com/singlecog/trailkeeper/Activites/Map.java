@@ -2,13 +2,11 @@ package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -24,11 +22,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import AsyncAdapters.AsyncGetClosestTrails;
+import AsyncAdapters.AsyncTrailLocations;
+import Helpers.GeoLocationHelper;
 import models.ModelTrails;
 
 public class Map extends BaseActivity implements OnMapReadyCallback,
@@ -70,7 +67,7 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
 
         // calls the AsyncTask for the distance
         try {
-            AsyncGetClosestTrails ati = new AsyncGetClosestTrails(this, context, home);
+            AsyncTrailLocations ati = new AsyncTrailLocations(this, context, home);
             trails = new ArrayList<>();
             ati.execute(trails);
         } catch (Exception e) {
@@ -78,33 +75,22 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
         }
     }
 
-    private void SortTrails() {
-        Collections.sort(trails, new Comparator<ModelTrails>() {
-            @Override
-            public int compare(ModelTrails lhs, ModelTrails rhs) {
-                Float dis1 = lhs.getDistance();
-                Float dis2 = rhs.getDistance();
-
-                if (dis1.compareTo(dis2) < 0)
-                    return -1;
-                else if (dis1.compareTo(dis2) > 0)
-                    return 1;
-                else
-                return 0;
-            }
-        });
-    }
-
-    private float GetClosestTrails(ModelTrails trail){
-        double latTrail = trail.GeoLocation.getLatitude();
-        double longTrail = trail.GeoLocation.getLongitude();
-        double latLocation = home.latitude;
-        double longLocation = home.longitude;
-
-        float[] dist = new float[1];
-        Location.distanceBetween(latLocation, longLocation, latTrail, longTrail, dist);
-        return dist[0] * 0.000621371192f;
-    }
+//    private void SortTrails() {
+//        Collections.sort(trails, new Comparator<ModelTrails>() {
+//            @Override
+//            public int compare(ModelTrails lhs, ModelTrails rhs) {
+//                Float dis1 = lhs.getDistance();
+//                Float dis2 = rhs.getDistance();
+//
+//                if (dis1.compareTo(dis2) < 0)
+//                    return -1;
+//                else if (dis1.compareTo(dis2) > 0)
+//                    return 1;
+//                else
+//                return 0;
+//            }
+//        });
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,10 +109,11 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
 
         if(trails != null) {
             for (int i = 0; trails.size() > i; i++){
-                trails.get(i).distance = GetClosestTrails(trails.get(i));
+                trails.get(i).distance = GeoLocationHelper.GetClosestTrails(trails.get(i), home);
             }
 
-            SortTrails();
+            //SortTrails();
+            GeoLocationHelper.SortTrails(trails);
             for (int i = 0; i < 3; i++) {
                 LatLng trail = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
 

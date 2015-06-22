@@ -13,21 +13,19 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.Map;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import models.ModelTrails;
 
 
-public class AsyncGetClosestTrails extends AsyncTask<List<ModelTrails>, Integer, List<ModelTrails>> {
+public class AsyncTrailLocations extends AsyncTask<List<ModelTrails>, Integer, List<ModelTrails>> {
 
     ProgressDialog dialog;
     private Map mapActivity;
     private Context context;
     private LatLng currentLocation;
 
-    public AsyncGetClosestTrails(Map mapActivity, Context context, LatLng currentLocation) {
+    public AsyncTrailLocations(Map mapActivity, Context context, LatLng currentLocation) {
         this.mapActivity = mapActivity;
         this.context = context;
         this.currentLocation = currentLocation;
