@@ -58,15 +58,6 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
         // get the latest device location
         buildGoogleApiClient();
 
-        // calls the AsyncTask for the Trails
-        try {
-            AsyncTrailInfo ati = new AsyncTrailInfo(this, context);
-            trails = new ArrayList<>();
-            ati.execute(trails);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
         // set up the RecyclerViews
         SetUpTrailStatusCard();
     }
@@ -87,9 +78,9 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
         mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails, context);
         mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
 
-        RecyclerView.ItemDecoration itemDecoration =
-                              new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-        mTrailOpenRecyclerView.addItemDecoration(itemDecoration);
+//        RecyclerView.ItemDecoration itemDecoration =
+//                              new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+//        mTrailOpenRecyclerView.addItemDecoration(itemDecoration);
         mTrailOpenRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -112,6 +103,20 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
     public void onConnected(Bundle bundle) {
         // Provides a simple way of getting a device's location and is well suited for
         // applications that do not require a fine-grained location and that do not need location
@@ -120,6 +125,14 @@ public class HomeScreen extends BaseActivity implements GoogleApiClient.Connecti
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            // calls the AsyncTask for the Trails
+            try {
+                AsyncTrailInfo ati = new AsyncTrailInfo(this, context, home);
+                trails = new ArrayList<>();
+                ati.execute(trails);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }

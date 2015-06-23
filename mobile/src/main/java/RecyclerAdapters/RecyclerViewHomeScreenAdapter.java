@@ -21,6 +21,7 @@ import com.singlecog.trailkeeper.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helpers.TrailStatusHelper;
 import models.ModelTrails;
 
 public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
@@ -102,7 +103,8 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         viewHolder.trailName.setText(model.TrailName);
         viewHolder.trailCity.setText(model.TrailCity);
         viewHolder.trailState.setText(model.TrailState);
-        String statusName = ConvertTrailStatus(model);
+        viewHolder.trailDistance.setText(String.valueOf(model.distance));
+        String statusName = TrailStatusHelper.ConvertTrailStatus(model);
         viewHolder.trailStatus.setText(statusName);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
@@ -130,23 +132,6 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 v.getContext().startActivity(intent);
             }
         });
-    }
-
-    private String ConvertTrailStatus(ModelTrails model){
-        String statusName = "";
-
-        switch (model.TrailStatus){
-            case 1:
-                statusName = "Closed";
-                break;
-            case 2:
-                statusName = "Open";
-                break;
-            case 3:
-                statusName = "Unknown";
-                break;
-        }
-        return statusName;
     }
 
     @Override
@@ -186,6 +171,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         TextView trailCity;
         TextView trailState;
         TextView trailStatus;
+        TextView trailDistance;
         Button btnHome;
         Button btnMap;
 
@@ -195,6 +181,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
             trailCity = (TextView) itemView.findViewById(R.id.txt_label_trail_city);
             trailState = (TextView) itemView.findViewById(R.id.txt_label_trail_state);
             trailStatus = (TextView)itemView.findViewById(R.id.txt_label_trail_status);
+            trailDistance = (TextView)itemView.findViewById(R.id.txt_label_trail_distance);
             btnHome = (Button)itemView.findViewById(R.id.btn_trail_home);
             btnMap = (Button)itemView.findViewById(R.id.btn_trail_map);
         }

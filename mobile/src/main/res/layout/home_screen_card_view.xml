@@ -4,37 +4,49 @@
     android:layout_gravity="center"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginRight="8dp"
     android:background="@color/background"
     card_view:cardUseCompatPadding="true"
     card_view:cardElevation="8dp"
-    card_view:cardCornerRadius="16dp">
+    card_view:cardCornerRadius="4dp">
 
     <LinearLayout
         android:id="@+id/trail_status_row_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
         android:background="?android:attr/selectableItemBackground">
 
-        <TextView
-            android:id="@+id/txt_label_trail_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_label_trail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+            <TextView
+                android:id="@+id/txt_label_trail_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -49,23 +61,40 @@
                 android:id="@+id/txt_label_trail_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/txt_label_dash"
+                android:text="-"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/txt_label_trail_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/txt_label_miles"
+                android:text=" Miles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_label_trail_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <Button
@@ -74,8 +103,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/button_home"
-                android:textSize="18sp"
-                android:textColor="@color/primary_text"
+                android:textSize="24sp"
+                android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 
             <Button
@@ -84,8 +113,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/button_map"
-                android:textSize="18sp"
-                android:textColor="@color/primary_text"
+                android:textSize="24sp"
+                android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 
         </LinearLayout>

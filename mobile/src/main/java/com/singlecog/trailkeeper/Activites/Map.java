@@ -75,23 +75,6 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
         }
     }
 
-//    private void SortTrails() {
-//        Collections.sort(trails, new Comparator<ModelTrails>() {
-//            @Override
-//            public int compare(ModelTrails lhs, ModelTrails rhs) {
-//                Float dis1 = lhs.getDistance();
-//                Float dis2 = rhs.getDistance();
-//
-//                if (dis1.compareTo(dis2) < 0)
-//                    return -1;
-//                else if (dis1.compareTo(dis2) > 0)
-//                    return 1;
-//                else
-//                return 0;
-//            }
-//        });
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -112,7 +95,6 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
                 trails.get(i).distance = GeoLocationHelper.GetClosestTrails(trails.get(i), home);
             }
 
-            //SortTrails();
             GeoLocationHelper.SortTrails(trails);
             for (int i = 0; i < 3; i++) {
                 LatLng trail = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
