@@ -10,9 +10,6 @@ import java.util.List;
 
 import models.ModelTrails;
 
-/**
- * Created by Jeremey on 6/21/2015.
- */
 public class GeoLocationHelper {
 
     public static float GetClosestTrails(ModelTrails trail, LatLng currentLocation){

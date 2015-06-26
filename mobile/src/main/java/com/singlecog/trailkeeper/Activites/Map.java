@@ -90,13 +90,17 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
         googleMap.setMyLocationEnabled(true);
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
+        // get the distance from Current Location to Trails first
         if(trails != null) {
             for (int i = 0; trails.size() > i; i++){
                 trails.get(i).distance = GeoLocationHelper.GetClosestTrails(trails.get(i), home);
             }
 
+            // then sort them
             GeoLocationHelper.SortTrails(trails);
-            for (int i = 0; i < 3; i++) {
+
+            // for now we will show all the trail, TODO we may cut that list down as it grows
+            for (int i = 0; i < trails.size(); i++) {
                 LatLng trail = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
 
                 googleMap.addMarker(new MarkerOptions()

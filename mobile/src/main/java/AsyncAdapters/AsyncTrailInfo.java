@@ -2,6 +2,7 @@ package AsyncAdapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.AvoidXfermode;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.singlecog.trailkeeper.Activites.Comments;
 import com.singlecog.trailkeeper.Activites.Home;
 import com.singlecog.trailkeeper.Activites.HomeScreen;
 
+import java.util.Iterator;
 import java.util.List;
 
 import Helpers.GeoLocationHelper;
@@ -27,7 +29,6 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
     private Comments commentActivity;
     private HomeScreen homeScreenActivity;
     private Context context;
-    private LatLng home;
 
     public AsyncTrailInfo(Home activity, Context context){
         this.homeActivity = activity;
@@ -39,10 +40,9 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
         this.context = context;
     }
 
-    public AsyncTrailInfo(HomeScreen activity, Context context, LatLng home){
+    public AsyncTrailInfo(HomeScreen activity, Context context){
         this.homeScreenActivity = activity;
         this.context = context;
-        this.home = home;
     }
 
     @Override
@@ -77,20 +77,10 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
 
                         passedTrails.add(trail);
                     }
-
-
                     if (homeActivity != null)
                         homeActivity.SetUpTrailStatusRecyclerView();
-                    if (homeScreenActivity != null) {
-                        if (passedTrails != null) {
-                            for (int i = 0; passedTrails.size() > i; i++) {
-                                passedTrails.get(i).distance = GeoLocationHelper.GetClosestTrails(passedTrails.get(i), home);
-                            }
-
-                            GeoLocationHelper.SortTrails(passedTrails);
-                        }
+                    if (homeScreenActivity != null)
                         homeScreenActivity.SetUpTrailStatusRecyclerView();
-                    }
                     if (commentActivity != null)
                         commentActivity.SetUpTrailRecyclerView();
                 } else {
