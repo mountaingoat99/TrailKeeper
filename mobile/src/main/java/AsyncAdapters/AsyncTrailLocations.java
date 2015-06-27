@@ -45,6 +45,7 @@ public class AsyncTrailLocations extends AsyncTask<List<ModelTrails>, Integer, L
                         ModelTrails trail = new ModelTrails();
                         trail.TrailID = parseObject.getInt("TrailID");
                         trail.TrailName = parseObject.get("TrailName").toString();
+                        trail.TrailStatus = Integer.valueOf(parseObject.get("Status").toString());
                         trail.GeoLocation = parseObject.getParseGeoPoint("GeoLocation");
 
                         passedTrails.add(trail);

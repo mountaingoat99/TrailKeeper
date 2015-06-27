@@ -20,12 +20,16 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import AsyncAdapters.AsyncTrailInfo;
 import Helpers.GeoLocationHelper;
 import RecyclerAdapters.RecyclerViewHomeScreenAdapter;
 import models.ModelTrails;
+
+import static android.support.v7.widget.RecyclerView.*;
 
 public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -52,6 +56,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
 
         // show the refresh spinner on load
         if (TrailKeeperApplication.home == null) {
@@ -88,6 +93,30 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         mTrailOpenRecyclerView = (RecyclerView) findViewById(R.id.home_screen_recycler_view);
         mTrailOpenRecyclerView.setLayoutManager(layoutManager);
         mTrailOpenRecyclerView.setHasFixedSize(true);
+
+        // lets make sure the refresh only happens when the top card is fully visible
+        mTrailOpenRecyclerView.setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                boolean enabled = false;
+                if (recyclerView != null && recyclerView.getChildCount() > 0){
+                    // check if the first card is visible
+                    boolean firstCardVisible = mTrailOpenAdapter.getItemViewType(0) == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstVisibleCard = recyclerView.getChildAt(0).getTop() == 0;
+                    // enable or disable the refresh layout
+                    enabled = firstCardVisible && topOfFirstVisibleCard;
+                }
+                mSwipeLayout.setEnabled(enabled);
+            }
+        });
+
     }
 
     // Fills the Trail Status Recycler View

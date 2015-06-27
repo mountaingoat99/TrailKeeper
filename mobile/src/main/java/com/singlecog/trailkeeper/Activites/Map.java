@@ -45,6 +45,7 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
     private LatLng home;
     private LatLng trailLocation;
     private String trailName;
+    private int trailStatus;
     private final Context context = this;
     private List<ModelTrails> trails;
 
@@ -60,6 +61,7 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
         if (bundle != null) {
             trailLocation = bundle.getParcelable("geoPoint");
             trailName = bundle.getString("trailName");
+            trailStatus = bundle.getInt("trailStatus");
         }
 
         // get the latest device location
@@ -93,7 +95,7 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
         // get the distance from Current Location to Trails first
         if(trails != null) {
             for (int i = 0; trails.size() > i; i++){
-                trails.get(i).distance = GeoLocationHelper.GetClosestTrails(trails.get(i), home);
+                trails.get(i).distance = (float)Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
             }
 
             // then sort them
@@ -103,35 +105,79 @@ public class Map extends BaseActivity implements OnMapReadyCallback,
             for (int i = 0; i < trails.size(); i++) {
                 LatLng trail = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
 
-                googleMap.addMarker(new MarkerOptions()
-                        .title(trails.get(i).TrailName)
-                        .position(trail)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                // 1 closed, 2 open, 3 unknown
+                if (trails.get(i).TrailStatus == 1) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .title(trails.get(i).TrailName + "   " +  trails.get(i).distance + " miles away")
+                            .position(trail)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                } else if (trails.get(i).TrailStatus == 2) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .title(trails.get(i).TrailName + "   " +  trails.get(i).distance + " miles away")
+                            .position(trail)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                } else {
+                    googleMap.addMarker(new MarkerOptions()
+                            .title(trails.get(i).TrailName + "   " +  trails.get(i).distance + " miles away")
+                            .position(trail)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                }
             }
         }
         if (trailLocation != null && mLastLocation != null) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
-            googleMap.addMarker(new MarkerOptions()
-                    .title(trailName)
-                    .position(trailLocation)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
+
+            // 1 closed, 2 open, 3 unknown
+            if (trailStatus == 1) {
+                googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).showInfoWindow();
+            } else if (trailStatus == 2) {
+                googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
+            } else {
+                googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))).showInfoWindow();
+            }
+
             googleMap.addMarker(new MarkerOptions()
                     .title("Current Location")
-                    .position(home));
+                    .position(home)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
         }
         else if (mLastLocation != null && trailLocation == null) {
             home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
             googleMap.addMarker(new MarkerOptions()
                     .title("Current Location")
-                    .position(home));
+                    .position(home)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         }
         else if (trailLocation != null && mLastLocation == null) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
-            googleMap.addMarker(new MarkerOptions()
-                .title(trailName)
-                    .position(trailLocation)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+            // 1 closed, 2 open, 3 unknown
+            if (trailStatus == 1) {
+                googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))).showInfoWindow();
+            } else if (trailStatus == 2) {
+                googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))).showInfoWindow();
+            } else {
+                googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))).showInfoWindow();
+            }
         } else {
             Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }

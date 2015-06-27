@@ -128,6 +128,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 Bundle args = new Bundle();
                 args.putParcelable("geoPoint", geoPoint);
                 args.putString("trailName", model.TrailName);
+                args.putInt("trailStatus", model.TrailStatus);
                 intent.putExtra("bundle", args);
                 v.getContext().startActivity(intent);
             }
