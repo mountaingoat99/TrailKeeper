@@ -32,5 +32,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="button_home">Home</string>
     <string name="button_map">Map</string>
+    <string name="trail_status_label">Trail Status:</string>
 
 </resources>

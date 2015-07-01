@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -104,9 +105,16 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         viewHolder.trailCity.setText(model.TrailCity);
         viewHolder.trailState.setText(model.TrailState);
         viewHolder.trailDistance.setText(String.valueOf(model.distance));
-        String statusName = TrailStatusHelper.ConvertTrailStatus(model);
-        viewHolder.trailStatus.setText(statusName);
+        //String statusName = TrailStatusHelper.ConvertTrailStatus(model);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
+
+        if (model.TrailStatus == 1) {
+            viewHolder.trailStatus.setImageResource(R.mipmap.red_closed);
+        } else if (model.TrailStatus == 2) {
+            viewHolder.trailStatus.setImageResource(R.mipmap.green_open);
+        } else {
+            viewHolder.trailStatus.setImageResource(R.mipmap.yellow_unknown);
+        }
 
         viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +179,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         TextView trailName;
         TextView trailCity;
         TextView trailState;
-        TextView trailStatus;
+        ImageView trailStatus;
         TextView trailDistance;
         Button btnHome;
         Button btnMap;
@@ -181,7 +189,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
             trailName = (TextView) itemView.findViewById(R.id.txt_label_trail_name);
             trailCity = (TextView) itemView.findViewById(R.id.txt_label_trail_city);
             trailState = (TextView) itemView.findViewById(R.id.txt_label_trail_state);
-            trailStatus = (TextView)itemView.findViewById(R.id.txt_label_trail_status);
+            trailStatus = (ImageView)itemView.findViewById(R.id.txt_label_trail_status);
             trailDistance = (TextView)itemView.findViewById(R.id.txt_label_trail_distance);
             btnHome = (Button)itemView.findViewById(R.id.btn_trail_home);
             btnMap = (Button)itemView.findViewById(R.id.btn_trail_map);
