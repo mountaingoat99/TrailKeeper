@@ -49,6 +49,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_marginRight="8dp"
+                            android:layout_gravity="center"
                             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                         <TextView
@@ -56,16 +57,17 @@
                             android:text="-"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
+                            android:layout_marginEnd="0dp"
+                            android:layout_marginRight="0dp"
+                            android:layout_gravity="center"
                             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-                        <TextView
+                        <ImageView
                             android:id="@+id/txtTrail_status"
-                            android:text="Open/Closed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:src="@mipmap/red_closed"
+                            android:contentDescription="@string/trail_status"/>
 
                     </LinearLayout>
 

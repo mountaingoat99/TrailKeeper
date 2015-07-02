@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +54,8 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
-    private TextView trailName, trailStatus, trailCity, trailState;
+    private TextView trailName, trailCity, trailState;
+    private ImageView trailStatus;
 
     GestureDetectorCompat gestureDetector;
     GoogleMap googleMap;
@@ -118,7 +120,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
     private void SetUpViews() {
         trailName = (TextView)findViewById(R.id.txtTrail_name);
-        trailStatus = (TextView)findViewById(R.id.txtTrail_status);
+        trailStatus = (ImageView)findViewById(R.id.txtTrail_status);
         trailCity = (TextView)findViewById(R.id.txtTrail_city);
         trailState = (TextView)findViewById(R.id.txtTrail_state);
     }
@@ -134,11 +136,18 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                     for (ParseObject object : list) {
                         trailNameString = object.get("TrailName").toString();
                         trailName.setText(trailNameString);
-                        String statusName = TrailStatusHelper.ConvertTrailStatus(object.getInt("Status"));
-                        trailStatus.setText(statusName);
+                        int status = object.getInt("Status");
                         trailCity.setText(object.get("City").toString());
                         trailState.setText(object.get("State").toString());
                         trailLocation = new LatLng(object.getParseGeoPoint("GeoLocation").getLatitude(), object.getParseGeoPoint("GeoLocation").getLongitude());
+
+                        if (status == 1) {
+                            trailStatus.setImageResource(R.mipmap.red_closed);
+                        } else if (status == 2) {
+                            trailStatus.setImageResource(R.mipmap.green_open);
+                        } else {
+                            trailStatus.setImageResource(R.mipmap.yellow_unknown);
+                        }
                     }
                 } else {
                     e.printStackTrace();
