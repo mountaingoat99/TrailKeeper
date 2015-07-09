@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
     private TextView trailName, trailCity, trailState;
     private ImageView trailStatus;
+    private Button btnComment, btnTrailStatus;
 
     GestureDetectorCompat gestureDetector;
     GoogleMap googleMap;
@@ -123,6 +125,8 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         trailStatus = (ImageView)findViewById(R.id.txtTrail_status);
         trailCity = (TextView)findViewById(R.id.txtTrail_city);
         trailState = (TextView)findViewById(R.id.txtTrail_state);
+        btnComment = (Button)findViewById(R.id.btn_leave_comment);
+        btnTrailStatus = (Button)findViewById(R.id.btn_set_trail_status);
     }
 
     private void GetTrailData() {

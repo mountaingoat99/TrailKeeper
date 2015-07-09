@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/button_home"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 
@@ -138,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/button_map"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 

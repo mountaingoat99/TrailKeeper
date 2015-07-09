@@ -9,6 +9,8 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +32,8 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
 
     private List<ModelTrails> items;
     public static ModelTrails model;
+    // Allows to remember the last item shown on screen
+    private int lastPosition = -1;
     private SparseBooleanArray selectedItems;
     private Context context;
 
@@ -116,6 +120,8 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
             viewHolder.trailStatus.setImageResource(R.mipmap.yellow_unknown);
         }
 
+        setAnimation(viewHolder, position);
+
         viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +135,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         viewHolder.btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ModelTrails model  = getTrailModel(viewHolder);
+                ModelTrails model = getTrailModel(viewHolder);
                 ParseGeoPoint point = model.GeoLocation;
                 LatLng geoPoint = new LatLng(point.getLatitude(), point.getLongitude());
                 Intent intent = new Intent(context, Map.class);
@@ -141,6 +147,17 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 v.getContext().startActivity(intent);
             }
         });
+    }
+
+    // animation
+    private void setAnimation(HomeScreenListViewHolder viewToAnimate, int position){
+        // if the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_out_right);
+            View v = viewToAnimate.itemView;
+            v.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override

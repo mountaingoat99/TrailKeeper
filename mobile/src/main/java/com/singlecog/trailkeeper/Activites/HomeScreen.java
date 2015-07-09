@@ -121,11 +121,6 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     // Fills the Trail Status Recycler View
     public void SetUpTrailStatusRecyclerView(){
-//        for (int i = 1; trails.size() > i; i++){   // TODO this sucks, stop coding with Vodka
-//            if (i > 4) {
-//                trails.remove(i);
-//            }
-//        }
         // we want to give a few extra seconds for the Google Location API to load and connect
         // but only if the current location is already null
         if (TrailKeeperApplication.home == null) {
@@ -153,11 +148,18 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     private void SortTrails(){
         for (int i = 0; trails.size() > i; i++) {
-            //on the Home Screen we only will show the 5 closet trails
             // TODO once settings are working add Metric in here
             trails.get(i).distance = (float)Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
         }
         GeoLocationHelper.SortTrails(trails);
+
+        //on the Home Screen we only will show the 5 closet trails
+        int count = trails.size();
+        for (int i = 0; count > i; i++) {
+            if (trails.size() > 5) {
+                trails.remove(5);
+            }
+        }
     }
 
     private void ShowTrailCards(){
@@ -216,6 +218,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
             mTrailOpenAdapter.removeData(i);
         }
+
         // then refresh the Application class Parse Methods
         TrailKeeperApplication.LoadAllFromParse();
         TrailKeeperApplication t = new TrailKeeperApplication();
