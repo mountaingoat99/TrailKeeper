@@ -68,6 +68,7 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
                 if (e == null) {
                     for (ParseObject parseObject : list) {
                         ModelTrails trail = new ModelTrails();
+                        trail.ObjectID = parseObject.getObjectId();
                         trail.TrailID = parseObject.getInt("TrailID");
                         trail.TrailName = parseObject.get("TrailName").toString();
                         trail.TrailStatus = Integer.valueOf(parseObject.get("Status").toString());

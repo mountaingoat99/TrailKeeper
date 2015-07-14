@@ -1,15 +1,18 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -19,9 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -29,18 +29,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import AsyncAdapters.AsyncOneTrailComments;
-import Helpers.TrailStatusHelper;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
 import models.ModelTrails;
@@ -51,13 +52,15 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
     protected static final String TAG = "trailScreenActivity";
 
-    private int trailId;
+    private int trailId, status;
+    private String objectID;
 
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
     private TextView trailName, trailCity, trailState;
     private ImageView trailStatus;
     private Button btnComment, btnTrailStatus;
+    private AlertDialog statusDialog;
 
     GestureDetectorCompat gestureDetector;
     GoogleMap googleMap;
@@ -84,6 +87,8 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         // get the trailID from the previous view
         Intent intent = getIntent();
         trailId = intent.getIntExtra("trailID", 0);
+        objectID = intent.getStringExtra("objectID");
+
 
         // call method to get items from Local DataStore to fill the Views
         GetTrailData();
@@ -108,6 +113,95 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         // set up the Recycler View
         SetupCommentCard();
         ShowGoogleMap();
+        SetUpButtonClicks();
+    }
+
+    private void ChangeStatusButtonText() {
+        if(status == 1) {
+            btnTrailStatus.setText("Open Trail");
+        } else if (status == 2 ) {
+            btnTrailStatus.setText("Close Trail");
+        } else {
+            btnTrailStatus.setText("Trail Status");
+        }
+    }
+
+    private void SetUpButtonClicks() {
+        btnTrailStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenTrailStatusDialog();
+            }
+        });
+    }
+
+    private void OpenTrailStatusDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Set Trail Status");
+
+        builder.setSingleChoiceItems(ModelTrails.getTrailStatusNames(), -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:                   // Open Trail
+                        status = 2;
+                        ChangeTrailStatus(status);
+                        break;
+                    case 1:                   // Close Trail
+                        status = 1;
+                        ChangeTrailStatus(status);
+                        break;
+                    case 2:                   // Unknown
+                        status = 3;
+                        ChangeTrailStatus(status);
+                        break;
+                }
+                statusDialog.dismiss();
+            }
+        });
+
+        statusDialog = builder.create();
+        statusDialog.show();
+    }
+
+    private void ChangeTrailStatus(final int choice){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if((ni != null) && (ni.isConnected())) {
+            // lets get the object first
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+
+            // retrieve the Object By ID
+            query.getInBackground(objectID, new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (e == null) {
+                        parseObject.put("Status", choice);
+                        parseObject.saveEventually();
+                        UpdateStatusIcon();
+                    }
+                }
+            });
+
+            // TODO create login and user authentication
+//            if (!ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+//                // If we have a network connection and a current
+//                // logged in user, update the status
+//            } else {
+//
+//                // If we have a network connection but no logged in user, direct
+//                // the person to log in or sign up.
+////                ParseLoginBuilder builder = new ParseLoginBuilder(this);
+////                startActivityForResult(builder.build(), LOGIN_ACTIVITY_CODE);
+//            }
+        } else {
+            // If there is no connection, let the user know the sync didn't happen
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Your device appears to be offline. Trail Status may not have been updated.",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     private void ShowGoogleMap() {
@@ -140,24 +234,30 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                     for (ParseObject object : list) {
                         trailNameString = object.get("TrailName").toString();
                         trailName.setText(trailNameString);
-                        int status = object.getInt("Status");
+                        status = object.getInt("Status");
                         trailCity.setText(object.get("City").toString());
                         trailState.setText(object.get("State").toString());
                         trailLocation = new LatLng(object.getParseGeoPoint("GeoLocation").getLatitude(), object.getParseGeoPoint("GeoLocation").getLongitude());
 
-                        if (status == 1) {
-                            trailStatus.setImageResource(R.mipmap.red_closed);
-                        } else if (status == 2) {
-                            trailStatus.setImageResource(R.mipmap.green_open);
-                        } else {
-                            trailStatus.setImageResource(R.mipmap.yellow_unknown);
-                        }
+                        UpdateStatusIcon();
                     }
                 } else {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void UpdateStatusIcon() {
+        if (status == 1) {
+            trailStatus.setImageResource(R.mipmap.red_closed);
+        } else if (status == 2) {
+            trailStatus.setImageResource(R.mipmap.green_open);
+        } else {
+            trailStatus.setImageResource(R.mipmap.yellow_unknown);
+        }
+
+        ChangeStatusButtonText();
     }
 
     // sets up the trail comment recycler view

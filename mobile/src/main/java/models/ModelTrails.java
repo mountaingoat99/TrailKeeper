@@ -1,11 +1,11 @@
 package models;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseGeoPoint;
 
 public class ModelTrails {
 
     private static int nextId = 0;
+    private static CharSequence[] trailStatusNames;
 
     public ModelTrails()
     {
@@ -20,6 +20,7 @@ public class ModelTrails {
         TrailID = trailID;
     }
 
+    public String ObjectID;
     public int TrailID;
     public String TrailName;
     public int TrailStatus;
@@ -27,6 +28,10 @@ public class ModelTrails {
     public String TrailState;
     public ParseGeoPoint GeoLocation;
     public float distance;
+
+    public static CharSequence[] getTrailStatusNames() {
+        return trailStatusNames = new CharSequence[]{"Open", "Closed", "Unknown"};
+    }
 
     public float getDistance() {
         return distance;

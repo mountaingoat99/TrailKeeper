@@ -82,6 +82,12 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         return m.TrailID;
     }
 
+    public String GetObjectID(RecyclerView.ViewHolder item) {
+        int id = item.getAdapterPosition();
+        ModelTrails m = items.get(id);
+        return m.ObjectID;
+    }
+
     public ParseGeoPoint getLocation(RecyclerView.ViewHolder item){
         int id = item.getAdapterPosition();
         ModelTrails m = items.get(id);
@@ -126,8 +132,10 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
             @Override
             public void onClick(View v) {
                 int id = getTrailID(viewHolder);
+                String objectId = GetObjectID(viewHolder);
                 Intent intent = new Intent(context, TrailScreen.class);
                 intent.putExtra("trailID", id);
+                intent.putExtra("objectID", objectId);
                 v.getContext().startActivity(intent);
             }
         });
@@ -153,7 +161,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
     private void setAnimation(HomeScreenListViewHolder viewToAnimate, int position){
         // if the bound view wasn't previously displayed on screen, it's animated
         if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_out_right);
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
             View v = viewToAnimate.itemView;
             v.startAnimation(animation);
             lastPosition = position;
