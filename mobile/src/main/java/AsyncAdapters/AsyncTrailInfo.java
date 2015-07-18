@@ -12,7 +12,6 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.Comments;
-import com.singlecog.trailkeeper.Activites.Home;
 import com.singlecog.trailkeeper.Activites.HomeScreen;
 
 import java.util.Iterator;
@@ -25,15 +24,9 @@ import models.ModelTrails;
 public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<ModelTrails>> {
 
     ProgressDialog dialog;
-    private Home homeActivity;
     private Comments commentActivity;
     private HomeScreen homeScreenActivity;
     private Context context;
-
-    public AsyncTrailInfo(Home activity, Context context){
-        this.homeActivity = activity;
-        this.context = context;
-    }
 
     public AsyncTrailInfo(Comments activity, Context context){
         this.commentActivity = activity;
@@ -78,8 +71,6 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
 
                         passedTrails.add(trail);
                     }
-                    if (homeActivity != null)
-                        homeActivity.SetUpTrailStatusRecyclerView();
                     if (homeScreenActivity != null)
                         homeScreenActivity.SetUpTrailStatusRecyclerView();
                     if (commentActivity != null)
