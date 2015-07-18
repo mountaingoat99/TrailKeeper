@@ -12,9 +12,9 @@ import java.util.Date;
 @ParseClassName("trails")
 public class ParseTrails extends ParseObject {
 
-    public String GetObjectID() { return getObjectId(); }
+    //public String getObjectId() { return getObjectId(); }
 
-    public void SetObjectID( String objectID) {put("ObjectID", objectID); }
+    public void setObjectId( String objectID) {put("objectID", objectID); }
 
     public Integer getTrailID() {
         return getInt("TrailID");
@@ -28,7 +28,7 @@ public class ParseTrails extends ParseObject {
         return getString("TrailName");
     }
 
-    public void SetTrailName(String trailName) {
+    public void setTrailName(String trailName) {
         put("TrailName", trailName);
     }
 
@@ -36,7 +36,7 @@ public class ParseTrails extends ParseObject {
         return getString("City");
     }
 
-    public void SetCity(String city){
+    public void setCity(String city){
         put("City", city);
     }
 
@@ -44,7 +44,7 @@ public class ParseTrails extends ParseObject {
         return getString("State");
     }
 
-    public void SetState(String state){
+    public void setState(String state){
         put("State", state);
     }
 
@@ -52,7 +52,7 @@ public class ParseTrails extends ParseObject {
         return getInt("Status");
     }
 
-    public void SetStatus(Integer status) {
+    public void setStatus(Integer status) {
         put("Status", status);
     }
 
@@ -73,11 +73,7 @@ public class ParseTrails extends ParseObject {
     }
 
     public Date getUpdatedAt(){
-        return getDate("updateAt");
-    }
-
-    public void setUpdatedAt(Date updateAt) {
-        put("updateAt", updateAt);
+        return getDate("updatedAt");
     }
 
     public static ParseQuery<ParseTrails> getQuery() {

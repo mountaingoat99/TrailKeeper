@@ -1,11 +1,17 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +45,10 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     private RecyclerViewHomeScreenAdapter mTrailOpenAdapter;
     private List<ModelTrails> trails;
     private Bundle bundle;
+    // this will let shared preference know if it needs to take longer for the first time load and
+    // if we need to ask them to create an account for the first time
+    private boolean firstTimeLoad = true;
+    private AlertDialog signUpDialog;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -50,13 +60,14 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         if (savedInstanceState != null)
             bundle = savedInstanceState;
 
+        loadSavedPreferences();
+
         // set up the swipe pull to refresh
         mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_home_screen);
         mSwipeLayout.setOnRefreshListener(this);
         mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
 
         // show the refresh spinner on load
         if (TrailKeeperApplication.home == null) {
@@ -70,8 +81,50 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
         // set up the RecyclerViews
         SetUpTrailStatusCard();
-
         CallAsyncTrailInfo();
+    }
+
+    private void showSignUpScreen(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.welcome_title);
+
+        builder.setMessage(R.string.welcome_message);
+
+        builder.setNegativeButton(R.string.button_not_yet, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                View v = mTrailOpenRecyclerView;
+                firstTimeLoad = false;
+                savePreferences("Firsttimeload", false);
+                Snackbar.make(v, R.string.snackbar_settings_reminder, Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        builder.setPositiveButton(R.string.button_sign_up, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                firstTimeLoad = false;
+                savePreferences("Firsttimeload", false);
+                Intent intent = new Intent(context, Settings.class);
+                startActivity(intent);
+            }
+        });
+
+        signUpDialog = builder.create();
+        signUpDialog.show();
+    }
+
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        firstTimeLoad = sp.getBoolean("Firsttimeload", true);
+    }
+
+    private void savePreferences(String key, boolean value) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
     }
 
     private void CallAsyncTrailInfo() {
@@ -116,7 +169,6 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                 mSwipeLayout.setEnabled(enabled);
             }
         });
-
     }
 
     // Fills the Trail Status Recycler View
@@ -130,15 +182,27 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                 public void run() {
                     // first we will sort and get the distance correct
                     if (TrailKeeperApplication.home != null) {
-                        SortTrails();
+                        if (!trails.isEmpty()) {
+                            SortTrails();
+                        } else {
+                            onRefresh();
+                            return;
+                        }
                     } else {
-                        Toast.makeText(context, "Please Turn On GPS for to get the trails nearest your location", Toast.LENGTH_LONG).show();
+                        View v = mTrailOpenRecyclerView;
+                        Snackbar.make(v, R.string.snackbar_no_signal, Snackbar.LENGTH_LONG).show();
+                        //Toast.makeText(context, "Please Turn On GPS for to get the trails nearest your location", Toast.LENGTH_LONG).show();
                     }
                     ShowTrailCards();
                 }
             };
 
-            handler.postDelayed(r, 3000);
+            // todo on the first time load lets set this to 6000
+            if (firstTimeLoad){
+                handler.postDelayed(r, 6000);
+            } else {
+                handler.postDelayed(r, 3000);
+            }
         // if not null then we can go ahead and sort and show the cards
         } else {
             SortTrails();
@@ -167,6 +231,11 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails, context);
         mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
         mTrailOpenRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        // lets show the sign up screen if this is the first time they've been here
+        if (firstTimeLoad) {
+            showSignUpScreen();
+        }
     }
 
     @Override
@@ -208,15 +277,18 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     @Override
     public void onRefresh() {
 
-        // first we remove all the items
-        for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
-            mTrailOpenAdapter.removeData(i);
-        }
-        for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
-            mTrailOpenAdapter.removeData(i);
-        }
-        for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
-            mTrailOpenAdapter.removeData(i);
+        if (mTrailOpenAdapter != null) {
+
+            // first we remove all the items
+            for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
+                mTrailOpenAdapter.removeData(i);
+            }
+            for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
+                mTrailOpenAdapter.removeData(i);
+            }
+            for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
+                mTrailOpenAdapter.removeData(i);
+            }
         }
 
         // then refresh the Application class Parse Methods

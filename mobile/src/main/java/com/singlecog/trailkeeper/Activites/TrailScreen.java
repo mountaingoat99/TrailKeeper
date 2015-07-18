@@ -34,6 +34,7 @@ import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
@@ -71,6 +72,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     protected Location mLastLocation;
     private LatLng trailLocation;
     private String trailNameString;
+    private enum trailStatusTypes { Open, Closed, Unknown }
 
     private List<ModelTrailComments> comments;
     private final Context context = this;
@@ -180,6 +182,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                         parseObject.put("Status", choice);
                         parseObject.saveEventually();
                         UpdateStatusIcon();
+                        SendOutAPushNotification();
                     }
                 }
             });
@@ -202,6 +205,18 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                     "Your device appears to be offline. Trail Status may not have been updated.",
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void SendOutAPushNotification() {
+        ParsePush push = new ParsePush();
+        push.setChannel("PetsTrailStatus");
+        if (status == 1)
+            push.setMessage("Silver Lake Mountainbike trails are closed!");
+        else if (status == 2)
+            push.setMessage("Silver Lake Mountainbike trails are open!");
+        else
+            push.setMessage("We don't know if Silver Lake MTB trails are open or closed");
+        push.sendInBackground();
     }
 
     private void ShowGoogleMap() {

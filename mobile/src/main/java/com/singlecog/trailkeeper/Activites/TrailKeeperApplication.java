@@ -68,11 +68,13 @@ public class TrailKeeperApplication extends Application implements
         Parse.enableLocalDatastore(getApplicationContext());
         Parse.initialize(this, getResources().getString(R.string.ApplicationID), getResources().getString(R.string.ClientKEey));
         ParseInstallation.getCurrentInstallation().saveInBackground();
+        //When a user indicates they want trail Updates we subscribe them to them
+        //ParsePush.subscribeInBackground("PetsTrailStatus");
         ParseUser.enableAutomaticUser();
         ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);
 
-        ParsePush.subscribeInBackground("", new SaveCallback() {
+        ParsePush.subscribeInBackground("PetsTrailStatus", new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {

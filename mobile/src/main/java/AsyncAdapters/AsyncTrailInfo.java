@@ -47,11 +47,11 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
 
     @Override
     protected void onPreExecute(){
-        dialog = new ProgressDialog(context);
-        dialog.setTitle("Updating Trails...");
-        dialog.setMessage("Please wait...");
-        dialog.setIndeterminate(true);
-        dialog.show();
+//        dialog = new ProgressDialog(context);
+//        dialog.setTitle("Updating Trails...");
+//        dialog.setMessage("Please wait...");
+//        dialog.setIndeterminate(true);
+//        dialog.show();
     }
 
     @SafeVarargs
@@ -95,6 +95,6 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
     }
 
     protected void onPostExecute(List<ModelTrails> passedTrails) {
-        dialog.dismiss();
+        //dialog.dismiss();
     }
 }

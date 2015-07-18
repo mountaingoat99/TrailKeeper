@@ -29,9 +29,19 @@
     <string name="ClientKEey">"4S7u2tedpm9yeE6DR3J6mDyJHHpgmUgktu6Q6QvD"</string>
     <string name="title_activity_home_screen">HomeScreen</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="button_home">Home</string>
     <string name="button_map">Map</string>
     <string name="trail_status_label">Trail Status:</string>
+
+    <!-- sign up screen -->
+    <string name="welcome_title">Welcome!</string>
+    <string name="welcome_message">Would you like to sign up for a free account?
+                \n\nWith an active account you will be able to use more of the TrailKeeper functions!</string>
+    <string name="button_not_yet">Not yet</string>
+    <string name="button_sign_up">Sign up</string>
+    <string name="snackbar_settings_reminder">Go to Settings to sign up anytime</string>
+
+    <!-- Snackbar no GPS -->
+    <string name="snackbar_no_signal">Please turn On GPS to see trails near you, and refresh</string>
 
 </resources>
