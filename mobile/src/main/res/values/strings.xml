@@ -43,5 +43,26 @@
 
     <!-- Snackbar no GPS -->
     <string name="snackbar_no_signal">Please turn On GPS to see trails near you, and refresh</string>
+    <string name="title_activity_create_account">Create Account</string>
+    <string name="email_hint">Email</string>
+
+    <!-- snackbar settings screen -->
+    <string name="snackbar_alreadysignedin_create_account">You are already signed in, no need to create an account</string>
+    <string name="snackbar_alreadysignedin_login">You are already signed in</string>
+    <string name="snackbar_alreadysignedin_logout">You are not signed in</string>
+    <string name="snackbar_alreadysignedin_delete_account">You are not signed in, nothing to delete</string>
+    <string name="snackbar_notifications_signin">Please sign in first</string>
+
+    <!-- Create Account Screen -->
+    <string name="username_hint">User Name</string>
+    <string name="password_hint">Password</string>
+    <string name="signup_btn_text">Sign Up</string>
+    <string name="create_account_success">Welcome to Trail Keeper and thanks for signing up!</string>
+    <string name="create_account_failure">We failed to create your account, \nPlease try again</string>
+    <string name="create_account_success_message_start">Your new User Name is</string>
+    <string name="create_account_success_message_end">and you now have access to all the free features we have to offer!</string>
+    <string name="snackbar_invalid_email">Please enter a vaild email address</string>
+    <string name="snackbar_invalid_username">Please enter a valid user name longer than 4 digits</string>
+    <string name="snackbar_invalid_password">Please enter a vaild password longer than 8 digits</string>
 
 </resources>

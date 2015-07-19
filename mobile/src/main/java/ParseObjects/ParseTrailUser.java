@@ -1,5 +1,9 @@
 package ParseObjects;
 
+import android.text.TextUtils;
+import android.util.Patterns;
+
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseClassName;
 import com.parse.ParseQuery;
 
@@ -36,4 +40,11 @@ public class ParseTrailUser extends com.parse.ParseUser {
         return ParseQuery.getQuery(ParseTrailUser.class);
     }
 
+    public static Boolean IsAnonUser() {
+        return (ParseAnonymousUtils.isLinked(ParseTrailUser.getCurrentUser()));
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
 }

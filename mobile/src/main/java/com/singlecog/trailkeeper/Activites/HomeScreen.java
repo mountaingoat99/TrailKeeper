@@ -2,7 +2,6 @@ package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,17 +17,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Menu;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationServices;
+
 import com.singlecog.trailkeeper.R;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import AsyncAdapters.AsyncTrailInfo;
 import Helpers.GeoLocationHelper;
@@ -106,7 +101,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                 dialog.dismiss();
                 firstTimeLoad = false;
                 savePreferences("Firsttimeload", false);
-                Intent intent = new Intent(context, Settings.class);
+                Intent intent = new Intent(context, CreateAccount.class);
                 startActivity(intent);
             }
         });
