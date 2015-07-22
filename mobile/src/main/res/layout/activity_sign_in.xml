@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.singlecog.trailkeeper.Activites.CreateAccount"
+    tools:context="com.singlecog.trailkeeper.SignIn"
     android:background="@drawable/bg_create_account">
 
     <android.support.v4.widget.DrawerLayout
@@ -37,17 +37,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:padding="10dp">
-
-                    <EditText
-                        android:id="@+id/edittext_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:hint="@string/email_hint"
-                        android:inputType="textEmailAddress"
-                        android:textColorHint="@color/secondary_text"
-                        android:drawableLeft="@mipmap/ic_action_email"
-                        android:drawableStart="@mipmap/ic_action_email"/>
 
                     <EditText
                         android:id="@+id/edittext_username"
@@ -85,7 +74,7 @@
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:text="@string/signup_btn_text"/>
+                            android:text="@string/sign_in"/>
 
                     </RelativeLayout>
 

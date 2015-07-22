@@ -53,16 +53,22 @@
     <string name="snackbar_alreadysignedin_delete_account">You are not signed in, nothing to delete</string>
     <string name="snackbar_notifications_signin">Please sign in first</string>
 
+    <!-- Settings Screen -->
+    <string name="sign_out_confirm">Are you sure you want to sign out?</string>
+    <string name="sign_out_cancel">Cancel</string>
+    <string name="sign_out_yes">Yes</string>
+
     <!-- Create Account Screen -->
     <string name="username_hint">User Name</string>
     <string name="password_hint">Password</string>
     <string name="signup_btn_text">Sign Up</string>
-    <string name="create_account_success">Welcome to Trail Keeper and thanks for signing up!</string>
     <string name="create_account_failure">We failed to create your account, \nPlease try again</string>
-    <string name="create_account_success_message_start">Your new User Name is</string>
-    <string name="create_account_success_message_end">and you now have access to all the free features we have to offer!</string>
     <string name="snackbar_invalid_email">Please enter a vaild email address</string>
-    <string name="snackbar_invalid_username">Please enter a valid user name longer than 4 digits</string>
+    <string name="snackbar_invalid_username">Please enter a valid user name longer than 6 digits</string>
     <string name="snackbar_invalid_password">Please enter a vaild password longer than 8 digits</string>
+    <string name="title_activity_sign_in">Sign In</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="sign_in">Sign In</string>
 
 </resources>

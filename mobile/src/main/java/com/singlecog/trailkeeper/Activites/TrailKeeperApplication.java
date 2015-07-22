@@ -29,7 +29,6 @@ import com.singlecog.trailkeeper.R;
 
 
 import AsyncAdapters.AsyncLoadAllFromParse;
-import ParseObjects.ParseTrailUser;
 import ParseObjects.ParseTrails;
 
 public class TrailKeeperApplication extends Application implements

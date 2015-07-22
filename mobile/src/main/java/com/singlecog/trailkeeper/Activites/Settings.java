@@ -1,6 +1,9 @@
 package com.singlecog.trailkeeper.Activites;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -11,9 +14,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
+import com.singlecog.trailkeeper.SignIn;
 
-import ParseObjects.ParseTrailUser;
+import java.util.Set;
+
+import Helpers.CreateAccountHelper;
 
 public class Settings extends BaseActivity implements AdapterView.OnItemClickListener {
 
@@ -21,6 +28,10 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
     String[] settingArray;
     private final Context context = this;
     private boolean isAnonUser;
+    private AlertDialog signOutDialog;
+    private ProgressDialog cancelDialog;
+    private View v;
+    private CreateAccountHelper createAccountHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +39,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
         setContentView(R.layout.activity_settings);
         super.onCreateDrawer();
 
-        isAnonUser = ParseTrailUser.IsAnonUser();
+        isAnonUser = CreateAccountHelper.IsAnonUser();
 
         settingsList = (ListView)findViewById(R.id.listViewSettings);
         populateListView();
@@ -58,14 +69,15 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 if(!isAnonUser) {
                     Snackbar.make(view, R.string.snackbar_alreadysignedin_login, Snackbar.LENGTH_LONG).show();
                 } else {
-                    // TODO go to login screen
+                    Intent intent = new Intent(context, SignIn.class);
+                    startActivity(intent);
                 }
                 break;
             case 2:  // Sign out
                 if(isAnonUser) {
                     Snackbar.make(view, R.string.snackbar_alreadysignedin_logout, Snackbar.LENGTH_LONG).show();
                 } else {
-                    // TODO go to logout screen
+                    SignOut();
                 }
                 break;
             case 3:  // Delete Account
@@ -92,6 +104,44 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
             case 6: // Contact
                 // TODO contact dialog
                 break;
+        }
+    }
+
+    private void SignOut(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.sign_out_confirm));
+        builder.setNegativeButton(getResources().getString(R.string.sign_out_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(getResources().getString(R.string.sign_out_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ParseUser.logOut();
+                createAccountHelper = new CreateAccountHelper(context, Settings.this);
+                createAccountHelper.CreateAnonUser();
+                StartSignOutDialog();
+            }
+        });
+        signOutDialog = builder.create();
+        signOutDialog.show();
+    }
+
+    private void StartSignOutDialog(){
+        cancelDialog = new ProgressDialog(Settings.this);
+        cancelDialog.setMessage("Signing Out");
+        cancelDialog.show();
+    }
+
+    public void SignedOut(boolean valid, String failMessage){
+        cancelDialog.dismiss();
+        v = settingsList;
+        if(valid){
+            Snackbar.make(v, "You have been signed out", Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
         }
     }
 

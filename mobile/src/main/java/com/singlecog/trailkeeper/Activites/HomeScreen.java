@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import AsyncAdapters.AsyncTrailInfo;
 import Helpers.GeoLocationHelper;
@@ -44,6 +45,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     // if we need to ask them to create an account for the first time
     private boolean firstTimeLoad = true;
     private AlertDialog signUpDialog;
+    private String userName;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -77,6 +79,19 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         // set up the RecyclerViews
         SetUpTrailStatusCard();
         CallAsyncTrailInfo();
+
+        Bundle b = getIntent().getExtras();
+        if (b != null){
+            View v = mTrailOpenRecyclerView;
+            userName = b.getString("userName");
+            String className = b.getString("className");
+            assert className != null;
+            if (className.equals("CreateAccount")) {
+                Snackbar.make(v, "Thanks for signing up " + userName, Snackbar.LENGTH_LONG).show();
+            } else {
+                Snackbar.make(v, "You are signed in " + userName, Snackbar.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void showSignUpScreen(){
