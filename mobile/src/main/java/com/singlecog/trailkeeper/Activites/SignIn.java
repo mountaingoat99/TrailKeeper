@@ -1,17 +1,14 @@
-package com.singlecog.trailkeeper;
+package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -20,8 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.parse.ParseUser;
-import com.singlecog.trailkeeper.Activites.BaseActivity;
-import com.singlecog.trailkeeper.Activites.HomeScreen;
+import com.singlecog.trailkeeper.R;
 
 import Helpers.CreateAccountHelper;
 

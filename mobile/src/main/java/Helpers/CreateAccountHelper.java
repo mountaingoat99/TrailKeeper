@@ -1,21 +1,27 @@
 package Helpers;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 
+import com.parse.DeleteCallback;
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.singlecog.trailkeeper.Activites.CreateAccount;
 import com.singlecog.trailkeeper.Activites.Settings;
-import com.singlecog.trailkeeper.SignIn;
+import com.singlecog.trailkeeper.Activites.SignIn;
 
-import java.util.Set;
-import java.util.UnknownFormatConversionException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class CreateAccountHelper {
 
@@ -70,6 +76,8 @@ public class CreateAccountHelper {
         ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setPassword(password);
+        // TODO Debug Password
+        user.put("DebugPassword", password);
         user.setEmail(email);
 
         user.signUpInBackground(new SignUpCallback() {
@@ -90,16 +98,32 @@ public class CreateAccountHelper {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
-                if (e == null){
+                if (e == null) {
                     signInActivity.SignInSuccess(true, null);
                     Log.i(LOG, "Sign In Success");
-                }else{
+                } else {
                     signInActivity.SignInSuccess(false, e.getMessage());
                     Log.i(LOG, "Login Failed");
                 }
             }
         });
+    }
 
+    public void DeleteUser(ParseUser parseUser) {
+        List<ParseUser> currentUser = new ArrayList<>();
+        currentUser.add(parseUser);
+        ParseUser.deleteAllInBackground(currentUser, new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.i(LOG, "Delete Account Success");
+                    settingsActivity.DeleteSuccessOrFail(true, null);
+                } else {
+                    Log.i(LOG, "Delete Account Fail");
+                    settingsActivity.DeleteSuccessOrFail(false, e.getMessage());
+                }
+            }
+        });
     }
 
     public void CreateAnonUser() {
@@ -107,11 +131,11 @@ public class CreateAccountHelper {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (e != null) {
-                    settingsActivity.SignedOut(false, e.getMessage());
                     Log.i(LOG, "Create Anon Account Failed");
+                    settingsActivity.SignedOut(false, e.getMessage());
                 } else {
-                    settingsActivity.SignedOut(true, null);
                     Log.i(LOG, "Create Anon Account Success");
+                    settingsActivity.SignedOut(true, null);
                 }
             }
         });

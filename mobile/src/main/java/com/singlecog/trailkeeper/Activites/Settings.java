@@ -16,9 +16,6 @@ import android.widget.ListView;
 
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
-import com.singlecog.trailkeeper.SignIn;
-
-import java.util.Set;
 
 import Helpers.CreateAccountHelper;
 
@@ -28,7 +25,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
     String[] settingArray;
     private final Context context = this;
     private boolean isAnonUser;
-    private AlertDialog signOutDialog;
+    private AlertDialog signOutDialog, deleteDialog;
     private ProgressDialog cancelDialog;
     private View v;
     private CreateAccountHelper createAccountHelper;
@@ -84,7 +81,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 if(isAnonUser) {
                     Snackbar.make(view, R.string.snackbar_alreadysignedin_delete_account, Snackbar.LENGTH_LONG).show();
                 } else {
-                    // TODO go to delete account screen
+                    DeleteAccount();
                 }
                 break;
             case 4:  // Notifications
@@ -107,6 +104,48 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
         }
     }
 
+    //region Delete Account
+    private void DeleteAccount() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.delete_account_confirm));
+        builder.setNegativeButton(getResources().getString(R.string.sign_out_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(getResources().getString(R.string.sign_out_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                createAccountHelper = new CreateAccountHelper(context, Settings.this);
+                createAccountHelper.DeleteUser(ParseUser.getCurrentUser());
+                StartDeleteDialog();
+            }
+        });
+        deleteDialog = builder.create();
+        deleteDialog.show();
+    }
+
+    private void StartDeleteDialog(){
+        cancelDialog = new ProgressDialog(Settings.this);
+        cancelDialog.setTitle("Deleting Account");
+        cancelDialog.setMessage("Sorry to see you go!");
+        cancelDialog.show();
+    }
+
+    public void DeleteSuccessOrFail(boolean valid, String failMessage) {
+        if (valid) {
+            createAccountHelper = new CreateAccountHelper(context, Settings.this);
+            createAccountHelper.CreateAnonUser();
+        } else {
+            cancelDialog.dismiss();
+            v = settingsList;
+            Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
+        }
+    }
+    //endregion
+
+    //region SignOut
     private void SignOut(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.sign_out_confirm));
@@ -139,11 +178,18 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
         cancelDialog.dismiss();
         v = settingsList;
         if(valid){
-            Snackbar.make(v, "You have been signed out", Snackbar.LENGTH_LONG).show();
+            Intent intent = new Intent(context, HomeScreen.class);
+            Bundle b = new Bundle();
+            b.putString("userName", "");
+            b.putString("className", "Settings");
+            intent.putExtras(b);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         } else {
             Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
         }
     }
+    //endregion
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -57,6 +57,7 @@
     <string name="sign_out_confirm">Are you sure you want to sign out?</string>
     <string name="sign_out_cancel">Cancel</string>
     <string name="sign_out_yes">Yes</string>
+    <string name="delete_account_confirm">Are you really sure you want to totally delete your account?</string>
 
     <!-- Create Account Screen -->
     <string name="username_hint">User Name</string>

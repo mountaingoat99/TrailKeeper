@@ -44,7 +44,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     // this will let shared preference know if it needs to take longer for the first time load and
     // if we need to ask them to create an account for the first time
     private boolean firstTimeLoad = true;
-    private AlertDialog signUpDialog;
+    private AlertDialog signUpDialog, verifyEmailDialog;
     private String userName;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -84,14 +84,31 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         if (b != null){
             View v = mTrailOpenRecyclerView;
             userName = b.getString("userName");
-            String className = b.getString("className");
-            assert className != null;
-            if (className.equals("CreateAccount")) {
-                Snackbar.make(v, "Thanks for signing up " + userName, Snackbar.LENGTH_LONG).show();
-            } else {
-                Snackbar.make(v, "You are signed in " + userName, Snackbar.LENGTH_LONG).show();
+            if (getIntent().hasExtra("className")) {
+                String className = b.getString("className") ;
+                if (className != null && className.equals("CreateAccount")) {
+                    VerifyEmailDialog();
+                } else if(className != null && className.equals("SignIn")) {
+                    Snackbar.make(v, "You are signed in " + userName, Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(v, "You have been signed out", Snackbar.LENGTH_LONG).show();
+                }
             }
         }
+    }
+
+    private void VerifyEmailDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thanks for signing up!");
+        builder.setMessage("Please check your email and verify your account to have access to all the features in TrailKeeper.");
+        builder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        signUpDialog = builder.create();
+        signUpDialog.show();
     }
 
     private void showSignUpScreen(){
@@ -121,8 +138,8 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
             }
         });
 
-        signUpDialog = builder.create();
-        signUpDialog.show();
+        verifyEmailDialog = builder.create();
+        verifyEmailDialog.show();
     }
 
     private void loadSavedPreferences(){

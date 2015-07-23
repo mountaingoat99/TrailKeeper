@@ -148,7 +148,7 @@
                 android:value="com.singlecog.trailkeeper.Activites.Settings" />
         </activity>
         <activity
-            android:name=".SignIn"
+            android:name=".Activites.SignIn"
             android:label="@string/title_activity_sign_in"
             android:parentActivityName=".Activites.Settings" >
             <meta-data
