@@ -72,10 +72,11 @@ public class BaseActivity extends AppCompatActivity {
         //Instantiate Navigation Drawer List
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+
         mActivityTitle = getTitle().toString();
 
         //Populate Navigation Drawer with string.xml values
-        mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_text_items,
                 new String[]{
                         getString(R.string.home),
                         getString(R.string.find_trail),

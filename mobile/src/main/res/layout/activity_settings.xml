@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linearlayout_root_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

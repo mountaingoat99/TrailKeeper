@@ -7,11 +7,14 @@ import android.util.Log;
 import android.util.Patterns;
 
 import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.singlecog.trailkeeper.Activites.CreateAccount;
 import com.singlecog.trailkeeper.Activites.Settings;
@@ -121,6 +124,45 @@ public class CreateAccountHelper {
                 } else {
                     Log.i(LOG, "Delete Account Fail");
                     settingsActivity.DeleteSuccessOrFail(false, e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void ResetPassword(String email){
+        ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.i(LOG, "Password Reset Success");
+                    signInActivity.PasswordResetSuccess(true, null);
+                } else {
+                    Log.i(LOG, "Password Reset Fail");
+                    signInActivity.PasswordResetSuccess(false, e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void FindUserName(String email) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("email", email);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                if (e == null) {
+                    String userName = null;
+                    for (ParseUser parseUser : list) {
+                        if (!parseUser.getUsername().isEmpty())
+                            userName = parseUser.getUsername();
+                    }
+                    if(userName != null) {
+                        signInActivity.FindPasswordSuccess(true, userName);
+                    } else {
+                        signInActivity.FindPasswordSuccess(false, null);
+                    }
+                } else {
+                    signInActivity.FindPasswordSuccess(false, null);
                 }
             }
         });

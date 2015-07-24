@@ -1,20 +1,27 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
@@ -24,14 +31,14 @@ import Helpers.CreateAccountHelper;
 public class SignIn extends BaseActivity {
 
     private static String LOG = "SignIn";
-    private LinearLayout layout;
     private EditText username, password;
-    private Button btnSignIn;
-    private String userNameString, passwordString;
-    private View v;
+    private Button btnSignIn, btnResetPassword, btnFindUsername;
+    private String userNameString, passwordString, resetEmailString;
     private final Context context = this;
     private InputMethodManager imm;
     private ProgressDialog dialog;
+    //private AlertDialog resetPasswordDialog;
+    private View view;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -48,10 +55,10 @@ public class SignIn extends BaseActivity {
         }
         username.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        layout = (LinearLayout)findViewById(R.id.layout1);
-        v = layout;
-        SetUpClickEvent(v);
+        view = findViewById(R.id.layout1);
+        SetUpSignInClickEvent();
+        SetUpResetClickEvent();
+        SetUpFindUserName();
     }
 
     @Override
@@ -63,16 +70,16 @@ public class SignIn extends BaseActivity {
             outState.putString("password", password.getText().toString());
     }
 
-    private void SetUpClickEvent(View v) {
+    private void SetUpSignInClickEvent() {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((username.getText().length() <= 0) || (password.getText().length() <= 0)){
-                    if(username.getText().length() <= 0){
+                if ((username.getText().length() <= 0) || (password.getText().length() <= 0)) {
+                    if (username.getText().length() <= 0) {
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                         Snackbar.make(v, "Please enter a Username", Snackbar.LENGTH_LONG).show();
                     }
-                    if(password.getText().length() <= 0) {
+                    if (password.getText().length() <= 0) {
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                         Snackbar.make(v, "Please enter a Password", Snackbar.LENGTH_LONG).show();
                     }
@@ -83,6 +90,126 @@ public class SignIn extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void SetUpFindUserName() {
+        btnFindUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FindUserNameDialog();
+            }
+        });
+    }
+
+    private void FindUserNameDialog() {
+        final Dialog resetDialog = new Dialog(this);
+        resetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        resetDialog.setContentView(R.layout.dialog_reset_email);
+        final EditText resetPasswordEditText = (EditText) resetDialog.findViewById(R.id.edittext_email);
+        Button resetButton = (Button) resetDialog.findViewById(R.id.btn_send_email);
+        resetButton.setText("Find Username");
+        Button cancelButton = (Button) resetDialog.findViewById(R.id.btn_cancel);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetDialog.dismiss();
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (resetPasswordEditText.getText().length() > 0) {
+                    if (CreateAccountHelper.isValidEmail(resetPasswordEditText.getText())) {
+                        resetDialog.dismiss();
+                        FindUsername(resetPasswordEditText.getText().toString());
+                    } else {
+                        Snackbar.make(v, "Please enter a valid email", Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    Snackbar.make(v, "Please enter a valid email", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        resetDialog.show();
+    }
+
+    private void FindUsername(String password){
+        CreateAccountHelper accountHelper = new CreateAccountHelper(context, this);
+        accountHelper.FindUserName(password);
+        dialog = new ProgressDialog(SignIn.this);
+        dialog.setMessage("Finding Username");
+        dialog.show();
+    }
+
+    public void FindPasswordSuccess(boolean valid, String foundUserName) {
+        dialog.dismiss();
+        if(valid) {
+            username.setText(foundUserName);
+            Toast.makeText(this, "You are in luck, we found it", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "We did not find it, it's either the wrong email, or you don't have an account", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void SetUpResetClickEvent() {
+        btnResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PasswordResetDialog();
+            }
+        });
+    }
+
+    private void PasswordResetDialog() {
+        final Dialog resetDialog = new Dialog(this);
+        resetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        resetDialog.setContentView(R.layout.dialog_reset_email);
+        final EditText resetPasswordEditText = (EditText) resetDialog.findViewById(R.id.edittext_email);
+        Button resetButton = (Button) resetDialog.findViewById(R.id.btn_send_email);
+        Button cancelButton = (Button) resetDialog.findViewById(R.id.btn_cancel);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetDialog.dismiss();
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (resetPasswordEditText.getText().length() > 0) {
+                    if (CreateAccountHelper.isValidEmail(resetPasswordEditText.getText())) {
+                        resetDialog.dismiss();
+                        PasswordReset(resetPasswordEditText.getText().toString());
+                    } else {
+                        Snackbar.make(v, "Please enter a valid email", Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    Snackbar.make(v, "Please enter a valid email", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        resetDialog.show();
+    }
+
+    private void PasswordReset(String password){
+        CreateAccountHelper accountHelper = new CreateAccountHelper(context, this);
+        accountHelper.ResetPassword(password);
+        dialog = new ProgressDialog(SignIn.this);
+        dialog.setMessage("Sending Reset Email");
+        dialog.show();
+    }
+
+    public void PasswordResetSuccess(boolean valid, String failMessage) {
+        dialog.dismiss();
+        if(valid) {
+            Toast.makeText(this, "Please check your email", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, failMessage, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void SignInToAccount(String userName, String password) {
@@ -99,8 +226,7 @@ public class SignIn extends BaseActivity {
             SignInWasSuccessful();
             Log.i(LOG, "Sign In Success");
         }else{
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
+            Toast.makeText(this, failMessage, Toast.LENGTH_LONG).show();
             Log.i(LOG, "Sign In Failed");
         }
     }
@@ -120,6 +246,8 @@ public class SignIn extends BaseActivity {
         username = (EditText)findViewById(R.id.edittext_username);
         password = (EditText)findViewById(R.id.edittext_password);
         btnSignIn = (Button)findViewById(R.id.btn_sign_up);
+        btnResetPassword = (Button)findViewById(R.id.btn_reset_password);
+        btnFindUsername = (Button)findViewById(R.id.btn_find_username);
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
