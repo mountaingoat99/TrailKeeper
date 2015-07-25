@@ -19,7 +19,10 @@ import android.widget.LinearLayout;
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 
+import Helpers.AlertDialogHelper;
+import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
+import Helpers.ProgressDialogHelper;
 
 public class CreateAccount extends BaseActivity {
 
@@ -32,6 +35,7 @@ public class CreateAccount extends BaseActivity {
     private final Context context = this;
     private InputMethodManager imm;
     private ProgressDialog dialog;
+    private ConnectionDetector connectionDetector;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -48,14 +52,16 @@ public class CreateAccount extends BaseActivity {
             passwordString = savedInstanceState.getString("password");
             password.setText(passwordString);
         }
+        connectionDetector = new ConnectionDetector(getApplicationContext());
         email.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         layout = (LinearLayout)findViewById(R.id.layout1);
         v = layout;
-        SetUpClickEvent(v);
+        SetUpClickEvent();
     }
 
+    //region Activity Methods
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -67,26 +73,48 @@ public class CreateAccount extends BaseActivity {
             outState.putString("password", password.getText().toString());
     }
 
-    private void SetUpClickEvent(View v) {
+
+    private void SetUpViews(){
+        email = (EditText)findViewById(R.id.edittext_email);
+        username = (EditText)findViewById(R.id.edittext_username);
+        password = (EditText)findViewById(R.id.edittext_password);
+        btnSignUp = (Button)findViewById(R.id.btn_sign_up);
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_create_account, menu);
+        return true;
+    }
+    //endregion
+
+    //region Create Account Methods
+    private void SetUpClickEvent() {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // first lets make sure all the fields are legit
-                if (!CreateAccountHelper.isValidEmail(email.getText()) ||
-                        !CreateAccountHelper.isValidUserName(username.getText().toString().trim()) ||
-                        !CreateAccountHelper.isValidPassword(password.getText().toString().trim())) {
-                    if (!CreateAccountHelper.isValidEmail(email.getText())) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        Snackbar.make(v, R.string.snackbar_invalid_email, Snackbar.LENGTH_LONG).show();
-                    } else if (!CreateAccountHelper.isValidUserName(username.getText().toString().trim())) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        Snackbar.make(v, R.string.snackbar_invalid_username, Snackbar.LENGTH_LONG).show();
-                    } else if (!CreateAccountHelper.isValidPassword(password.getText().toString().trim())) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        Snackbar.make(v, R.string.snackbar_invalid_password, Snackbar.LENGTH_LONG).show();
+                if (connectionDetector.isConnectingToInternet()) {
+                    // first lets make sure all the fields are legit
+                    if (!CreateAccountHelper.isValidEmail(email.getText()) ||
+                            !CreateAccountHelper.isValidUserName(username.getText().toString().trim()) ||
+                            !CreateAccountHelper.isValidPassword(password.getText().toString().trim())) {
+                        if (!CreateAccountHelper.isValidEmail(email.getText())) {
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            Snackbar.make(v, R.string.snackbar_invalid_email, Snackbar.LENGTH_LONG).show();
+                        } else if (!CreateAccountHelper.isValidUserName(username.getText().toString().trim())) {
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            Snackbar.make(v, R.string.snackbar_invalid_username, Snackbar.LENGTH_LONG).show();
+                        } else if (!CreateAccountHelper.isValidPassword(password.getText().toString().trim())) {
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            Snackbar.make(v, R.string.snackbar_invalid_password, Snackbar.LENGTH_LONG).show();
+                        }
+                    } else {
+                        CallCreateAccount();
                     }
                 } else {
-                    CallCreateAccount();
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -97,10 +125,7 @@ public class CreateAccount extends BaseActivity {
         createAccountHelper.CreateParseUserAccount(username.getText().toString(),
                 password.getText().toString(),
                 email.getText().toString());
-
-        dialog = new ProgressDialog(CreateAccount.this);
-        dialog.setMessage("Creating Account");
-        dialog.show();
+        dialog = ProgressDialogHelper.ShowProgressDialog(context, "Creating Account");
     }
 
     public void UpdateCreateAccountSuccessMessage(boolean valid, String failMessage) {
@@ -125,19 +150,6 @@ public class CreateAccount extends BaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+    //endregion
 
-    private void SetUpViews(){
-        email = (EditText)findViewById(R.id.edittext_email);
-        username = (EditText)findViewById(R.id.edittext_username);
-        password = (EditText)findViewById(R.id.edittext_password);
-        btnSignUp = (Button)findViewById(R.id.btn_sign_up);
-        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_create_account, menu);
-        return true;
-    }
 }

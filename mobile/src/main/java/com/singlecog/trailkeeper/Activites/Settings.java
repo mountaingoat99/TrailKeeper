@@ -17,7 +17,10 @@ import android.widget.ListView;
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 
+import Helpers.AlertDialogHelper;
+import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
+import Helpers.ProgressDialogHelper;
 
 public class Settings extends BaseActivity implements AdapterView.OnItemClickListener {
 
@@ -26,23 +29,33 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
     private final Context context = this;
     private boolean isAnonUser;
     private AlertDialog signOutDialog, deleteDialog;
-    private ProgressDialog cancelDialog;
+    private ProgressDialog dialog;
     private View v;
     private CreateAccountHelper createAccountHelper;
+    private ConnectionDetector connectionDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         super.onCreateDrawer();
-
+        connectionDetector = new ConnectionDetector(context);
         isAnonUser = CreateAccountHelper.IsAnonUser();
-
         settingsList = (ListView)findViewById(R.id.listViewSettings);
         populateListView();
         settingsList.setOnItemClickListener(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        // right now we won't show anything here, but we may add menu items
+        // to the individual layouts so we won't move this to the super class
+        //getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    //region ListItem Methods
     private void populateListView() {
         settingArray = getResources().getStringArray(R.array.settings_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -103,6 +116,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 break;
         }
     }
+    //endregion
 
     //region Delete Account
     private void DeleteAccount() {
@@ -117,9 +131,13 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
         builder.setPositiveButton(getResources().getString(R.string.sign_out_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                createAccountHelper = new CreateAccountHelper(context, Settings.this);
-                createAccountHelper.DeleteUser(ParseUser.getCurrentUser());
-                StartDeleteDialog();
+                if (connectionDetector.isConnectingToInternet()) {
+                    createAccountHelper = new CreateAccountHelper(context, Settings.this);
+                    createAccountHelper.DeleteUser(ParseUser.getCurrentUser());
+                    StartDeleteDialog();
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                }
             }
         });
         deleteDialog = builder.create();
@@ -127,10 +145,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
     }
 
     private void StartDeleteDialog(){
-        cancelDialog = new ProgressDialog(Settings.this);
-        cancelDialog.setTitle("Deleting Account");
-        cancelDialog.setMessage("Sorry to see you go!");
-        cancelDialog.show();
+        dialog = ProgressDialogHelper.ShowProgressDialog(context, "DeletingAccount");
     }
 
     public void DeleteSuccessOrFail(boolean valid, String failMessage) {
@@ -138,7 +153,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
             createAccountHelper = new CreateAccountHelper(context, Settings.this);
             createAccountHelper.CreateAnonUser();
         } else {
-            cancelDialog.dismiss();
+            dialog.dismiss();
             v = settingsList;
             Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
         }
@@ -158,10 +173,14 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
         builder.setPositiveButton(getResources().getString(R.string.sign_out_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ParseUser.logOut();
-                createAccountHelper = new CreateAccountHelper(context, Settings.this);
-                createAccountHelper.CreateAnonUser();
-                StartSignOutDialog();
+                if (connectionDetector.isConnectingToInternet()) {
+                    ParseUser.logOut();
+                    createAccountHelper = new CreateAccountHelper(context, Settings.this);
+                    createAccountHelper.CreateAnonUser();
+                    StartSignOutDialog();
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                }
             }
         });
         signOutDialog = builder.create();
@@ -169,13 +188,11 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
     }
 
     private void StartSignOutDialog(){
-        cancelDialog = new ProgressDialog(Settings.this);
-        cancelDialog.setMessage("Signing Out");
-        cancelDialog.show();
+        dialog = ProgressDialogHelper.ShowProgressDialog(context, "Signing Out");
     }
 
     public void SignedOut(boolean valid, String failMessage){
-        cancelDialog.dismiss();
+        dialog.dismiss();
         v = settingsList;
         if(valid){
             Intent intent = new Intent(context, HomeScreen.class);
@@ -190,13 +207,4 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
         }
     }
     //endregion
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        // right now we won't show anything here, but we may add menu items
-        // to the individual layouts so we won't move this to the super class
-        //getMenuInflater().inflate(R.menu.menu_settings, menu);
-        return true;
-    }
 }

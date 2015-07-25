@@ -1,7 +1,6 @@
 package Helpers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -9,7 +8,6 @@ import android.util.Patterns;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -21,10 +19,7 @@ import com.singlecog.trailkeeper.Activites.Settings;
 import com.singlecog.trailkeeper.Activites.SignIn;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class CreateAccountHelper {
 
@@ -157,12 +152,12 @@ public class CreateAccountHelper {
                             userName = parseUser.getUsername();
                     }
                     if(userName != null) {
-                        signInActivity.FindPasswordSuccess(true, userName);
+                        signInActivity.FindUsernameSuccess(true, userName);
                     } else {
-                        signInActivity.FindPasswordSuccess(false, null);
+                        signInActivity.FindUsernameSuccess(false, null);
                     }
                 } else {
-                    signInActivity.FindPasswordSuccess(false, null);
+                    signInActivity.FindUsernameSuccess(false, null);
                 }
             }
         });
