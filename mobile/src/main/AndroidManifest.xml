@@ -54,7 +54,7 @@
                 android:value=".Activites.HomeScreen" />
         </activity>
         <activity
-            android:name=".Activites.Map"
+            android:name=".Activites.MapActivity"
             android:label="@string/title_activity_map"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data

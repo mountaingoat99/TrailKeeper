@@ -4,9 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by Jeremey on 7/24/2015.
- */
 public class ConnectionDetector {
 
     private Context context;

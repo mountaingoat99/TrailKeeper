@@ -20,6 +20,14 @@ public class ModelTrails {
         TrailID = trailID;
     }
 
+    public String getObjectID() {
+        return ObjectID;
+    }
+
+    public void setObjectID(String objectID) {
+        ObjectID = objectID;
+    }
+
     public String ObjectID;
     public int TrailID;
     public String TrailName;

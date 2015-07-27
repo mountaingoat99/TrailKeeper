@@ -10,8 +10,6 @@ public class AlertDialogHelper {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
-        // Setting alert dialog icon
-        //alertDialog.setIcon(R.drawable.fail);
 
         alertDialog.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
             @Override

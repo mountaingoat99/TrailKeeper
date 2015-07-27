@@ -2,7 +2,6 @@ package RecyclerAdapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -17,14 +16,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseGeoPoint;
-import com.singlecog.trailkeeper.Activites.Map;
+import com.singlecog.trailkeeper.Activites.MapActivity;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Helpers.TrailStatusHelper;
 import models.ModelTrails;
 
 public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
@@ -146,11 +144,13 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 ModelTrails model = getTrailModel(viewHolder);
                 ParseGeoPoint point = model.GeoLocation;
                 LatLng geoPoint = new LatLng(point.getLatitude(), point.getLongitude());
-                Intent intent = new Intent(context, Map.class);
+                Intent intent = new Intent(context, MapActivity.class);
                 Bundle args = new Bundle();
                 args.putParcelable("geoPoint", geoPoint);
                 args.putString("trailName", model.TrailName);
                 args.putInt("trailStatus", model.TrailStatus);
+                args.putInt("trailID", model.TrailID);
+                args.putString("objectID", model.ObjectID);
                 intent.putExtra("bundle", args);
                 v.getContext().startActivity(intent);
             }

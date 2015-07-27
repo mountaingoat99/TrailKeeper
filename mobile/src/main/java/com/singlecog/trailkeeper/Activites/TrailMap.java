@@ -1,11 +1,13 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,6 +36,8 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
      */
     protected Location mLastLocation;
     private LatLng home;
+    private int trailId;
+    private String objectID;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -44,6 +48,26 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
 
         // get the latest device location
         buildGoogleApiClient();
+
+        Intent intent = getIntent();
+        trailId = intent.getIntExtra("trailID", 0);
+        objectID = intent.getStringExtra("objectID");
+    }
+
+    //region Activity Methods
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, TrailScreen.class);
+                intent.putExtra("trailID", trailId);
+                intent.putExtra("objectID", objectID);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -54,8 +78,9 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         //getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
     }
+    //endregion
 
-    // this gets called on the getMapAsync method
+    //region Google MapActivity Api Methods
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
@@ -71,7 +96,9 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
             Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }
     }
+    //endregion
 
+    //region Google Location Api Methods
     /**
      * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
      */
@@ -133,4 +160,5 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
     }
+    //endregion
 }

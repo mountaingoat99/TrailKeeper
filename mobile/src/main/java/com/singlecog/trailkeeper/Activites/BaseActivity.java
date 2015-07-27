@@ -2,8 +2,6 @@ package com.singlecog.trailkeeper.Activites;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -107,7 +104,7 @@ public class BaseActivity extends AppCompatActivity {
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
                             case 2:
-                                intent = new Intent(BaseActivity.this, Map.class);
+                                intent = new Intent(BaseActivity.this, MapActivity.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
                             case 3:
