@@ -6,8 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
@@ -30,7 +28,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -43,6 +40,7 @@ import java.util.List;
 import AsyncAdapters.AsyncOneTrailComments;
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
+import Helpers.CreateAccountHelper;
 import Helpers.ProgressDialogHelper;
 import Helpers.TrailStatusHelper;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
@@ -53,22 +51,23 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         , GoogleMap.OnMapClickListener
         , GoogleMap.OnMapLongClickListener{
 
+    //region Properties
     protected static final String LOG = "trailScreenActivity";
-
     private int trailId, status;
-    private String objectID;
-
+    private String objectID, trailSubscriptionStatus;
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
     private TextView trailName, trailCity, trailState;
     private ImageView trailStatus;
-    private Button btnComment, btnTrailStatus;
+    private Button btnComment, btnTrailStatus, btnSubscribe;
     private AlertDialog statusDialog;
     private ProgressDialog dialog;
     private TrailStatusHelper trailStatusHelper;
     private ConnectionDetector connectionDetector;
     GestureDetectorCompat gestureDetector;
     GoogleMap googleMap;
+    private boolean isAnonUser;
+    private boolean isEmailVerified;
 
     /**
      * Represents a geographical location.
@@ -76,7 +75,9 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     private LatLng trailLocation;
     private String trailNameString;
     private List<ModelTrailComments> comments;
+    private ModelTrails modelTrails;
     private final Context context = this;
+    //endregion
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -87,6 +88,9 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
         trailStatusHelper = new TrailStatusHelper(context, this);
         connectionDetector = new ConnectionDetector(context);
+        modelTrails = new ModelTrails(context, this);
+        isAnonUser = CreateAccountHelper.IsAnonUser();
+        isEmailVerified = CreateAccountHelper.isEmailVerified();
         SetUpViews();
 
         // get the trailID from the previous view
@@ -117,7 +121,8 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         // set up the Recycler View
         SetupCommentCard();
         ShowGoogleMap();
-        SetUpButtonClicks();
+        SetUpBtnStatusClick();
+        SetUpBtnSubscribeClick();
     }
 
     //region Activity Methods
@@ -131,11 +136,36 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         }
     }
 
-    private void SetUpButtonClicks() {
+    private void SetUpBtnSubscribeClick() {
+        btnSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isAnonUser) {
+                    if (isEmailVerified) {
+                        OpenSubscribeDialog();
+                    } else {
+                        AlertDialogHelper.showAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Subscribing to Notifications.");
+                    }
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Subscribing to Notifications.");
+                }
+            }
+        });
+    }
+
+    private void SetUpBtnStatusClick() {
         btnTrailStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OpenTrailStatusDialog();
+                if (!isAnonUser) {
+                    if (isEmailVerified) {
+                        OpenTrailStatusDialog();
+                    } else {
+                        AlertDialogHelper.showAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Updating Trails");
+                    }
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Updating Trails");
+                }
             }
         });
     }
@@ -147,6 +177,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         trailState = (TextView)findViewById(R.id.txtTrail_state);
         btnComment = (Button)findViewById(R.id.btn_leave_comment);
         btnTrailStatus = (Button)findViewById(R.id.btn_set_trail_status);
+        btnSubscribe = (Button)findViewById(R.id.btn_subscribe);
     }
 
     private void GetTrailData() {
@@ -238,6 +269,56 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     }
     //endregion
 
+    //region Subscribe to Notifications
+    //TODO write method to check subsciptions and change button text to 'Subscribe' or 'Unsubscribe'
+
+    private void OpenSubscribeDialog() {
+        final CharSequence[] choiceList = {"Yes", "No"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Receive Notifications For This Trail?");
+        builder.setSingleChoiceItems(choiceList, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:  // Yes
+                        trailSubscriptionStatus = "You have been subscribed to " + trailNameString;
+                        UpdateSubscribeStatus(which);
+                        break;
+                    case 1:  // No
+                        trailSubscriptionStatus = "You have been un-subscribed to " + trailNameString;
+                        UpdateSubscribeStatus(which);
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+        statusDialog = builder.create();
+        statusDialog.show();
+    }
+
+    private void UpdateSubscribeStatus(int subscribe) {
+        if (connectionDetector.isConnectingToInternet()) {
+            dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscriptions");
+            modelTrails.SubscribeToChannel(trailNameString, subscribe);
+        } else {
+            AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+        }
+    }
+
+    public void UpdateSubscriptionWasSuccessful(boolean valid, String message) {
+        dialog.dismiss();
+        if (valid) {
+            AlertDialogHelper.showAlertDialog(context, trailNameString, trailSubscriptionStatus);
+            Log.i(LOG, "Subscription change for " + trailNameString + " was updated");
+        } else {
+            AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
+            Log.i(LOG, "Subscription change for " + trailNameString + " was not updated");
+        }
+    }
+
+    //endregion
+
     //region Trail Status Updates
     private void OpenTrailStatusDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -259,7 +340,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                         ChangeTrailStatus(status);
                         break;
                 }
-                statusDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
@@ -276,8 +357,8 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     }
 
     private void CallChangeTrailStatusClass(int choice) {
-        trailStatusHelper.UpdateTrailStatus(objectID, choice);
         dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Trail Status");
+        trailStatusHelper.UpdateTrailStatus(objectID, choice);
     }
 
     public void TrailStatusUpdateWasSuccessful(boolean valid, String message) {
@@ -285,26 +366,12 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         if (valid) {
             AlertDialogHelper.showAlertDialog(context, "Trail Status", "The Trail has been changed to " + TrailStatusHelper.ConvertTrailStatus(status));
             UpdateStatusIcon();
-            SendOutAPushNotification();
+            ModelTrails.SendOutAPushNotifications(trailNameString, status);
             Log.i(LOG, "Trail Status was changed");
         } else {
             AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
             Log.i(LOG, "Trail Status was not changed");
         }
-    }
-    //endregion
-
-    //region Push Notifications
-    private void SendOutAPushNotification() {
-        ParsePush push = new ParsePush();
-        push.setChannel("PetsTrailStatus");
-        if (status == 1)
-            push.setMessage(trailNameString + " trails are closed!");
-        else if (status == 2)
-            push.setMessage(trailNameString + " trails are open!");
-        else
-            push.setMessage("We don't know if " + trailNameString + " trails are open or closed");
-        push.sendInBackground();
     }
     //endregion
 

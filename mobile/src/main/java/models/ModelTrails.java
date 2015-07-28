@@ -1,15 +1,42 @@
 package models;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.AvoidXfermode;
+import android.os.Parcel;
+import android.util.Log;
+
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParsePush;
+import com.parse.SaveCallback;
+import com.singlecog.trailkeeper.Activites.TrailScreen;
 
 public class ModelTrails {
 
+    private static final String LOG = "ModelTrails";
     private static int nextId = 0;
     private static CharSequence[] trailStatusNames;
+    public String ObjectID;
+    public int TrailID;
+    public String TrailName;
+    public int TrailStatus;
+    public String TrailCity;
+    public String TrailState;
+    public ParseGeoPoint GeoLocation;
+    public float distance;
+    private Context context;
+    private TrailScreen trailScreen;
 
     public ModelTrails()
     {
 
+    }
+
+    public ModelTrails(Context context, TrailScreen trailScreen)
+    {
+        this.context = context;
+        this.trailScreen = trailScreen;
     }
 
     public int getTrailID() {
@@ -28,22 +55,83 @@ public class ModelTrails {
         ObjectID = objectID;
     }
 
-    public String ObjectID;
-    public int TrailID;
-    public String TrailName;
-    public int TrailStatus;
-    public String TrailCity;
-    public String TrailState;
-    public ParseGeoPoint GeoLocation;
-    public float distance;
+    //Region Static Methods
+
+    public static String CreateChannelName(String trail) {
+        return trail.replace(" ", "") + "Channel";
+    }
 
     public static CharSequence[] getTrailStatusNames() {
         return trailStatusNames = new CharSequence[]{"Open", "Closed", "Unknown"};
     }
 
+    public static void SendOutAPushNotifications(String trailNameString, int status) {
+        ParsePush push = new ParsePush();
+        String trailChannel = CreateChannelName(trailNameString);
+        push.setChannel(trailChannel);
+        if (status == 1)
+            push.setMessage(trailNameString + " trails are closed!");
+        else if (status == 2)
+            push.setMessage(trailNameString + " trails are open!");
+        else
+            push.setMessage("We don't know if " + trailNameString + " trails are open or closed");
+        push.sendInBackground();
+    }
+
+    //endregion
+
+    //Region Public Methods
+
+    public void SubscribeToChannel(String trailName, int choice){    // 0 means Yes, 1 means No
+        //When a user indicates they want trail Updates we subscribe them to them
+        final String trailNameChannel = CreateChannelName(trailName);
+        if (choice == 0) {
+            ParsePush.subscribeInBackground(trailNameChannel, new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d(LOG, "successfully subscribed to the " + trailNameChannel + " broadcast channel.");
+                        SubscribeWasSuccessful(true, null);
+                    } else {
+                        SubscribeWasSuccessful(false, e.getMessage());
+                        Log.e(LOG, "failed to subscribe for push for " + trailNameChannel, e);
+                    }
+                }
+            });
+        } else {
+            ParsePush.unsubscribeInBackground(trailNameChannel, new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d(LOG, "successfully un-subscribed to the " + trailNameChannel + " broadcast channel.");
+                        SubscribeWasSuccessful(true, null);
+                    } else {
+                        SubscribeWasSuccessful(false, e.getMessage());
+                        Log.e(LOG, "failed to un-subscribe for push " + trailNameChannel, e);
+                    }
+                }
+            });
+        }
+    }
+
     public float getDistance() {
         return distance;
     }
-//TODO I think we'll use what the db sends us after we get that hooked up
-    //public int TrailId = ++nextId;
+
+    //endregion
+
+    // Region Private Methods
+
+    // here we will call the TrailScreen class and let them know it was valid
+    private void SubscribeWasSuccessful(boolean valid, String message) {
+        if (valid) {
+            trailScreen.UpdateSubscriptionWasSuccessful(valid, null);
+            Log.d(LOG, "successfully changed subscriptions.");
+        } else {
+            trailScreen.UpdateSubscriptionWasSuccessful(valid, message);
+            Log.e(LOG, "Unsuccessfully changed subscription");
+        }
+    }
+
+    //endregion
 }

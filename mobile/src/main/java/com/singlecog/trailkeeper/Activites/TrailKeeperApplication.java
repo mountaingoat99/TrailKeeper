@@ -75,21 +75,6 @@ public class TrailKeeperApplication extends Application implements
         ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);
 
-        //When a user indicates they want trail Updates we subscribe them to them
-        //ParsePush.subscribeInBackground("PetsTrailStatus");
-        ParsePush.subscribeInBackground("PetsTrailStatus", new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
-                } else {
-                    Log.e("com.parse.push", "failed to subscribe for push", e);
-                }
-            }
-        });
-
-        //LoadTestCommentsToParse();
-
         LoadAllFromParse();
 
     }
