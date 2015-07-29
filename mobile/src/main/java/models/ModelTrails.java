@@ -1,14 +1,14 @@
 package models;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.AvoidXfermode;
-import android.os.Parcel;
 import android.util.Log;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
@@ -57,6 +57,40 @@ public class ModelTrails {
 
     //Region Static Methods
 
+    public static String ConvertTrailStatus(ModelTrails model){
+        String statusName = "";
+
+        switch (model.TrailStatus){
+            case 1:
+                statusName = "Closed";
+                break;
+            case 2:
+                statusName = "Open";
+                break;
+            case 3:
+                statusName = "Unknown";
+                break;
+        }
+        return statusName;
+    }
+
+    public static String ConvertTrailStatus(int status){
+        String statusName = "";
+
+        switch (status){
+            case 1:
+                statusName = "Closed";
+                break;
+            case 2:
+                statusName = "Open";
+                break;
+            case 3:
+                statusName = "Unknown";
+                break;
+        }
+        return statusName;
+    }
+
     public static String CreateChannelName(String trail) {
         return trail.replace(" ", "") + "Channel";
     }
@@ -81,6 +115,32 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
+
+    public void UpdateTrailStatus(String objectId, final int choice) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+
+        query.getInBackground(objectId, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    parseObject.put("Status", choice);
+                    parseObject.saveEventually(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                // call class methods to send info back to activity
+                                TrailStatusUpdateSuccessful(true, null);
+                            } else {
+                                TrailStatusUpdateSuccessful(false, e.getMessage());
+                            }
+                        }
+                    });
+                } else {
+                    TrailStatusUpdateSuccessful(false, e.getMessage());
+                }
+            }
+        });
+    }
 
     public void SubscribeToChannel(String trailName, int choice){    // 0 means Yes, 1 means No
         //When a user indicates they want trail Updates we subscribe them to them
@@ -121,6 +181,13 @@ public class ModelTrails {
     //endregion
 
     // Region Private Methods
+    private void TrailStatusUpdateSuccessful(boolean valid, String message) {
+        if (valid) {
+            trailScreen.TrailStatusUpdateWasSuccessful(valid, null);
+        } else {
+            trailScreen.TrailStatusUpdateWasSuccessful(valid, message);
+        }
+    }
 
     // here we will call the TrailScreen class and let them know it was valid
     private void SubscribeWasSuccessful(boolean valid, String message) {

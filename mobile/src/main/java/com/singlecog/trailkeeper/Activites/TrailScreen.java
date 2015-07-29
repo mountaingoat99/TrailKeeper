@@ -42,7 +42,6 @@ import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
 import Helpers.ProgressDialogHelper;
-import Helpers.TrailStatusHelper;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
 import models.ModelTrails;
@@ -62,7 +61,6 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     private Button btnComment, btnTrailStatus, btnSubscribe;
     private AlertDialog statusDialog;
     private ProgressDialog dialog;
-    private TrailStatusHelper trailStatusHelper;
     private ConnectionDetector connectionDetector;
     GestureDetectorCompat gestureDetector;
     GoogleMap googleMap;
@@ -86,7 +84,6 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_trail_screen);
         super.onCreateDrawer();
 
-        trailStatusHelper = new TrailStatusHelper(context, this);
         connectionDetector = new ConnectionDetector(context);
         modelTrails = new ModelTrails(context, this);
         isAnonUser = CreateAccountHelper.IsAnonUser();
@@ -358,13 +355,13 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
     private void CallChangeTrailStatusClass(int choice) {
         dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Trail Status");
-        trailStatusHelper.UpdateTrailStatus(objectID, choice);
+        modelTrails.UpdateTrailStatus(objectID, choice);
     }
 
     public void TrailStatusUpdateWasSuccessful(boolean valid, String message) {
         dialog.dismiss();
         if (valid) {
-            AlertDialogHelper.showAlertDialog(context, "Trail Status", "The Trail has been changed to " + TrailStatusHelper.ConvertTrailStatus(status));
+            AlertDialogHelper.showAlertDialog(context, "Trail Status", "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status));
             UpdateStatusIcon();
             ModelTrails.SendOutAPushNotifications(trailNameString, status);
             Log.i(LOG, "Trail Status was changed");

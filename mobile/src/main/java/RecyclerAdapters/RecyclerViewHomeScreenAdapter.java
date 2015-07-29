@@ -113,7 +113,6 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         viewHolder.trailCity.setText(model.TrailCity);
         viewHolder.trailState.setText(model.TrailState);
         viewHolder.trailDistance.setText(String.valueOf(model.distance));
-        //String statusName = TrailStatusHelper.ConvertTrailStatus(model);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
         if (model.TrailStatus == 1) {

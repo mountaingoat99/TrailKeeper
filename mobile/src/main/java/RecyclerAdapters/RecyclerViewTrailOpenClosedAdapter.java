@@ -12,7 +12,6 @@ import com.singlecog.trailkeeper.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Helpers.TrailStatusHelper;
 import models.ModelTrails;
 
 public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
@@ -79,7 +78,7 @@ public class RecyclerViewTrailOpenClosedAdapter extends RecyclerView.Adapter
         model = items.get(position);
         viewHolder.trailID.setText(String.valueOf(model.TrailID));
         viewHolder.trailName.setText(model.TrailName);
-        String statusName = TrailStatusHelper.ConvertTrailStatus(model);
+        String statusName = ModelTrails.ConvertTrailStatus(model);
         viewHolder.trailStatus.setText(statusName);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
     }
