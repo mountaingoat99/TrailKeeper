@@ -2,6 +2,7 @@
 <resources>
     <string-array name="settings_array">
         <item>Create Account</item>
+        <item>Update Account</item>
         <item>Sign-in</item>
         <item>Sign-out</item>
         <item>Delete Account</item>

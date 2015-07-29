@@ -75,5 +75,13 @@
     <string name="reset_password">Reset Password</string>
     <string name="find_username">Find Username</string>
     <string name="send_email">Send Email</string>
+    <string name="title_activity_update_account">Update Account</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="update_account_title">Sign In To Update Account</string>
+    <string name="update_email">Update Email</string>
+    <string name="verify_email">Verify Email</string>
+    <string name="update_username">Update Username</string>
+    <string name="update_password">Update Password</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package Helpers;
 
 import android.content.Context;
+import android.provider.SyncStateContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -17,6 +18,7 @@ import com.parse.SignUpCallback;
 import com.singlecog.trailkeeper.Activites.CreateAccount;
 import com.singlecog.trailkeeper.Activites.Settings;
 import com.singlecog.trailkeeper.Activites.SignIn;
+import com.singlecog.trailkeeper.UpdateAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,10 @@ public class CreateAccountHelper {
     private CreateAccount createAccountActivity;
     private Settings settingsActivity;
     private SignIn signInActivity;
+    private final String SIGNINACTIVITY = "SignIn";
+    private final String UPDATEACCOUNTACTIVITY = "UpdateAccount";
+    private String whichActivity;
+    private UpdateAccount updateAccountActivity;
     private Context context;
 
     public CreateAccountHelper(Context context, CreateAccount activity) {
@@ -42,6 +48,13 @@ public class CreateAccountHelper {
     public CreateAccountHelper(Context context, SignIn activity) {
         this.context = context;
         this.signInActivity = activity;
+        whichActivity = SIGNINACTIVITY;
+    }
+
+    public CreateAccountHelper(Context context, UpdateAccount activity) {
+        this.context = context;
+        this.updateAccountActivity = activity;
+        whichActivity = UPDATEACCOUNTACTIVITY;
     }
 
     // TODO check if the email is verified
@@ -97,11 +110,19 @@ public class CreateAccountHelper {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
-                    signInActivity.SignInSuccess(true, null);
                     Log.i(LOG, "Sign In Success");
+                    if (whichActivity.equals(SIGNINACTIVITY)) {
+                        signInActivity.SignInSuccess(true, null);
+                    } else {
+                        String email = ParseUser.getCurrentUser().getEmail();
+                        updateAccountActivity.SignInSuccess(true, null, email);
+                    }
                 } else {
-                    signInActivity.SignInSuccess(false, e.getMessage());
                     Log.i(LOG, "Login Failed");
+                    if (whichActivity.equals(SIGNINACTIVITY)) {
+                        signInActivity.SignInSuccess(false, e.getMessage());
+                    } else {
+                        updateAccountActivity.SignInSuccess(false, e.getMessage(), null);                    }
                 }
             }
         });
