@@ -84,9 +84,9 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         super.onCreateDrawer();
 
         connectionDetector = new ConnectionDetector(context);
+        isEmailVerified = TrailKeeperApplication.isEmailVerified();
         modelTrails = new ModelTrails(context, this);
         isAnonUser = CreateAccountHelper.IsAnonUser();
-        isEmailVerified = CreateAccountHelper.isEmailVerified();
         SetUpViews();
 
         // get the trailID from the previous view

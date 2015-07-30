@@ -46,11 +46,22 @@ public class TrailKeeperApplication extends Application implements
     public static Location mLastLocation;
     public static LatLng home;
 
+    private static boolean isEmailVerified = false;
+
     /*
      * Define a request code to send to Google Play services
      * This code is returned in Activity.onActivityResult
      */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+    public static boolean isEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public static void setIsEmailVerified(boolean isEmailVerified) {
+        TrailKeeperApplication.isEmailVerified = isEmailVerified;
+    }
+
 
     @Override
     public void onCreate(){
@@ -73,6 +84,8 @@ public class TrailKeeperApplication extends Application implements
         ParseUser.enableAutomaticUser();
         ParseUser.getCurrentUser().saveInBackground();
         ParseACL defaultACL = new ParseACL();
+        defaultACL.setPublicReadAccess(true);
+        defaultACL.setPublicWriteAccess(true);
         ParseACL.setDefaultACL(defaultACL, true);
 
         LoadAllFromParse();
@@ -87,6 +100,8 @@ public class TrailKeeperApplication extends Application implements
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.

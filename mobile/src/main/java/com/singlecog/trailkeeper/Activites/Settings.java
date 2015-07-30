@@ -83,6 +83,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 } else {
                     Snackbar.make(view, R.string.snackbar_alreadysignedin_logout, Snackbar.LENGTH_LONG).show();
                 }
+                break;
             case 2:  // Sign in
                 if(!isAnonUser) {
                     Snackbar.make(view, R.string.snackbar_alreadysignedin_login, Snackbar.LENGTH_LONG).show();

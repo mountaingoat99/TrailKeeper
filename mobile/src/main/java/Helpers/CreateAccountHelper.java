@@ -19,6 +19,7 @@ import com.parse.SignUpCallback;
 import com.singlecog.trailkeeper.Activites.CreateAccount;
 import com.singlecog.trailkeeper.Activites.Settings;
 import com.singlecog.trailkeeper.Activites.SignIn;
+import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.UpdateAccount;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class CreateAccountHelper {
     private final String UPDATEACCOUNTACTIVITY = "UpdateAccount";
     private String whichActivity;
     private UpdateAccount updateAccountActivity;
+    private static Boolean emailVerified = false;
     private Context context;
 
     public CreateAccountHelper(Context context, CreateAccount activity) {
@@ -58,11 +60,6 @@ public class CreateAccountHelper {
         whichActivity = UPDATEACCOUNTACTIVITY;
     }
 
-    // TODO check if the email is verified
-    public static boolean isEmailVerified(){
-        return true;
-    }
-
     public static Boolean IsAnonUser() {
         return (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser()));
     }
@@ -79,34 +76,45 @@ public class CreateAccountHelper {
         return target.length() >= 8;
     }
 
-    // TODO set the failed message
-//    private static String CreateAccountErrorMessage(String message){
-//        return "Failed to Create Account";
-//    }
-
-    public void UpdateParseUserEmail(String email, final boolean isVerify) {
+    // this is ridiculous, but in order to get the verify email to resend is
+    // to update the email with a fake one, then update it again with the correct one.
+    public void ResendVerifyUserEmail() {
         ParseUser user = ParseUser.getCurrentUser();
-        user.setEmail(email);
+        final String realEmail = user.getEmail();
+        user.setEmail("trailKeeper@email.com");
         user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e == null) {
-                    Log.i(LOG, "Create Account success");
-                    if (isVerify) {
-                        updateAccountActivity.VerifySuccess(true, null);
-                    } else {
-
-                    }
+                if (e == null) {
+                    Log.i(LOG, "First Resend Email success");
+                    ResendRealEmailAfterCreatingFake(realEmail, null, true);
                 } else {
-                    Log.i(LOG, "Failed Create Account message: " + e.getMessage());
-                    if (isVerify) {
-                        updateAccountActivity.VerifySuccess(false, e.getMessage());
-                    } else {
-
-                    }
+                    Log.i(LOG, "First Resend Email Failed message: " + e.getMessage());
+                    ResendRealEmailAfterCreatingFake(realEmail, e.getMessage(), false);
                 }
             }
         });
+    }
+
+    private void ResendRealEmailAfterCreatingFake(String realEmail, String failMessage, boolean valid) {
+        if (valid) {
+            ParseUser user = ParseUser.getCurrentUser();
+            user.setEmail(realEmail);
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.i(LOG, "Second Resend Email success");
+                        updateAccountActivity.VerifySuccess(true, null);
+                    } else {
+                        Log.i(LOG, "First Resend Email Failed message: " + e.getMessage());
+                        updateAccountActivity.VerifySuccess(false, e.getMessage());
+                    }
+                }
+            });
+        } else {
+            updateAccountActivity.VerifySuccess(valid, failMessage);
+        }
     }
 
     public void CreateParseUserAccount(String username, String password, String email){
@@ -137,6 +145,7 @@ public class CreateAccountHelper {
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Sign In Success");
+                    TrailKeeperApplication.setIsEmailVerified(parseUser.getBoolean("emailVerified"));
                     if (whichActivity.equals(SIGNINACTIVITY)) {
                         signInActivity.SignInSuccess(true, null);
                     } else {
@@ -148,7 +157,7 @@ public class CreateAccountHelper {
                     if (whichActivity.equals(SIGNINACTIVITY)) {
                         signInActivity.SignInSuccess(false, e.getMessage());
                     } else {
-                        updateAccountActivity.SignInSuccess(false, e.getMessage(), null);                    }
+                        updateAccountActivity.SignInSuccess(false, e.getMessage(), null); }
                 }
             }
         });

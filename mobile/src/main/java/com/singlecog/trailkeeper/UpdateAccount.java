@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.Activites.BaseActivity;
+import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
@@ -117,7 +118,11 @@ public class UpdateAccount extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (connectionDetector.isConnectingToInternet()) {
-                    SendAccount();
+                    if (!TrailKeeperApplication.isEmailVerified()) {
+                        SendAccount();
+                    } else {
+                        Snackbar.make(v, "Your email is already verified", Snackbar.LENGTH_LONG).show();
+                    }
                 } else {
                     AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
@@ -127,7 +132,7 @@ public class UpdateAccount extends BaseActivity {
 
     public void SendAccount() {
         CreateAccountHelper helper = new CreateAccountHelper(context, this);
-        helper.UpdateParseUserEmail(emailString, true);
+        helper.ResendVerifyUserEmail();
     }
 
     public void VerifySuccess(boolean valid, String failMessage) {
