@@ -2,7 +2,6 @@ package com.singlecog.trailkeeper;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.Activites.BaseActivity;
-import com.singlecog.trailkeeper.Activites.HomeScreen;
 
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
@@ -29,11 +27,12 @@ public class UpdateAccount extends BaseActivity {
 
     private static String LOG = "UpdateAccount";
     private LinearLayout layout2, layout3, layoutET;
-    private RelativeLayout layout1;
+    private RelativeLayout layout1, mainLayout;
     private EditText username, password;
     private Button btnSignIn, btnUpdateEmail, btnUpdateUsername, btnUpdatePassword, btnSendVerify;
     private String emailString, newEmailString, userNameString, newUserNameString, passwordString;
     private View v;
+    private boolean isSignedIn = false;
     private final Context context = this;
     private InputMethodManager imm;
     private ProgressDialog dialog;
@@ -50,11 +49,13 @@ public class UpdateAccount extends BaseActivity {
             username.setText(userNameString);
             passwordString = savedInstanceState.getString("password");
             password.setText(passwordString);
+            isSignedIn = savedInstanceState.getBoolean("isSignedIn");
         }
+        v = mainLayout;
+        showCorrectView();
         connectionDetector = new ConnectionDetector(getApplicationContext());
-        username.requestFocus();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         SetUpSignInClickEvent();
+        SetUpVerifyClickEvent();
     }
 
     //region Activity Methods
@@ -67,10 +68,28 @@ public class UpdateAccount extends BaseActivity {
         btnUpdatePassword = (Button)findViewById(R.id.btn_reset_password);
         btnUpdateUsername = (Button)findViewById(R.id.btn_change_username);
         layout1 = (RelativeLayout)findViewById(R.id.layout_btn1);
+        mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
         layout2 = (LinearLayout)findViewById(R.id.layout_btn2);
         layout3 = (LinearLayout)findViewById(R.id.layout_btn3);
         layoutET = (LinearLayout)findViewById(R.id.layout_edittexts);
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
+
+    private void showCorrectView() {
+        if (isSignedIn) {
+            layout1.setVisibility(View.GONE);
+            layoutET.setVisibility(View.GONE);
+            layout2.setVisibility(View.VISIBLE);
+            layout3.setVisibility(View.VISIBLE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        } else {
+            layout1.setVisibility(View.VISIBLE);
+            layoutET.setVisibility(View.VISIBLE);
+            layout2.setVisibility(View.GONE);
+            layout3.setVisibility(View.GONE);
+            username.requestFocus();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
     }
 
     @Override
@@ -80,6 +99,7 @@ public class UpdateAccount extends BaseActivity {
             outState.putString("username", username.getText().toString());
         if(password.getText().length() > 0)
             outState.putString("password", password.getText().toString());
+        outState.putBoolean("isSignedIn", isSignedIn);
     }
 
     @Override
@@ -88,6 +108,43 @@ public class UpdateAccount extends BaseActivity {
         //getMenuInflater().inflate(R.menu.menu_update_account, menu);
         return true;
     }
+    //endregion
+
+    //region Verify Email
+
+    private void SetUpVerifyClickEvent() {
+        btnSendVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (connectionDetector.isConnectingToInternet()) {
+                    SendAccount();
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                }
+            }
+        });
+    }
+
+    public void SendAccount() {
+        CreateAccountHelper helper = new CreateAccountHelper(context, this);
+        helper.UpdateParseUserEmail(emailString, true);
+    }
+
+    public void VerifySuccess(boolean valid, String failMessage) {
+        dialog.dismiss();
+        if (valid) {
+            Log.i(LOG, "Verify Success");
+            ShowSuccessfulVerifyMessage();
+        } else {
+            Log.i(LOG, "Verify Failed");
+            Toast.makeText(this, failMessage, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void ShowSuccessfulVerifyMessage() {
+        AlertDialogHelper.showAlertDialog(this, "Email Sent", "Please check your email and verify your account to have access to all the features in TrailKeeper.");
+    }
+
     //endregion
 
     //region Sign In Methods
@@ -137,10 +194,8 @@ public class UpdateAccount extends BaseActivity {
 
     private void SignInWasSuccessful() {
         userNameString = ParseUser.getCurrentUser().getUsername();
-        layout1.setVisibility(View.GONE);
-        layoutET.setVisibility(View.GONE);
-        layout2.setVisibility(View.VISIBLE);
-        layout3.setVisibility(View.VISIBLE);
+        isSignedIn = true;
+        showCorrectView();
     }
     //endregion
 }

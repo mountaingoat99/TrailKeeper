@@ -14,6 +14,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import com.singlecog.trailkeeper.Activites.CreateAccount;
 import com.singlecog.trailkeeper.Activites.Settings;
@@ -83,6 +84,31 @@ public class CreateAccountHelper {
 //        return "Failed to Create Account";
 //    }
 
+    public void UpdateParseUserEmail(String email, final boolean isVerify) {
+        ParseUser user = ParseUser.getCurrentUser();
+        user.setEmail(email);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    Log.i(LOG, "Create Account success");
+                    if (isVerify) {
+                        updateAccountActivity.VerifySuccess(true, null);
+                    } else {
+
+                    }
+                } else {
+                    Log.i(LOG, "Failed Create Account message: " + e.getMessage());
+                    if (isVerify) {
+                        updateAccountActivity.VerifySuccess(false, e.getMessage());
+                    } else {
+
+                    }
+                }
+            }
+        });
+    }
+
     public void CreateParseUserAccount(String username, String password, String email){
         ParseUser user = new ParseUser();
         user.setUsername(username);
@@ -95,11 +121,11 @@ public class CreateAccountHelper {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    createAccountActivity.UpdateCreateAccountSuccessMessage(true, null);
                     Log.i(LOG, "Create Account success");
+                    createAccountActivity.UpdateCreateAccountSuccessMessage(true, null);
                 } else {
-                    createAccountActivity.UpdateCreateAccountSuccessMessage(false, e.getMessage());
                     Log.i(LOG, "Failed Create Account message: " + e.getMessage());
+                    createAccountActivity.UpdateCreateAccountSuccessMessage(false, e.getMessage());
                 }
             }
         });
