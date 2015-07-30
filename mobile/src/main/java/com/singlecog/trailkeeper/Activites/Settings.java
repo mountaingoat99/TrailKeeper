@@ -16,7 +16,6 @@ import android.widget.ListView;
 
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
-import com.singlecog.trailkeeper.UpdateAccount;
 
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
@@ -77,12 +76,8 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 }
                 break;
             case 1:  // update account
-                if (!isAnonUser) {
-                    Intent intent = new Intent(context, UpdateAccount.class);
-                    startActivity(intent);
-                } else {
-                    Snackbar.make(view, R.string.snackbar_alreadysignedin_logout, Snackbar.LENGTH_LONG).show();
-                }
+                Intent intentUpdate = new Intent(context, UpdateAccount.class);
+                startActivity(intentUpdate);
                 break;
             case 2:  // Sign in
                 if(!isAnonUser) {

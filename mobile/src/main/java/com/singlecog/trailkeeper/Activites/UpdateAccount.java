@@ -1,4 +1,4 @@
-package com.singlecog.trailkeeper;
+package com.singlecog.trailkeeper.Activites;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.Activites.BaseActivity;
 import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
+import com.singlecog.trailkeeper.R;
 
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
@@ -57,6 +58,9 @@ public class UpdateAccount extends BaseActivity {
         connectionDetector = new ConnectionDetector(getApplicationContext());
         SetUpSignInClickEvent();
         SetUpVerifyClickEvent();
+        SetUpEmailClick();
+        SetUpUsernameClick();
+        SetUpPasswordClick();
     }
 
     //region Activity Methods
@@ -66,7 +70,7 @@ public class UpdateAccount extends BaseActivity {
         btnSignIn = (Button)findViewById(R.id.btn_sign_in);
         btnSendVerify = (Button)findViewById(R.id.btn_verify_email);
         btnUpdateEmail = (Button)findViewById(R.id.btn_change_email);
-        btnUpdatePassword = (Button)findViewById(R.id.btn_reset_password);
+        btnUpdatePassword = (Button)findViewById(R.id.btn_change_password);
         btnUpdateUsername = (Button)findViewById(R.id.btn_change_username);
         layout1 = (RelativeLayout)findViewById(R.id.layout_btn1);
         mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
@@ -110,6 +114,64 @@ public class UpdateAccount extends BaseActivity {
         return true;
     }
     //endregion
+
+    //region Update Email
+
+    private void SetUpEmailClick() {
+        btnUpdateEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    //endRegion
+
+    //region UpdateUsername
+
+    private void SetUpUsernameClick() {
+        btnUpdateUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    //endRegion
+
+    //region Update Password
+
+    private void SetUpPasswordClick() {
+        btnUpdatePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (connectionDetector.isConnectingToInternet()) {
+                    PasswordReset(emailString);
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                }
+            }
+        });
+    }
+
+    private void PasswordReset(String password){
+        CreateAccountHelper accountHelper = new CreateAccountHelper(context, this);
+        accountHelper.ResetPassword(password);
+        dialog = ProgressDialogHelper.ShowProgressDialog(context, "Sending Reset Email");
+    }
+
+    public void PasswordResetSuccess(boolean valid, String failMessage) {
+        dialog.dismiss();
+        if(valid) {
+            AlertDialogHelper.showAlertDialog(context, "Reset Password", "Please check your email");
+        } else {
+            AlertDialogHelper.showAlertDialog(context, "Reset Password", failMessage);
+        }
+    }
+
+    //endRegion
 
     //region Verify Email
 

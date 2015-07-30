@@ -1,7 +1,6 @@
 package Helpers;
 
 import android.content.Context;
-import android.provider.SyncStateContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -20,7 +19,7 @@ import com.singlecog.trailkeeper.Activites.CreateAccount;
 import com.singlecog.trailkeeper.Activites.Settings;
 import com.singlecog.trailkeeper.Activites.SignIn;
 import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
-import com.singlecog.trailkeeper.UpdateAccount;
+import com.singlecog.trailkeeper.Activites.UpdateAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,7 +156,8 @@ public class CreateAccountHelper {
                     if (whichActivity.equals(SIGNINACTIVITY)) {
                         signInActivity.SignInSuccess(false, e.getMessage());
                     } else {
-                        updateAccountActivity.SignInSuccess(false, e.getMessage(), null); }
+                        updateAccountActivity.SignInSuccess(false, e.getMessage(), null);
+                    }
                 }
             }
         });
@@ -186,10 +186,18 @@ public class CreateAccountHelper {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Password Reset Success");
-                    signInActivity.PasswordResetSuccess(true, null);
+                    if (whichActivity.equals(SIGNINACTIVITY)) {
+                        signInActivity.PasswordResetSuccess(true, null);
+                    } else {
+                        updateAccountActivity.PasswordResetSuccess(true, null);
+                    }
                 } else {
                     Log.i(LOG, "Password Reset Fail");
-                    signInActivity.PasswordResetSuccess(false, e.getMessage());
+                    if (whichActivity.equals(SIGNINACTIVITY)) {
+                        signInActivity.PasswordResetSuccess(false, e.getMessage());
+                    } else {
+                        updateAccountActivity.PasswordResetSuccess(false, e.getMessage());
+                    }
                 }
             }
         });

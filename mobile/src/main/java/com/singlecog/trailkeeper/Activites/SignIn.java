@@ -262,9 +262,9 @@ public class SignIn extends BaseActivity {
     public void PasswordResetSuccess(boolean valid, String failMessage) {
         dialog.dismiss();
         if(valid) {
-            Toast.makeText(this, "Please check your email", Toast.LENGTH_LONG).show();
+            AlertDialogHelper.showAlertDialog(context, "Reset Password", "Please check your email");
         } else {
-            Toast.makeText(this, failMessage, Toast.LENGTH_LONG).show();
+            AlertDialogHelper.showAlertDialog(context, "Reset Password", failMessage);
         }
     }
     //endregion

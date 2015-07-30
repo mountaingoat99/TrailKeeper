@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.singlecog.trailkeeper.UpdateAccount"
+    tools:context="com.singlecog.trailkeeper.Activites.UpdateAccount"
     android:background="@drawable/bg_create_account"
     android:id="@+id/main_layout">
 
