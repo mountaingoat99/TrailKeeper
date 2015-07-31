@@ -1,18 +1,25 @@
 package com.singlecog.trailkeeper.Activites;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -121,9 +128,64 @@ public class UpdateAccount extends BaseActivity {
         btnUpdateEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                UpdateEmailDialog();
             }
         });
+    }
+
+    private void UpdateEmailDialog() {
+        final Dialog updateEmailDialog = new Dialog(this);
+        updateEmailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        updateEmailDialog.setContentView(R.layout.dialog_update_account);
+        final TextView oldField = (TextView) updateEmailDialog.findViewById(R.id.old_field);
+        oldField.setText("Current Email: " + emailString);
+        final EditText newEmail = (EditText) updateEmailDialog.findViewById(R.id.edittext_change_field);
+        newEmail.setHint("New Email");
+        newEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        newEmail.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_email, 0, 0, 0);
+        Button btnCancel = (Button) updateEmailDialog.findViewById(R.id.btn_cancel);
+        Button btnUpdate = (Button) updateEmailDialog.findViewById(R.id.btn_update_field);
+        btnUpdate.setText("Update Email");
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateEmailDialog.dismiss();
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (connectionDetector.isConnectingToInternet()) {
+                    if (CreateAccountHelper.isValidEmail(newEmail.getText().toString().trim())) {
+                        updateEmailDialog.dismiss();
+                        UpdateEmail(newEmail.getText().toString().trim());
+                    } else {
+                        Snackbar.make(v, R.string.snackbar_invalid_email, Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                }
+            }
+        });
+        updateEmailDialog.show();
+    }
+
+    private void UpdateEmail(String email) {
+        CreateAccountHelper accountHelper = new CreateAccountHelper(context, this);
+        accountHelper.UpdateEmail(email);
+        dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Email");
+    }
+
+    public void UpdateEmailSuccess(boolean valid, String failMessage, String newEmail) {
+        dialog.dismiss();
+        if (valid) {
+            AlertDialogHelper.showAlertDialog(context, "Update Email", "Your New Email is " + newEmail +
+                    "\nPlease check your email and verify your new address to have access to all the features in TrailKeeper.");
+        } else {
+            AlertDialogHelper.showAlertDialog(context, "Update Email", failMessage);
+        }
     }
 
     //endRegion
@@ -134,9 +196,66 @@ public class UpdateAccount extends BaseActivity {
         btnUpdateUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                UpdateUserNameDialog();
             }
         });
+    }
+
+    private void UpdateUserNameDialog() {
+        // set the drawable
+        //Drawable img = getResources().getDrawable(R.mipmap.ic_action_email);
+
+        final Dialog updateUserNameDialog = new Dialog(this);
+        updateUserNameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        updateUserNameDialog.setContentView(R.layout.dialog_update_account);
+        final TextView oldField = (TextView) updateUserNameDialog.findViewById(R.id.old_field);
+        oldField.setText("Current User Name: " + userNameString);
+        final EditText newUserName = (EditText) updateUserNameDialog.findViewById(R.id.edittext_change_field);
+        newUserName.setHint("New Username");
+        newUserName.setInputType(InputType.TYPE_CLASS_TEXT);
+        newUserName.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_action_person, 0, 0, 0);
+        Button btnCancel = (Button) updateUserNameDialog.findViewById(R.id.btn_cancel);
+        Button btnUpdate = (Button) updateUserNameDialog.findViewById(R.id.btn_update_field);
+        btnUpdate.setText("Update Username");
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUserNameDialog.dismiss();
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (connectionDetector.isConnectingToInternet()) {
+                    if (CreateAccountHelper.isValidUserName(newUserName.getText().toString().trim())) {
+                        updateUserNameDialog.dismiss();
+                        UpdateUsername(newUserName.getText().toString().trim());
+                    } else {
+                        Snackbar.make(v, R.string.snackbar_invalid_username, Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                }
+            }
+        });
+        updateUserNameDialog.show();
+    }
+
+    private void UpdateUsername(String userNameString) {
+        CreateAccountHelper accountHelper = new CreateAccountHelper(context, this);
+        accountHelper.UpdateUserName(userNameString);
+        dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Username");
+    }
+
+    public void UpdateUserNameSuccess(boolean valid, String failMessage, String newUserName) {
+        dialog.dismiss();
+        if (valid) {
+            AlertDialogHelper.showAlertDialog(context, "Update UserName", "Your New Username is " + newUserName);
+        } else {
+            AlertDialogHelper.showAlertDialog(context, "Update Username", failMessage);
+        }
     }
 
     //endRegion

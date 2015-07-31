@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/old_field"
             android:text="Old Field"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"

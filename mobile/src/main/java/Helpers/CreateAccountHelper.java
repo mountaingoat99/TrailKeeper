@@ -75,6 +75,40 @@ public class CreateAccountHelper {
         return target.length() >= 8;
     }
 
+    public void UpdateUserName(final String newUserName) {
+        ParseUser user = ParseUser.getCurrentUser();
+        user.setUsername(newUserName);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.i(LOG, "Update Username Success");
+                    updateAccountActivity.UpdateUserNameSuccess(true, null, newUserName);
+                } else {
+                    Log.i(LOG, "Update Username Fail");
+                    updateAccountActivity.UpdateUserNameSuccess(false, e.getMessage(), null);
+                }
+            }
+        });
+    }
+
+    public void UpdateEmail(final String newEmail) {
+        ParseUser user = ParseUser.getCurrentUser();
+        user.setEmail(newEmail);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.i(LOG, "Update Emai; Success");
+                    updateAccountActivity.UpdateEmailSuccess(true, null, newEmail);
+                } else {
+                    Log.i(LOG, "Update Email Fail");
+                    updateAccountActivity.UpdateEmailSuccess(false, e.getMessage(), null);
+                }
+            }
+        });
+    }
+
     // this is ridiculous, but in order to get the verify email to resend is
     // to update the email with a fake one, then update it again with the correct one.
     public void ResendVerifyUserEmail() {
