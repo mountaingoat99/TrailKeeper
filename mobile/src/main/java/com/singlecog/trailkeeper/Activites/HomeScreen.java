@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import AsyncAdapters.AsyncTrailInfo;
+import Helpers.CreateAccountHelper;
 import Helpers.GeoLocationHelper;
 import RecyclerAdapters.RecyclerViewHomeScreenAdapter;
 import models.ModelTrails;
@@ -320,6 +321,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
         // then refresh the Application class Parse Methods
         TrailKeeperApplication.LoadAllFromParse();
+        CreateAccountHelper.CheckUserVerified();
         TrailKeeperApplication t = new TrailKeeperApplication();
         t.onConnected(bundle);
 

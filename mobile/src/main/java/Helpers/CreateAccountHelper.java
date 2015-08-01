@@ -7,6 +7,7 @@ import android.util.Patterns;
 
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
@@ -15,6 +16,7 @@ import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.singlecog.trailkeeper.Activites.AccountSettings;
 import com.singlecog.trailkeeper.Activites.CreateAccount;
 import com.singlecog.trailkeeper.Activites.Settings;
 import com.singlecog.trailkeeper.Activites.SignIn;
@@ -28,7 +30,7 @@ public class CreateAccountHelper {
 
     private static final String LOG = "CreateAccountHelper";
     private CreateAccount createAccountActivity;
-    private Settings settingsActivity;
+    private AccountSettings settingsActivity;
     private SignIn signInActivity;
     private final String SIGNINACTIVITY = "SignIn";
     private final String UPDATEACCOUNTACTIVITY = "UpdateAccount";
@@ -42,7 +44,7 @@ public class CreateAccountHelper {
         this.context = context;
     }
 
-    public CreateAccountHelper(Context context, Settings activity) {
+    public CreateAccountHelper(Context context, AccountSettings activity) {
         this.settingsActivity = activity;
         this.context = context;
     }
@@ -167,6 +169,23 @@ public class CreateAccountHelper {
                 } else {
                     Log.i(LOG, "Failed Create Account message: " + e.getMessage());
                     createAccountActivity.UpdateCreateAccountSuccessMessage(false, e.getMessage());
+                }
+            }
+        });
+    }
+
+    public static void CheckUserVerified(){
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.getInBackground(user.getObjectId(), new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (e == null) {
+                    Log.i(LOG, "Got the User");
+                    TrailKeeperApplication.setIsEmailVerified(parseUser.getBoolean("emailVerified"));
+                } else {
+                    Log.i(LOG, "Failed to get user");
+                    TrailKeeperApplication.setIsEmailVerified(false);
                 }
             }
         });

@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="settings_array">
+        <item>Account Settings</item>
+        <item>Subscriptions</item>
+        <item>Request Trail Owner/Admin Status</item>
+        <item>Contact Us!</item>
+    </string-array>
+
+    <string-array name="account_settings_array">
         <item>Create Account</item>
         <item>Update Account</item>
         <item>Sign-in</item>
         <item>Sign-out</item>
         <item>Delete Account</item>
-        <item>Notifications</item>
-        <item>Request Trail Owner/Admin Status</item>
-        <item>Contact Us!</item>
     </string-array>
+
 </resources>

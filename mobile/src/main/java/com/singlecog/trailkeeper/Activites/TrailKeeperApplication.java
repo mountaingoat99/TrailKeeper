@@ -55,6 +55,8 @@ public class TrailKeeperApplication extends Application implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     public static boolean isEmailVerified() {
+        ParseUser user = ParseUser.getCurrentUser();
+
         return isEmailVerified;
     }
 

@@ -82,7 +82,6 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_screen);
         super.onCreateDrawer();
-
         connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();
         modelTrails = new ModelTrails(context, this);
@@ -122,6 +121,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     }
 
     //region Activity Methods
+
     private void ChangeStatusButtonText() {
         if(status == 1) {
             btnTrailStatus.setText("Open Trail");

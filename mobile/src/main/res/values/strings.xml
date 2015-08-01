@@ -83,5 +83,7 @@
     <string name="verify_email">Verify Email</string>
     <string name="update_username">Update Username</string>
     <string name="update_password">Update Password</string>
+    <string name="title_activity_account_settings">Account Settings</string>
+    <string name="title_activity_notifications">Notifications</string>
 
 </resources>

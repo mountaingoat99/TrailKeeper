@@ -6,11 +6,16 @@ import android.util.Log;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelTrails {
 
@@ -115,6 +120,11 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
+
+    // Subscriptions are also channels on Parse
+    public List<String> GetUserSubscriptions() {
+         return ParseInstallation.getCurrentInstallation().getList("channels");
+    }
 
     public void UpdateTrailStatus(String objectId, final int choice) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
