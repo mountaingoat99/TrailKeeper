@@ -14,12 +14,14 @@
 
     <TextView
         android:id="@+id/txt_comment_date"
+        android:text="test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/txt_trail_comment"
+        android:text="test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall" />

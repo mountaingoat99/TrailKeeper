@@ -85,5 +85,6 @@
     <string name="update_password">Update Password</string>
     <string name="title_activity_account_settings">Account Settings</string>
     <string name="title_activity_notifications">Notifications</string>
+    <string name="unsubscribe">Unsubscribe</string>
 
 </resources>

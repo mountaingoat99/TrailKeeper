@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linearlayout_root_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,32 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/notifications_recycler_view"
+            android:layout_marginTop="8dp"
+            android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="16dp"
-            android:paddingStart="16dp"
-            android:paddingRight="8dp"
-            android:paddingEnd="8dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/listSubscriptions"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="20.0sp"
-                android:clickable="true"
-                android:drawSelectorOnTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true">
-            </ListView>
-
-        </RelativeLayout>
+            android:layout_height="match_parent"/>
 
         <include layout="@layout/nav_drawer"/>
 

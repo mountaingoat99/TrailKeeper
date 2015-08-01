@@ -100,6 +100,14 @@ public class ModelTrails {
         return trail.replace(" ", "") + "Channel";
     }
 
+    public  static String FormatChannelName(String trail) {
+        // strip out the word Channel
+        trail = trail.replace("Channel", "");
+        // add a space before each capital letter
+        trail = trail.replaceAll("([A-Z])", " $1").trim();
+        return trail;
+    }
+
     public static CharSequence[] getTrailStatusNames() {
         return trailStatusNames = new CharSequence[]{"Open", "Closed", "Unknown"};
     }
@@ -209,6 +217,5 @@ public class ModelTrails {
             Log.e(LOG, "Unsuccessfully changed subscription");
         }
     }
-
     //endregion
 }

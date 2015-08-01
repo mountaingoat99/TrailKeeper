@@ -2,42 +2,33 @@ package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.singlecog.trailkeeper.Activites.BaseActivity;
 import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import Helpers.ConnectionDetector;
+import RecyclerAdapters.RecyclerViewNotifications;
 import models.ModelTrails;
 
-public class Notifications extends BaseActivity implements AdapterView.OnItemClickListener {
+public class Notifications extends BaseActivity {
 
     private final String LOG = "Notifications";
-    private ListView listView;
     private final Context context = this;
-    private ConnectionDetector connectionDetector;
+    private RecyclerView mSubsciptionsRecyclerView;
+    private RecyclerViewNotifications mSubsciptionsAdapter;
+    private List<String>  formattedSubscriptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
         super.onCreateDrawer();
-        listView = (ListView)findViewById(R.id.listSubscriptions);
-        connectionDetector = new ConnectionDetector(context);
-        populateListView();
-        listView.setOnItemClickListener(this);
+        getUserSubscriptions();
+        SetUpRecyclerView();
     }
 
     @Override
@@ -47,31 +38,32 @@ public class Notifications extends BaseActivity implements AdapterView.OnItemCli
         return true;
     }
 
-    //region ListItem Methods
+    private void SetUpRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
 
-    private List<String> getUserSubscriptions() {
+        mSubsciptionsRecyclerView = (RecyclerView) findViewById(R.id.notifications_recycler_view);
+        mSubsciptionsRecyclerView.setLayoutManager(layoutManager);
+        mSubsciptionsRecyclerView.setHasFixedSize(true);
+        mSubsciptionsAdapter = new RecyclerViewNotifications(formattedSubscriptions);
+        mSubsciptionsRecyclerView.setAdapter(mSubsciptionsAdapter);
+    }
+
+    private void getUserSubscriptions() {
+        formattedSubscriptions = new ArrayList<>();
         ArrayList<String> noSubscriptions = new ArrayList<>();
         noSubscriptions.add(0, "Looks like you haven't subscribed to any trails yet.");
-        List<String> subscriptions;
         ModelTrails trails = new ModelTrails();
-        subscriptions = trails.GetUserSubscriptions();
+        List<String> subscriptionsList = trails.GetUserSubscriptions();
 
-        if (subscriptions == null) {
-            return noSubscriptions;
+        if (subscriptionsList == null) {
+            formattedSubscriptions = noSubscriptions;
+        } else {
+            for (String string : subscriptionsList) {
+                string = ModelTrails.FormatChannelName(string);
+                formattedSubscriptions.add(string);
+            }
         }
-        return subscriptions;
     }
-
-    private void populateListView() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, R.layout.activity_setting_listitem, getUserSubscriptions());
-        listView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(LOG, "User clicked item: " + id + " at position: " + position);
-
-    }
-    //endregion
 }

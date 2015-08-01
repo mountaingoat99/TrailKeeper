@@ -127,8 +127,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
                 android:text="@string/button_home"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_small"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 
@@ -137,8 +139,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
                 android:text="@string/button_map"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_small"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 

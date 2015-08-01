@@ -184,10 +184,7 @@
                         android:scrollbars="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:context=".Home"
-                        tools:listitem="@layout/trail_comment_list"/>
-
-
+                        tools:context=".Home"/>
 
                 </LinearLayout>
 
