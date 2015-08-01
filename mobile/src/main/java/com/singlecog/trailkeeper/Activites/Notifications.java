@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.singlecog.trailkeeper.R;
 
@@ -21,12 +23,14 @@ public class Notifications extends BaseActivity {
     private RecyclerView mSubsciptionsRecyclerView;
     private RecyclerViewNotifications mSubsciptionsAdapter;
     private List<String>  formattedSubscriptions;
+    private View v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
         super.onCreateDrawer();
+        v = findViewById(R.id.linearlayout_root_main);
         getUserSubscriptions();
         SetUpRecyclerView();
     }
@@ -46,24 +50,17 @@ public class Notifications extends BaseActivity {
         mSubsciptionsRecyclerView = (RecyclerView) findViewById(R.id.notifications_recycler_view);
         mSubsciptionsRecyclerView.setLayoutManager(layoutManager);
         mSubsciptionsRecyclerView.setHasFixedSize(true);
-        mSubsciptionsAdapter = new RecyclerViewNotifications(formattedSubscriptions);
+        mSubsciptionsAdapter = new RecyclerViewNotifications(formattedSubscriptions, context, v, this);
         mSubsciptionsRecyclerView.setAdapter(mSubsciptionsAdapter);
     }
 
     private void getUserSubscriptions() {
         formattedSubscriptions = new ArrayList<>();
-        ArrayList<String> noSubscriptions = new ArrayList<>();
-        noSubscriptions.add(0, "Looks like you haven't subscribed to any trails yet.");
-        ModelTrails trails = new ModelTrails();
-        List<String> subscriptionsList = trails.GetUserSubscriptions();
+        List<String> subscriptionsList = ModelTrails.GetUserSubscriptions();
 
-        if (subscriptionsList == null) {
-            formattedSubscriptions = noSubscriptions;
-        } else {
-            for (String string : subscriptionsList) {
-                string = ModelTrails.FormatChannelName(string);
-                formattedSubscriptions.add(string);
-            }
+        for (String string : subscriptionsList) {
+            string = ModelTrails.FormatChannelName(string);
+            formattedSubscriptions.add(string);
         }
     }
 }

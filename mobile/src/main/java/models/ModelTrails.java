@@ -12,10 +12,13 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.singlecog.trailkeeper.Activites.Notifications;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import RecyclerAdapters.RecyclerViewNotifications;
 
 public class ModelTrails {
 
@@ -32,16 +35,21 @@ public class ModelTrails {
     public float distance;
     private Context context;
     private TrailScreen trailScreen;
+    private RecyclerViewNotifications notificationsScreen;
 
     public ModelTrails()
     {
 
     }
 
-    public ModelTrails(Context context, TrailScreen trailScreen)
-    {
+    public ModelTrails(Context context, TrailScreen trailScreen) {
         this.context = context;
         this.trailScreen = trailScreen;
+    }
+
+    public ModelTrails (Context context, RecyclerViewNotifications notifications) {
+        this.context = context;
+        this.notificationsScreen = notifications;
     }
 
     public int getTrailID() {
@@ -130,7 +138,7 @@ public class ModelTrails {
     //Region Public Methods
 
     // Subscriptions are also channels on Parse
-    public List<String> GetUserSubscriptions() {
+    public static List<String> GetUserSubscriptions() {
          return ParseInstallation.getCurrentInstallation().getList("channels");
     }
 
@@ -160,7 +168,7 @@ public class ModelTrails {
         });
     }
 
-    public void SubscribeToChannel(String trailName, int choice){    // 0 means Yes, 1 means No
+    public void SubscribeToChannel(String trailName, int choice, final String whichActivity){    // 0 means Yes, 1 means No
         //When a user indicates they want trail Updates we subscribe them to them
         final String trailNameChannel = CreateChannelName(trailName);
         if (choice == 0) {
@@ -169,9 +177,9 @@ public class ModelTrails {
                 public void done(ParseException e) {
                     if (e == null) {
                         Log.d(LOG, "successfully subscribed to the " + trailNameChannel + " broadcast channel.");
-                        SubscribeWasSuccessful(true, null);
+                        SubscribeWasSuccessful(true, null, whichActivity);
                     } else {
-                        SubscribeWasSuccessful(false, e.getMessage());
+                        SubscribeWasSuccessful(false, e.getMessage(), whichActivity);
                         Log.e(LOG, "failed to subscribe for push for " + trailNameChannel, e);
                     }
                 }
@@ -182,9 +190,9 @@ public class ModelTrails {
                 public void done(ParseException e) {
                     if (e == null) {
                         Log.d(LOG, "successfully un-subscribed to the " + trailNameChannel + " broadcast channel.");
-                        SubscribeWasSuccessful(true, null);
+                        SubscribeWasSuccessful(true, null, whichActivity);
                     } else {
-                        SubscribeWasSuccessful(false, e.getMessage());
+                        SubscribeWasSuccessful(false, e.getMessage(), whichActivity);
                         Log.e(LOG, "failed to un-subscribe for push " + trailNameChannel, e);
                     }
                 }
@@ -208,12 +216,20 @@ public class ModelTrails {
     }
 
     // here we will call the TrailScreen class and let them know it was valid
-    private void SubscribeWasSuccessful(boolean valid, String message) {
+    private void SubscribeWasSuccessful(boolean valid, String message, String whichActivity) {
         if (valid) {
-            trailScreen.UpdateSubscriptionWasSuccessful(valid, null);
+            if (whichActivity.isEmpty()) {
+                trailScreen.UpdateSubscriptionWasSuccessful(valid, null);
+            } else {
+                notificationsScreen.UpdateSubscriptionWasSuccessful(true, null);
+            }
             Log.d(LOG, "successfully changed subscriptions.");
         } else {
-            trailScreen.UpdateSubscriptionWasSuccessful(valid, message);
+            if (whichActivity.isEmpty()) {
+                trailScreen.UpdateSubscriptionWasSuccessful(valid, message);
+            } else {
+                notificationsScreen.UpdateSubscriptionWasSuccessful(false, message);
+            }
             Log.e(LOG, "Unsuccessfully changed subscription");
         }
     }

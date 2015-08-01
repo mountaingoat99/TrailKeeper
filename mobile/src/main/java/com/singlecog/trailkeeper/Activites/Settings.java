@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.singlecog.trailkeeper.R;
 
 import Helpers.CreateAccountHelper;
+import models.ModelTrails;
 
 public class Settings extends BaseActivity implements AdapterView.OnItemClickListener {
 
@@ -63,8 +64,12 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 if(isAnonUser) {
                     Snackbar.make(view, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                 } else {
-                    Intent intent1 = new Intent(context, Notifications.class);
-                    startActivity(intent1);
+                    if (ModelTrails.GetUserSubscriptions().size() > 0) {
+                        Intent intent1 = new Intent(context, Notifications.class);
+                        startActivity(intent1);
+                    } else {
+                        Snackbar.make(view, "You Have No Subscriptions", Snackbar.LENGTH_LONG).show();
+                    }
                 }
                 break;
             case 2: // TrailOwnerAdmin request

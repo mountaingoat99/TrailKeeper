@@ -1,6 +1,10 @@
 package RecyclerAdapters;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,19 +12,65 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.singlecog.trailkeeper.Activites.Notifications;
 import com.singlecog.trailkeeper.R;
 
 import java.util.List;
 
+import Helpers.AlertDialogHelper;
+import Helpers.ConnectionDetector;
+import Helpers.ProgressDialogHelper;
+import models.ModelTrails;
+
 public class RecyclerViewNotifications extends RecyclerView.Adapter
         <RecyclerViewNotifications.ListItemViewHolder> {
 
+    private final String LOG = "RecyclerVNotification";
     private List<String> items;
     private SparseBooleanArray selectedItems;
+    private ConnectionDetector connectionDetector;
+    private Context context;
+    private ProgressDialog dialog;
+    private String trailNameString;
+    private ModelTrails modelTrails;
+    private int itemToRemove;
+    private View v;
+    private Notifications notificationActivity;
 
-    public RecyclerViewNotifications(List<String> notifications) {
+    public RecyclerViewNotifications(List<String> notifications, Context context, View v, Notifications notificationActivity) {
         items = notifications;
         selectedItems = new SparseBooleanArray();
+        this.notificationActivity = notificationActivity;
+        this.context = context;
+        this.v = v;
+        connectionDetector = new ConnectionDetector(context);
+        modelTrails = new ModelTrails(context, this);
+    }
+
+    private String GetTrailName(RecyclerView.ViewHolder item) {
+        itemToRemove = item.getAdapterPosition();
+        trailNameString = items.get(item.getAdapterPosition());
+        return items.get(item.getAdapterPosition());
+    }
+
+    public void UpdateSubscriptionWasSuccessful(boolean valid, String message) {
+        dialog.dismiss();
+        if (valid) {
+            removeItem(itemToRemove);
+            Snackbar.make(v, "You have been un-subscribed from " + trailNameString, Snackbar.LENGTH_LONG).show();
+            if (getItemCount() == 0) {
+                notificationActivity.finish();
+            }
+            Log.i(LOG, "Subscription for " + trailNameString + " was updated");
+        } else {
+            Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
+            Log.i(LOG, "Subscription for " + trailNameString + " was not updated");
+        }
+    }
+
+    public void removeItem(int position) {
+        notifyItemRemoved(position);
+        items.remove(position);
     }
 
     @Override
@@ -32,13 +82,29 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
     }
 
     @Override
-    public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ListItemViewHolder viewHolder, int position) {
         String trail = items.get(position);
         viewHolder.subscriptions.setText(trail);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
-        //TODO Set Up Button Clicks
+        viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+
+        viewHolder.btnUnsubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (connectionDetector.isConnectingToInternet()) {
+                    dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscription");
+                    modelTrails.SubscribeToChannel(GetTrailName(viewHolder), 1, LOG);
+                } else {
+                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                }
+            }
+        });
     }
 
     @Override

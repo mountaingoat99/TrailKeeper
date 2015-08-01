@@ -29,7 +29,9 @@ import com.singlecog.trailkeeper.R;
 
 
 import AsyncAdapters.AsyncLoadAllFromParse;
+import Helpers.CreateAccountHelper;
 import ParseObjects.ParseTrails;
+import models.ModelTrails;
 
 public class TrailKeeperApplication extends Application implements
         GoogleApiClient.ConnectionCallbacks,
@@ -40,13 +42,11 @@ public class TrailKeeperApplication extends Application implements
      * Provides the entry point to Google Play services.
      */
     protected static final String TAG = "TrailKeeperActivity";
-    private Context context = this;
     public static GoogleApiClient mGoogleApiClient;
     //public static LocationRequest mLocationRequest;
     public static Location mLastLocation;
     public static LatLng home;
-
-    private static boolean isEmailVerified = false;
+    public static boolean isEmailVerified = false;
 
     /*
      * Define a request code to send to Google Play services
@@ -55,15 +55,12 @@ public class TrailKeeperApplication extends Application implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     public static boolean isEmailVerified() {
-        ParseUser user = ParseUser.getCurrentUser();
-
         return isEmailVerified;
     }
 
     public static void setIsEmailVerified(boolean isEmailVerified) {
         TrailKeeperApplication.isEmailVerified = isEmailVerified;
     }
-
 
     @Override
     public void onCreate(){
@@ -92,6 +89,9 @@ public class TrailKeeperApplication extends Application implements
 
         LoadAllFromParse();
 
+        // Check to see if the Users Email is verified
+        CreateAccountHelper.CheckUserVerified();
+
     }
 
     public static void LoadAllFromParse() {
@@ -102,8 +102,6 @@ public class TrailKeeperApplication extends Application implements
             e.printStackTrace();
         }
     }
-
-
 
     /**
      * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.

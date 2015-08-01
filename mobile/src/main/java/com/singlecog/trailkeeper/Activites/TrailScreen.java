@@ -296,7 +296,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     private void UpdateSubscribeStatus(int subscribe) {
         if (connectionDetector.isConnectingToInternet()) {
             dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscriptions");
-            modelTrails.SubscribeToChannel(trailNameString, subscribe);
+            modelTrails.SubscribeToChannel(trailNameString, subscribe, "");
         } else {
             AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
         }
