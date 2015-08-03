@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import AsyncAdapters.AsyncTrailInfo;
 import Helpers.CreateAccountHelper;

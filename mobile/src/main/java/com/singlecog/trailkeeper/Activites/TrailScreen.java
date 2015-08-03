@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +67,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     GoogleMap googleMap;
     private boolean isAnonUser;
     private boolean isEmailVerified;
+    private View v;
 
     /**
      * Represents a geographical location.
@@ -174,6 +177,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         btnComment = (Button)findViewById(R.id.btn_leave_comment);
         btnTrailStatus = (Button)findViewById(R.id.btn_set_trail_status);
         btnSubscribe = (Button)findViewById(R.id.btn_subscribe);
+        v = findViewById(R.id.linearlayout_root_main);
     }
 
     private void GetTrailData() {
@@ -196,7 +200,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                             UpdateStatusIcon();
                         }
                     } else {
-                        AlertDialogHelper.showAlertDialog(context, "Oops", "Something went wrong, and we don't know what, go back to the home screen and try again");
+                        AlertDialogHelper.showAlertDialog(context, "Oops", "Something went wrong, and we don't know what. \nGo back to the home screen and try again");
                         e.printStackTrace();
                     }
                 }
@@ -305,10 +309,12 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     public void UpdateSubscriptionWasSuccessful(boolean valid, String message) {
         dialog.dismiss();
         if (valid) {
-            AlertDialogHelper.showAlertDialog(context, trailNameString, trailSubscriptionStatus);
+            Snackbar.make(v, trailSubscriptionStatus, Snackbar.LENGTH_LONG).show();
+            //AlertDialogHelper.showAlertDialog(context, trailNameString, trailSubscriptionStatus);
             Log.i(LOG, "Subscription change for " + trailNameString + " was updated");
         } else {
-            AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
+            Snackbar.make(v, trailSubscriptionStatus, Snackbar.LENGTH_LONG).show();
+            //AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
             Log.i(LOG, "Subscription change for " + trailNameString + " was not updated");
         }
     }
@@ -360,12 +366,14 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     public void TrailStatusUpdateWasSuccessful(boolean valid, String message) {
         dialog.dismiss();
         if (valid) {
-            AlertDialogHelper.showAlertDialog(context, "Trail Status", "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status));
+            Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
+            //AlertDialogHelper.showAlertDialog(context, "Trail Status", "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status));
             UpdateStatusIcon();
             ModelTrails.SendOutAPushNotifications(trailNameString, status);
             Log.i(LOG, "Trail Status was changed");
         } else {
-            AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
+            Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
+            //AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
             Log.i(LOG, "Trail Status was not changed");
         }
     }

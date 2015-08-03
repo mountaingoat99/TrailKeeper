@@ -2,6 +2,7 @@ package RecyclerAdapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.singlecog.trailkeeper.Activites.Notifications;
+import com.singlecog.trailkeeper.Activites.TrailScreen;
 import com.singlecog.trailkeeper.R;
 
 import java.util.List;
@@ -47,10 +49,19 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         modelTrails = new ModelTrails(context, this);
     }
 
+    public RecyclerViewNotifications(){}
+
     private String GetTrailName(RecyclerView.ViewHolder item) {
         itemToRemove = item.getAdapterPosition();
         trailNameString = items.get(item.getAdapterPosition());
         return items.get(item.getAdapterPosition());
+    }
+
+    public void SendToTrailScreen(ModelTrails trails, Context context) {
+        Intent intent = new Intent(context, TrailScreen.class);
+        intent.putExtra("trailID", trails.getTrailID());
+        intent.putExtra("objectID", trails.getObjectID());
+        context.startActivity(intent);
     }
 
     public void UpdateSubscriptionWasSuccessful(boolean valid, String message) {
@@ -90,7 +101,8 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ModelTrails trails = new ModelTrails();
+                trails.GetTrailIDs(GetTrailName(viewHolder), context);
             }
         });
 

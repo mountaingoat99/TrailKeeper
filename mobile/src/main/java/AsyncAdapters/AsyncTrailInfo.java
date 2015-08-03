@@ -12,6 +12,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.Comments;
+import com.singlecog.trailkeeper.Activites.FindTrail;
 import com.singlecog.trailkeeper.Activites.HomeScreen;
 
 import java.util.Iterator;
@@ -26,6 +27,7 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
     ProgressDialog dialog;
     private Comments commentActivity;
     private HomeScreen homeScreenActivity;
+    private FindTrail findTrailActivity;
     private Context context;
 
     public AsyncTrailInfo(Comments activity, Context context){
@@ -35,6 +37,11 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
 
     public AsyncTrailInfo(HomeScreen activity, Context context){
         this.homeScreenActivity = activity;
+        this.context = context;
+    }
+
+    public AsyncTrailInfo(FindTrail activity, Context context) {
+        this.findTrailActivity = activity;
         this.context = context;
     }
 
@@ -75,6 +82,8 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
                         homeScreenActivity.SetUpTrailStatusRecyclerView();
                     if (commentActivity != null)
                         commentActivity.SetUpTrailRecyclerView();
+                    //if (findTrailActivity != null)
+                        //findTrailActivity.SetUpStateRecyclerView();
                 } else {
                     e.printStackTrace();
                     dialog.dismiss();

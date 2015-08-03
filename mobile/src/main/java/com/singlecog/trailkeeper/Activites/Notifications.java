@@ -1,12 +1,12 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.singlecog.trailkeeper.R;
 
@@ -18,7 +18,6 @@ import models.ModelTrails;
 
 public class Notifications extends BaseActivity {
 
-    private final String LOG = "Notifications";
     private final Context context = this;
     private RecyclerView mSubsciptionsRecyclerView;
     private RecyclerViewNotifications mSubsciptionsAdapter;
@@ -63,4 +62,6 @@ public class Notifications extends BaseActivity {
             formattedSubscriptions.add(string);
         }
     }
+
+
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container_inner_item"
+    android:layout_centerVertical="true" >
+
+    <TextView
+        android:id="@+id/state_list"
+        android:text="Wisconsin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/primary_text"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/find_trail_in_state_recycler_view"
+        android:layout_margin="8dp"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

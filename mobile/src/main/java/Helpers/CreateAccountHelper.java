@@ -11,6 +11,7 @@ import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
@@ -165,6 +166,10 @@ public class CreateAccountHelper {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Create Account success");
+                    // here we want to associate an installation with a user
+                    ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
+                    parseInstallation.add("user", ParseUser.getCurrentUser());
+                    parseInstallation.saveInBackground();
                     createAccountActivity.UpdateCreateAccountSuccessMessage(true, null);
                 } else {
                     Log.i(LOG, "Failed Create Account message: " + e.getMessage());
@@ -197,6 +202,10 @@ public class CreateAccountHelper {
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Sign In Success");
+                    // here we want to associate an installation with a user
+                    ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
+                    parseInstallation.add("user", ParseUser.getCurrentUser());
+                    parseInstallation.saveInBackground();
                     TrailKeeperApplication.setIsEmailVerified(parseUser.getBoolean("emailVerified"));
                     if (whichActivity.equals(SIGNINACTIVITY)) {
                         signInActivity.SignInSuccess(true, null);

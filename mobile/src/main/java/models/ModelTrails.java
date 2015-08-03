@@ -1,8 +1,11 @@
 package models;
 
 import android.content.Context;
+import android.graphics.AvoidXfermode;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -12,11 +15,14 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.singlecog.trailkeeper.Activites.FindTrail;
 import com.singlecog.trailkeeper.Activites.Notifications;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import RecyclerAdapters.RecyclerViewNotifications;
 
@@ -36,6 +42,7 @@ public class ModelTrails {
     private Context context;
     private TrailScreen trailScreen;
     private RecyclerViewNotifications notificationsScreen;
+    private FindTrail findTrailScreen;
 
     public ModelTrails()
     {
@@ -50,6 +57,12 @@ public class ModelTrails {
     public ModelTrails (Context context, RecyclerViewNotifications notifications) {
         this.context = context;
         this.notificationsScreen = notifications;
+    }
+
+
+    public ModelTrails (Context context, FindTrail findTrail) {
+        this.context = context;
+        this.findTrailScreen = findTrail;
     }
 
     public int getTrailID() {
@@ -136,6 +149,56 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
+
+    // gets the states for each trail we have
+    public void GetTrailStates(final RecyclerView RecyclerView) {
+        final List<String> sortedTrailState = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    for (ParseObject parseObject : list) {
+                        String trailState;
+                        trailState = parseObject.get("State").toString();
+                        // sort the trails and create the Real Names for them
+                        sortedTrailState.add(trailState);
+                        // send the list back to the FindTrail Class
+                    }
+                    Set<String> uniqueStates = new HashSet<>(sortedTrailState);
+                    FindTrail findTrail = new FindTrail();
+                    findTrail.SetUpStateRecyclerView(uniqueStates, context, RecyclerView);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // query the local datastore to get the trailID and Object from a trail name
+    public void GetTrailIDs(final String name, final Context context) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        query.whereEqualTo("TrailName", name);
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    Log.d(name, "Retrieved");
+                    for (ParseObject trail : list) {
+                        ModelTrails trails = new ModelTrails();
+                        trails.setObjectID(trail.getObjectId());
+                        trails.setTrailID(trail.getInt("TrailID"));
+                        RecyclerViewNotifications notifications = new RecyclerViewNotifications();
+                        notifications.SendToTrailScreen(trails, context);
+                    }
+                } else {
+                    Log.d(name, "Not Retrieved");
+                }
+            }
+        });
+    }
 
     // Subscriptions are also channels on Parse
     public static List<String> GetUserSubscriptions() {
