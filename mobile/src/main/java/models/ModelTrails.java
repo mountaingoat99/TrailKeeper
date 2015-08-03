@@ -152,21 +152,19 @@ public class ModelTrails {
 
     // gets the states for each trail we have
     public void GetTrailStates(final RecyclerView RecyclerView) {
-        final List<String> sortedTrailState = new ArrayList<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
+                    Set<String> uniqueStates = new HashSet<>();
                     for (ParseObject parseObject : list) {
                         String trailState;
                         trailState = parseObject.get("State").toString();
-                        // sort the trails and create the Real Names for them
-                        sortedTrailState.add(trailState);
-                        // send the list back to the FindTrail Class
+                        // Set will only add unique States, and will sort Alphabetically
+                        uniqueStates.add(trailState);
                     }
-                    Set<String> uniqueStates = new HashSet<>(sortedTrailState);
                     FindTrail findTrail = new FindTrail();
                     findTrail.SetUpStateRecyclerView(uniqueStates, context, RecyclerView);
                 } else {
@@ -174,6 +172,19 @@ public class ModelTrails {
                 }
             }
         });
+    }
+
+    // get the trails for any given state, pass in the state abbreviation
+    public static List<ParseObject> GetTrailsByState(String state) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        query.whereEqualTo("State", state);
+        query.fromLocalDatastore();
+        try {
+           return query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // query the local datastore to get the trailID and Object from a trail name

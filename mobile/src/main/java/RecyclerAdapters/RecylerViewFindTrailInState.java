@@ -21,7 +21,6 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
     private final String LOG = "RecyclerFindTrailInState";
     private List<ModelTrails> items;
     private static ModelTrails model;
-    private int lastPosition = -1;
     private SparseBooleanArray selectedItems;
     private Context context;
 
@@ -47,6 +46,7 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         model = items.get(position);
         viewHolder.trails.setText(model.TrailName);
         viewHolder.cities.setText(model.TrailCity);
+        viewHolder.itemView.setActivated(selectedItems.get(position, false));
     }
 
     @Override

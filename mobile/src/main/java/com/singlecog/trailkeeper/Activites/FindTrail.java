@@ -27,9 +27,6 @@ public class FindTrail extends BaseActivity {
     private final Context context = this;
     private RecyclerView mFindTrailByStateRecyclerView;
     private RecyclerViewFindTrailByState mFindTrailByStateAdapter;
-    private RecyclerView mFindTrailInStateRecyclerView;
-    private RecylerViewFindTrailInState mFindTrailInStateAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +37,6 @@ public class FindTrail extends BaseActivity {
         setUpdateRecyclerView();
         ModelTrails modelTrails = new ModelTrails(context, this);
         modelTrails.GetTrailStates(mFindTrailByStateRecyclerView);
-        //CallAsyncTrailInfo();
     }
 
     @Override
@@ -52,16 +48,6 @@ public class FindTrail extends BaseActivity {
         return true;
     }
 
-//    private void CallAsyncTrailInfo() {
-//        try {
-//            AsyncTrailInfo ati = new AsyncTrailInfo(this, context);
-//            trails = new ArrayList<>();
-//            ati.execute(trails);
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     private void setUpdateRecyclerView(){
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -72,23 +58,7 @@ public class FindTrail extends BaseActivity {
         mFindTrailByStateRecyclerView.setHasFixedSize(true);
     }
 
-    public void SetUpStateRecyclerView(Set<String> trailStates, Context passedContext, RecyclerView RecyclerView) {
-        if (TrailKeeperApplication.home != null) {
-            SortTrails();
-        } else {
-            View v = mFindTrailByStateRecyclerView;
-            Snackbar.make(v, R.string.snackbar_no_signal, Snackbar.LENGTH_LONG).show();
-        }
-        SortTrails();
-        ShowTrailCards(trailStates, passedContext, RecyclerView);
-    }
-
-    private void SortTrails() {
-
-    }
-
-    private void ShowTrailCards(Set<String> states, Context passedContext, RecyclerView RecyclerView) {
-
+    public void SetUpStateRecyclerView(Set<String> states, Context passedContext, RecyclerView RecyclerView) {
         List<String> trailStates = new ArrayList<>();
         // convert the set to a List for the Recycler Adapter
         trailStates.addAll(states);

@@ -2,8 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:id="@+id/container_inner_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_centerVertical="true" >
 
     <TextView
@@ -19,7 +22,7 @@
         android:text="Kenosha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:textSize="@dimen/text_size_small" />
+        android:paddingLeft="16dp"
+        android:textSize="@dimen/text_size_mini" />
 
 </LinearLayout>
