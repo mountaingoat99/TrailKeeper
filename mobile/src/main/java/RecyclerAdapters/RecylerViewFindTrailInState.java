@@ -7,12 +7,15 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.R;
 
 import java.util.List;
 
+import Helpers.GeoLocationHelper;
 import models.ModelTrails;
 
 public class RecylerViewFindTrailInState extends RecyclerView.Adapter
@@ -47,6 +50,18 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         viewHolder.trails.setText(model.TrailName);
         viewHolder.cities.setText(model.TrailCity);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
+
+        if (model.TrailStatus == 1) {
+            viewHolder.trailStatus.setImageResource(R.mipmap.red_closed);
+        } else if (model.TrailStatus == 2) {
+            viewHolder.trailStatus.setImageResource(R.mipmap.green_open);
+        } else {
+            viewHolder.trailStatus.setImageResource(R.mipmap.yellow_unknown);
+        }
+
+        int distanceAway = Math.round(GeoLocationHelper.GetClosestTrails(model, TrailKeeperApplication.home) * 100) / 100;
+
+        viewHolder.distance.setText(String.valueOf(distanceAway + " Miles"));
     }
 
     @Override
@@ -58,11 +73,15 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
         TextView trails;
         TextView cities;
+        ImageView trailStatus;
+        TextView distance;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
             trails = (TextView) itemView.findViewById(R.id.trails_in_state_list);
             cities = (TextView) itemView.findViewById(R.id.trails_in_state_cities);
+            trailStatus = (ImageView)itemView.findViewById(R.id.txt_label_trail_status);
+            distance = (TextView)itemView.findViewById(R.id.trails_distance);
         }
     }
 }

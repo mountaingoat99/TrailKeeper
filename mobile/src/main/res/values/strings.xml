@@ -86,5 +86,6 @@
     <string name="title_activity_account_settings">Account Settings</string>
     <string name="title_activity_notifications">Notifications</string>
     <string name="unsubscribe">Unsubscribe</string>
+    <string name="expand_state">Expand State Trails</string>
 
 </resources>

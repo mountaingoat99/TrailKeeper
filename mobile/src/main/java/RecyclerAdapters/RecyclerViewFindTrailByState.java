@@ -63,34 +63,47 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
     public void onBindViewHolder(final ListItemViewHolder viewHolder, int position) {
         model = items.get(position);
         viewHolder.states.setText(StateListHelper.GetStateName(model));
+        viewHolder.expand.setImageResource(R.mipmap.ic_action_expand);
+        viewHolder.showTrails = false;  // decides if we show or un-show the trails
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
         viewHolder.states.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trailsByState = new ArrayList<>();
-                String state = GetState(viewHolder);
+                if (!viewHolder.showTrails) {
+                    viewHolder.trailsInState.setVisibility(View.VISIBLE);
+                    viewHolder.expand.setImageResource(R.mipmap.ic_action_collapse);
+                    trailsByState = new ArrayList<>();
+                    String state = GetState(viewHolder);
+                    MyLinearLayoutManager trailsViewLinearLayout = new MyLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+                    viewHolder.trailsInState.setLayoutManager(trailsViewLinearLayout);
+                    viewHolder.trailsInState.setHasFixedSize(true);
 
-                MyLinearLayoutManager trailsViewLinearLayout = new MyLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                viewHolder.trailsInState.setLayoutManager(trailsViewLinearLayout);
-                viewHolder.trailsInState.setHasFixedSize(true);
+                    // get the list of states from the local datastore
+                    // and add them to a new List of ModelTrails
+                    List<ParseObject> trails = ModelTrails.GetTrailsByState(state);
+                    for (ParseObject parseObject : trails) {
+                        ModelTrails trail = new ModelTrails();
+                        trail.TrailID = parseObject.getInt("TrailID");
+                        trail.setObjectID(parseObject.getObjectId());
+                        trail.TrailName = parseObject.get("TrailName").toString();
+                        trail.TrailCity = parseObject.get("City").toString();
+                        trail.TrailStatus = parseObject.getInt("Status");
+                        trail.GeoLocation = parseObject.getParseGeoPoint("GeoLocation");
 
-                // get the list of states from the local datastore
-                // and add them to a new List of ModelTrails
-                List<ParseObject> trails = ModelTrails.GetTrailsByState(state);
-                for (ParseObject parseObject : trails) {
-                    ModelTrails trail = new ModelTrails();
-                    trail.TrailID = parseObject.getInt("TrailID");
-                    trail.setObjectID(parseObject.getObjectId());
-                    trail.TrailName = parseObject.get("TrailName").toString();
-                    trail.TrailCity = parseObject.get("City").toString();
-
-                    trailsByState.add(trail);
+                        trailsByState.add(trail);
+                    }
+                    // set the show trails to true
+                    viewHolder.showTrails = true;
+                    // send the trail list to the next adapter
+                    mFindTrailInStateAdapter = new RecylerViewFindTrailInState(trailsByState, context);
+                    viewHolder.trailsInState.setAdapter(mFindTrailInStateAdapter);
+                    viewHolder.trailsInState.setItemAnimator(new DefaultItemAnimator());
+                } else {
+                    viewHolder.expand.setImageResource(R.mipmap.ic_action_expand);
+                    viewHolder.trailsInState.setVisibility(View.GONE);
+                    viewHolder.showTrails = false;
                 }
-                // send the trail list to the next adapter
-                mFindTrailInStateAdapter = new RecylerViewFindTrailInState(trailsByState, context);
-                viewHolder.trailsInState.setAdapter(mFindTrailInStateAdapter);
-                viewHolder.trailsInState.setItemAnimator(new DefaultItemAnimator());
 
                 // when a user clicks on a state show the Recycler view
 
@@ -107,11 +120,15 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder{
         TextView states;
         RecyclerView trailsInState;
+        ImageView expand;
+        boolean showTrails;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
             states = (TextView) itemView.findViewById(R.id.state_list);
             trailsInState = (RecyclerView)itemView.findViewById(R.id.find_trail_in_state_recycler_view);
+            expand = (ImageView)itemView.findViewById(R.id.image_expand);
+            showTrails = false;
         }
     }
 }
