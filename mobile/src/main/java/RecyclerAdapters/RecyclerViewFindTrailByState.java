@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
@@ -67,7 +69,7 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
         viewHolder.showTrails = false;  // decides if we show or un-show the trails
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
-        viewHolder.states.setOnClickListener(new View.OnClickListener() {
+        viewHolder.stateTouchPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!viewHolder.showTrails) {
@@ -121,6 +123,7 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
         TextView states;
         RecyclerView trailsInState;
         ImageView expand;
+        LinearLayout stateTouchPoint;
         boolean showTrails;
 
         public ListItemViewHolder(View itemView) {
@@ -128,6 +131,7 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
             states = (TextView) itemView.findViewById(R.id.state_list);
             trailsInState = (RecyclerView)itemView.findViewById(R.id.find_trail_in_state_recycler_view);
             expand = (ImageView)itemView.findViewById(R.id.image_expand);
+            stateTouchPoint = (LinearLayout)itemView.findViewById(R.id.container_inner_item);
             showTrails = false;
         }
     }
