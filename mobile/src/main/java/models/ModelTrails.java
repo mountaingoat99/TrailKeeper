@@ -59,7 +59,6 @@ public class ModelTrails {
         this.notificationsScreen = notifications;
     }
 
-
     public ModelTrails (Context context, FindTrail findTrail) {
         this.context = context;
         this.findTrailScreen = findTrail;
@@ -150,6 +149,27 @@ public class ModelTrails {
 
     //Region Public Methods
 
+    // gets the trail names
+    public void GetTrailNames() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                List<String> trails = new ArrayList<>();
+                if (e == null) {
+                    for (ParseObject parseObject : list) {
+                        String trailName = parseObject.get("TrailName").toString();
+                        trails.add(trailName);
+                    }
+                    findTrailScreen.RecieveTrailNames(trails);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     // gets the states for each trail we have
     public void GetTrailStates(final RecyclerView RecyclerView) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
@@ -196,13 +216,18 @@ public class ModelTrails {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
+                    ModelTrails trails = new ModelTrails();
                     Log.d(name, "Retrieved");
                     for (ParseObject trail : list) {
-                        ModelTrails trails = new ModelTrails();
                         trails.setObjectID(trail.getObjectId());
                         trails.setTrailID(trail.getInt("TrailID"));
+                    }
+                    // lets decide which screen to send back the info
+                    if (notificationsScreen != null) {
                         RecyclerViewNotifications notifications = new RecyclerViewNotifications();
                         notifications.SendToTrailScreen(trails, context);
+                    } else if (findTrailScreen != null) {
+                        findTrailScreen.SendToTrailScreen(trails, context);
                     }
                 } else {
                     Log.d(name, "Not Retrieved");

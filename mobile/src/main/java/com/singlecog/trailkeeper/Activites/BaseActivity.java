@@ -155,6 +155,7 @@ public class BaseActivity extends AppCompatActivity {
         } else {
             mDrawerToggle.setDrawerIndicatorEnabled(false);
             mDrawerLayout.setDrawerListener(mDrawerToggle);
+            //mDrawerLayout.setDrawerTitle(GravityCompat.START, "Home");
             assert getSupportActionBar() != null;
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);

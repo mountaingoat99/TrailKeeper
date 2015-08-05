@@ -87,5 +87,7 @@
     <string name="title_activity_notifications">Notifications</string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="expand_state">Expand State Trails</string>
+    <string name="trail_name_hint">Trail Name</string>
+    <string name="btn_go">Go</string>
 
 </resources>

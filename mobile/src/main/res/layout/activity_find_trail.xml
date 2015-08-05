@@ -1,5 +1,5 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearlayout_root_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +17,28 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/search_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="16dp"
+                app:elevation="4dp"
+                app:borderWidth="0dp"
+                android:clickable="true"
+                android:src="@android:drawable/ic_menu_search" />
+
+        </RelativeLayout>
 
         <include layout="@layout/nav_drawer"/>
 
