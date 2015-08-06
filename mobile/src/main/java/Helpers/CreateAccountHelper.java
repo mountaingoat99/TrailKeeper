@@ -163,8 +163,6 @@ public class CreateAccountHelper {
         // TODO Debug Password
         user.put("DebugPassword", password);
         // every user can start out as a canComment user
-        user.put("canComment", true);
-        user.put("updateTrailStatus", ModelTrails.GetTrailNamesForStatusChangeAuthorized());
         user.setEmail(email);
 
         user.signUpInBackground(new SignUpCallback() {
@@ -172,10 +170,7 @@ public class CreateAccountHelper {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Create Account success");
-                    // here we want to associate an installation with a user
-                    ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
-                    parseInstallation.add("user", ParseUser.getCurrentUser());
-                    parseInstallation.saveInBackground();
+
                     createAccountActivity.UpdateCreateAccountSuccessMessage(true, null);
                 } else {
                     Log.i(LOG, "Failed Create Account message: " + e.getMessage());
@@ -211,6 +206,9 @@ public class CreateAccountHelper {
                     // here we want to associate an installation with a user
                     ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
                     parseInstallation.add("user", ParseUser.getCurrentUser());
+                    List<String> trailNames = new ArrayList<>(ModelTrails.GetTrailNamesForStatusChangeAuthorized());
+                    parseInstallation.add("updateTrailStatus", trailNames);
+                    parseInstallation.add("canComment", true);
                     parseInstallation.saveInBackground();
                     TrailKeeperApplication.setIsEmailVerified(parseUser.getBoolean("emailVerified"));
                     if (whichActivity.equals(SIGNINACTIVITY)) {

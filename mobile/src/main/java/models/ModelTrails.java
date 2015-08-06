@@ -155,7 +155,7 @@ public class ModelTrails {
     public static List<String> GetTrailNamesForStatusChangeAuthorized() {
         List<String> trailNames = new ArrayList<>();
         List<ParseObject> trails = new ArrayList<>();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
 
         query.fromLocalDatastore();
         try {
@@ -164,7 +164,7 @@ public class ModelTrails {
             e.printStackTrace();
         }
         for (int i = 0; trails.size() > i; i++) {
-            String trailname = trails.get(i).get("TrailName").toString();
+            String trailname = trails.get(i).get("trailName").toString();
             trailNames.add(trailname);
         }
         return trailNames;
@@ -172,7 +172,7 @@ public class ModelTrails {
 
     // gets the trail names
     public void GetTrailNames() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -180,7 +180,7 @@ public class ModelTrails {
                 List<String> trails = new ArrayList<>();
                 if (e == null) {
                     for (ParseObject parseObject : list) {
-                        String trailName = parseObject.get("TrailName").toString();
+                        String trailName = parseObject.get("trailName").toString();
                         trails.add(trailName);
                     }
                     findTrailScreen.RecieveTrailNames(trails);
@@ -193,7 +193,7 @@ public class ModelTrails {
 
     // gets the states for each trail we have
     public void GetTrailStates(final RecyclerView RecyclerView) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -202,7 +202,7 @@ public class ModelTrails {
                     Set<String> uniqueStates = new HashSet<>();
                     for (ParseObject parseObject : list) {
                         String trailState;
-                        trailState = parseObject.get("State").toString();
+                        trailState = parseObject.get("state").toString();
                         // Set will only add unique States, and will sort Alphabetically
                         uniqueStates.add(trailState);
                     }
@@ -217,8 +217,8 @@ public class ModelTrails {
 
     // get the trails for any given state, pass in the state abbreviation
     public static List<ParseObject> GetTrailsByState(String state) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
-        query.whereEqualTo("State", state);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
+        query.whereEqualTo("state", state);
         query.fromLocalDatastore();
         try {
            return query.find();
@@ -230,8 +230,8 @@ public class ModelTrails {
 
     // query the local datastore to get the trailID and Object from a trail name
     public void GetTrailIDs(final String name, final Context context) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
-        query.whereEqualTo("TrailName", name);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
+        query.whereEqualTo("trailName", name);
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -241,7 +241,7 @@ public class ModelTrails {
                     Log.d(name, "Retrieved");
                     for (ParseObject trail : list) {
                         trails.setObjectID(trail.getObjectId());
-                        trails.setTrailID(trail.getInt("TrailID"));
+                        trails.setTrailID(trail.getInt("trailId"));
                     }
                     // lets decide which screen to send back the info
                     if (notificationsScreen != null) {
@@ -263,13 +263,13 @@ public class ModelTrails {
     }
 
     public void UpdateTrailStatus(String objectId, final int choice) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
 
         query.getInBackground(objectId, new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 if (e == null) {
-                    parseObject.put("Status", choice);
+                    parseObject.put("status", choice);
                     parseObject.saveEventually(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

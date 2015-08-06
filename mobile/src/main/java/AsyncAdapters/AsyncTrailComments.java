@@ -55,7 +55,7 @@ public class AsyncTrailComments extends AsyncTask<List<ModelTrailComments>, Inte
     protected final List<ModelTrailComments> doInBackground(List<ModelTrailComments>... comments) {
         final List<ModelTrailComments> passedComments = comments[0];
 
-        ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("Trails");
         cQuery.fromLocalDatastore();
         cQuery.addAscendingOrder("createdAt");
         cQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -66,9 +66,9 @@ public class AsyncTrailComments extends AsyncTask<List<ModelTrailComments>, Inte
                         for (ParseObject parseObject : list) {
                             ModelTrailComments comment = new ModelTrailComments();
                             // get the commentArray from the class
-                            List<Object> commentList = parseObject.getList("Comments");
+                            List<Object> commentList = parseObject.getList("comments");
                             for (Object cList : commentList){
-                                comment.TrailName = parseObject.get("TrailName").toString();
+                                comment.TrailName = parseObject.get("trailName").toString();
                                 comment.TrailComments = cList.toString();
                                 // add it to the list
                                 passedComments.add(comment);

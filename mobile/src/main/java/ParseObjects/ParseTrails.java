@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import java.lang.reflect.Array;
 import java.util.Date;
 
-@ParseClassName("trails")
+@ParseClassName("Trails")
 public class ParseTrails extends ParseObject {
 
     //public String getObjectId() { return getObjectId(); }
@@ -17,59 +17,59 @@ public class ParseTrails extends ParseObject {
     public void setObjectId( String objectID) {put("objectID", objectID); }
 
     public Integer getTrailID() {
-        return getInt("TrailID");
+        return getInt("trailId");
     }
 
     public void SetTrailID(Integer trailID) {
-        put("TrailID", trailID);
+        put("trailId", trailID);
     }
 
     public String getTrailName() {
-        return getString("TrailName");
+        return getString("trailName");
     }
 
     public void setTrailName(String trailName) {
-        put("TrailName", trailName);
+        put("trailName", trailName);
     }
 
     public String getCity(){
-        return getString("City");
+        return getString("city");
     }
 
     public void setCity(String city){
-        put("City", city);
+        put("city", city);
     }
 
     public String getState(){
-        return getString("State");
+        return getString("state");
     }
 
     public void setState(String state){
-        put("State", state);
+        put("state", state);
     }
 
     public Integer getStatus() {
-        return getInt("Status");
+        return getInt("status");
     }
 
     public void setStatus(Integer status) {
-        put("Status", status);
+        put("status", status);
     }
 
     public JSONArray getComments(){
-        return getJSONArray("Comments");
+        return getJSONArray("comments");
     }
 
     public void setComment(String comment){
-        put("Comment", comment);
+        put("comment", comment);
     }
 
     public JSONArray getCommentDate(){
-        return getJSONArray("CommentDate");
+        return getJSONArray("commentDate");
     }
 
     public void setCommentDate(String commentDate){
-        put("CommentDate", commentDate);
+        put("commentDate", commentDate);
     }
 
     public Date getUpdatedAt(){

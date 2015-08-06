@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -52,12 +55,14 @@ import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
 import models.ModelTrails;
 
-public class TrailScreen extends BaseActivity implements OnMapReadyCallback
+public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,
+        OnMapReadyCallback
         , GoogleMap.OnMapClickListener
         , GoogleMap.OnMapLongClickListener{
 
     //region Properties
     protected static final String LOG = "trailScreenActivity";
+    private SwipeRefreshLayout mSwipeLayout;
     private int trailId, status;
     private String objectID, trailSubscriptionStatus;
     private RecyclerView mTrailCommentRecyclerView;
@@ -91,6 +96,14 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_screen);
         super.onCreateDrawer();
+
+        // set up the swipe pull to refresh
+        mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_trail_screen);
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setColorSchemeResources(R.color.accent,
+                R.color.accent, R.color.accent,
+                R.color.accent);
+
         connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();
         modelTrails = new ModelTrails(context, this);
@@ -128,6 +141,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         ShowGoogleMap();
         SetUpBtnStatusClick();
         SetUpBtnSubscribeClick();
+        mSwipeLayout.setEnabled(true);
     }
 
     //region Activity Methods
@@ -161,8 +175,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
     private void IsAuthorizedToUpdateTrailStatus(String trailName) {
         isUpdateStatusVerified = false;
-        ParseUser user = ParseUser.getCurrentUser();
-        JSONArray trailnames = user.getJSONArray("updateTrailStatus");
+        JSONArray trailnames = ParseInstallation.getCurrentInstallation().getJSONArray("updateTrailStatus");
         for (int i = 0; trailnames.length() > i; i++){
             String name = null;
             try {
@@ -183,11 +196,11 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 if (!isAnonUser) {
                     if (isEmailVerified) {
-                        if (isUpdateStatusVerified) {
+                        //if (isUpdateStatusVerified) {
                             OpenTrailStatusDialog();
-                        } else {
-                            AlertDialogHelper.showCustomAlertDialog(context, "Trail Status", "You Do Not Have Permission To Update This Trail's Status");
-                        }
+                        //} else {
+                            //AlertDialogHelper.showCustomAlertDialog(context, "Trail Status", "You Do Not Have Permission To Update This Trail's Status");
+                        //}
                     } else {
                         AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Updating Trails, Or Refresh The Screen If You've Already Done So");
                     }
@@ -211,23 +224,23 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
     private void GetTrailData() {
         if (connectionDetector.isConnectingToInternet()) {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
             query.fromLocalDatastore();
-            query.whereEqualTo("TrailID", trailId);
+            query.whereEqualTo("trailId", trailId);
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
                     if (e == null) {
                         for (ParseObject object : list) {
-                            trailNameString = object.get("TrailName").toString();
+                            trailNameString = object.get("trailName").toString();
                             trailName.setText(trailNameString);
-                            status = object.getInt("Status");
-                            trailCity.setText(object.get("City").toString());
-                            trailState.setText(object.get("State").toString());
-                            trailLocation = new LatLng(object.getParseGeoPoint("GeoLocation").getLatitude(), object.getParseGeoPoint("GeoLocation").getLongitude());
+                            status = object.getInt("status");
+                            trailCity.setText(object.get("city").toString());
+                            trailState.setText(object.get("state").toString());
+                            trailLocation = new LatLng(object.getParseGeoPoint("geoLocation").getLatitude(), object.getParseGeoPoint("geoLocation").getLongitude());
 
                             UpdateStatusIcon();
-                            IsAuthorizedToUpdateTrailStatus(trailNameString);
+                            //IsAuthorizedToUpdateTrailStatus(trailNameString);
                         }
                     } else {
                         AlertDialogHelper.showCustomAlertDialog(context, "Oops", "Something went wrong, and we don't know what. \nGo back to the home screen and try again");
@@ -446,5 +459,27 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         intent.putExtra("objectID", objectID);
         startActivity(intent);
     }
+    //endregion
+
+    //Region Swipe To Refresh
+    @Override
+    public void onRefresh() {
+        mSwipeLayout.setRefreshing(true);
+
+        TrailKeeperApplication.LoadAllFromParse();
+        CreateAccountHelper.CheckUserVerified();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //IsAuthorizedToUpdateTrailStatus(trailNameString);
+                isEmailVerified = TrailKeeperApplication.isEmailVerified();
+                isAnonUser = CreateAccountHelper.IsAnonUser();
+
+                mSwipeLayout.setRefreshing(false);
+            }
+        }, 3000);
+    }
+
     //endregion
 }

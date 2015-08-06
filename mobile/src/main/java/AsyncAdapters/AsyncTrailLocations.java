@@ -34,7 +34,7 @@ public class AsyncTrailLocations extends AsyncTask<List<ModelTrails>, Integer, L
     @Override
     protected final List<ModelTrails> doInBackground(List<ModelTrails>... trails) {
         final List<ModelTrails> passedTrails = trails[0];
-        ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("Trails");
         tQuery.fromLocalDatastore();
         tQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -43,10 +43,10 @@ public class AsyncTrailLocations extends AsyncTask<List<ModelTrails>, Integer, L
                     for (ParseObject parseObject : list) {
                         ModelTrails trail = new ModelTrails();
                         trail.ObjectID = parseObject.getObjectId();
-                        trail.TrailID = parseObject.getInt("TrailID");
-                        trail.TrailName = parseObject.get("TrailName").toString();
-                        trail.TrailStatus = Integer.valueOf(parseObject.get("Status").toString());
-                        trail.GeoLocation = parseObject.getParseGeoPoint("GeoLocation");
+                        trail.TrailID = parseObject.getInt("trailId");
+                        trail.TrailName = parseObject.get("trailName").toString();
+                        trail.TrailStatus = Integer.valueOf(parseObject.get("status").toString());
+                        trail.GeoLocation = parseObject.getParseGeoPoint("geoLocation");
 
                         passedTrails.add(trail);
                     }

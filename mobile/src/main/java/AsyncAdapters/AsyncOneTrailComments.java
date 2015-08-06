@@ -43,9 +43,9 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
     protected final List<ModelTrailComments> doInBackground(List<ModelTrailComments>... comments) {
         final List<ModelTrailComments> passedComments = comments[0];
 
-        ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("Trails");
         cQuery.fromLocalDatastore();
-        cQuery.whereEqualTo("TrailID", mTrailID);
+        cQuery.whereEqualTo("trailId", mTrailID);
         cQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -53,8 +53,8 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
                     if (list != null) {
                         for (ParseObject parseObject : list) {
                             // get the commentArray from the class
-                            List<Object> commentList = parseObject.getList("Comments");
-                            List<Object> commentDateList = parseObject.getList("CommentDate");
+                            List<Object> commentList = parseObject.getList("comments");
+                            List<Object> commentDateList = parseObject.getList("commentDate");
                             int count = 0;
                             for (Object cList : commentList){
                                 ModelTrailComments comment = new ModelTrailComments();

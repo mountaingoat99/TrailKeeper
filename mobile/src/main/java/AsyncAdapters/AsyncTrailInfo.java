@@ -60,7 +60,7 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
         final List<ModelTrails> passedTrails = trails[0];
 
         //Parse
-        ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("trails");
+        ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("Trails");
         tQuery.fromLocalDatastore();
         tQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -69,12 +69,12 @@ public class AsyncTrailInfo extends AsyncTask<List<ModelTrails>, Integer, List<M
                     for (ParseObject parseObject : list) {
                         ModelTrails trail = new ModelTrails();
                         trail.ObjectID = parseObject.getObjectId();
-                        trail.TrailID = parseObject.getInt("TrailID");
-                        trail.TrailName = parseObject.get("TrailName").toString();
-                        trail.TrailStatus = Integer.valueOf(parseObject.get("Status").toString());
-                        trail.TrailState = parseObject.get("State").toString();
-                        trail.TrailCity = parseObject.get("City").toString();
-                        trail.GeoLocation = parseObject.getParseGeoPoint("GeoLocation");
+                        trail.TrailID = parseObject.getInt("trailId");
+                        trail.TrailName = parseObject.get("trailName").toString();
+                        trail.TrailStatus = Integer.valueOf(parseObject.get("status").toString());
+                        trail.TrailState = parseObject.get("state").toString();
+                        trail.TrailCity = parseObject.get("city").toString();
+                        trail.GeoLocation = parseObject.getParseGeoPoint("geoLocation");
 
                         passedTrails.add(trail);
                     }

@@ -62,9 +62,9 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         // set up the swipe pull to refresh
         mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_home_screen);
         mSwipeLayout.setOnRefreshListener(this);
-        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light, android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        mSwipeLayout.setColorSchemeResources(R.color.accent,
+                R.color.accent, R.color.accent,
+                R.color.accent);
 
         // show the refresh spinner on load
         if (TrailKeeperApplication.home == null) {

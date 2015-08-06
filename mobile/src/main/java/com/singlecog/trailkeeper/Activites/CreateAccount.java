@@ -16,13 +16,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
 import Helpers.ProgressDialogHelper;
+import models.ModelTrails;
 
 public class CreateAccount extends BaseActivity {
 
@@ -131,12 +138,38 @@ public class CreateAccount extends BaseActivity {
     public void UpdateCreateAccountSuccessMessage(boolean valid, String failMessage) {
         dialog.dismiss();
         if (valid){
+            UpdateInstallationInfo();
             CreateSuccessMessage();
             Log.i(LOG, "Account Creation Success");
         }else{
             Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
             Log.i(LOG, "Account Creation Failed");
         }
+    }
+
+    public void UpdateInstallationInfo() {
+        // here we want to associate an installation with a user
+        ParseInstallation parseInstallation = null;
+        try {
+            parseInstallation = ParseInstallation.getCurrentInstallation().fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        assert parseInstallation != null;
+        parseInstallation.add("user", ParseUser.getCurrentUser());
+        List<String> trailNames = new ArrayList<>(ModelTrails.GetTrailNamesForStatusChangeAuthorized());
+        parseInstallation.add("updateTrailStatus", trailNames);
+        parseInstallation.add("canComment", true);
+        parseInstallation.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.i(LOG, "updated new Installation ");
+                } else {
+                    Log.i(LOG, "Failed to update installation: " + e.getMessage());
+                }
+            }
+        });
     }
 
     // if successful we go right back to the StartScreen
