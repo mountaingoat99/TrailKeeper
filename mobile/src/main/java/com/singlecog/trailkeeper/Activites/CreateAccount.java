@@ -114,7 +114,7 @@ public class CreateAccount extends BaseActivity {
                         CallCreateAccount();
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });

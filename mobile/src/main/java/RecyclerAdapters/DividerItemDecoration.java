@@ -43,7 +43,7 @@ public void setOrientation(int orientation) {
 
 @Override
 public void onDraw(Canvas c, RecyclerView parent) {
-        Log.v("recyclerview - itemdecoration", "onDraw()");
+        Log.v("itemdecoration", "onDraw()");
         if (mOrientation == VERTICAL_LIST) {
         drawVertical(c, parent);
         } else {

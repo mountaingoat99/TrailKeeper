@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import RecyclerAdapters.RecyclerViewNotifications;
 
@@ -148,6 +149,26 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
+    // gets the trail names for the updateTrailStatus field in user
+    // this field decides if a user can update a status, if a
+    // user gets trail admin status we remove it from all other users
+    public static List<String> GetTrailNamesForStatusChangeAuthorized() {
+        List<String> trailNames = new ArrayList<>();
+        List<ParseObject> trails = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("trails");
+
+        query.fromLocalDatastore();
+        try {
+            trails = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; trails.size() > i; i++) {
+            String trailname = trails.get(i).get("TrailName").toString();
+            trailNames.add(trailname);
+        }
+        return trailNames;
+    }
 
     // gets the trail names
     public void GetTrailNames() {

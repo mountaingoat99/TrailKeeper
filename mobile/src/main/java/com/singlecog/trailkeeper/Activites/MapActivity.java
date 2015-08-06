@@ -137,6 +137,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                             .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    marker.showInfoWindow();
                     AddToMarkerList(marker, trails.get(i));
 
                 } else if (trails.get(i).TrailStatus == 2) {
@@ -144,12 +145,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                             .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    marker.showInfoWindow();
                     AddToMarkerList(marker, trails.get(i));
                 } else {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
                             .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                    marker.showInfoWindow();
                     AddToMarkerList(marker, trails.get(i));
                 }
             }
@@ -205,7 +208,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
             googleMap.addMarker(new MarkerOptions()
                     .title("Current Location")
                     .position(home)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
         }
         // if coming from the Main Trail Screen (trailLocation will not be null)
         // but the device location is null

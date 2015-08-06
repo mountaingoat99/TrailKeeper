@@ -121,7 +121,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
                     createAccountHelper.DeleteUser(ParseUser.getCurrentUser());
                     StartDeleteDialog();
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -164,7 +164,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
                     createAccountHelper.CreateAnonUser();
                     StartSignOutDialog();
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });

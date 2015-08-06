@@ -19,13 +19,14 @@ import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import com.singlecog.trailkeeper.Activites.AccountSettings;
 import com.singlecog.trailkeeper.Activites.CreateAccount;
-import com.singlecog.trailkeeper.Activites.Settings;
 import com.singlecog.trailkeeper.Activites.SignIn;
 import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.Activites.UpdateAccount;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import models.ModelTrails;
 
 public class CreateAccountHelper {
 
@@ -77,6 +78,8 @@ public class CreateAccountHelper {
     public static boolean isValidPassword(String target){
         return target.length() >= 8;
     }
+
+
 
     public void UpdateUserName(final String newUserName) {
         ParseUser user = ParseUser.getCurrentUser();
@@ -159,6 +162,9 @@ public class CreateAccountHelper {
         user.setPassword(password);
         // TODO Debug Password
         user.put("DebugPassword", password);
+        // every user can start out as a canComment user
+        user.put("canComment", true);
+        user.put("updateTrailStatus", ModelTrails.GetTrailNamesForStatusChangeAuthorized());
         user.setEmail(email);
 
         user.signUpInBackground(new SignUpCallback() {

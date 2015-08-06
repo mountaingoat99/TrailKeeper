@@ -106,7 +106,7 @@ public class SignIn extends BaseActivity {
                         SignInToAccount(userNameString, passwordString);
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -182,7 +182,7 @@ public class SignIn extends BaseActivity {
                         Snackbar.make(v, "Please enter a valid email", Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -246,7 +246,7 @@ public class SignIn extends BaseActivity {
                         Snackbar.make(v, "Please enter a valid email", Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -262,9 +262,9 @@ public class SignIn extends BaseActivity {
     public void PasswordResetSuccess(boolean valid, String failMessage) {
         dialog.dismiss();
         if(valid) {
-            AlertDialogHelper.showAlertDialog(context, "Reset Password", "Please check your email");
+            AlertDialogHelper.showCustomAlertDialog(context, "Reset Password", "Please check your email");
         } else {
-            AlertDialogHelper.showAlertDialog(context, "Reset Password", failMessage);
+            AlertDialogHelper.showCustomAlertDialog(context, "Reset Password", failMessage);
         }
     }
     //endregion

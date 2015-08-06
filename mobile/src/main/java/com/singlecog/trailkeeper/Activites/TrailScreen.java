@@ -30,10 +30,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +72,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
     GoogleMap googleMap;
     private boolean isAnonUser;
     private boolean isEmailVerified;
+    private boolean isUpdateStatusVerified;
     private View v;
 
     /**
@@ -98,6 +104,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
 
         // call method to get items from Local DataStore to fill the Views
         GetTrailData();
+
 
         // sets the tap event on the recycler views
         gestureDetector =
@@ -143,13 +150,31 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                     if (isEmailVerified) {
                         OpenSubscribeDialog();
                     } else {
-                        AlertDialogHelper.showAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Subscribing to Notifications.");
+                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Subscribing To Notifications, Or Refresh The Screen If You've Already Done So");
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Subscribing to Notifications.");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Subscribing to Notifications.");
                 }
             }
         });
+    }
+
+    private void IsAuthorizedToUpdateTrailStatus(String trailName) {
+        isUpdateStatusVerified = false;
+        ParseUser user = ParseUser.getCurrentUser();
+        JSONArray trailnames = user.getJSONArray("updateTrailStatus");
+        for (int i = 0; trailnames.length() > i; i++){
+            String name = null;
+            try {
+                name = trailnames.getString(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (name != null && name.equals(trailName)) {
+                isUpdateStatusVerified = true;
+                break;
+            }
+        }
     }
 
     private void SetUpBtnStatusClick() {
@@ -158,12 +183,16 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 if (!isAnonUser) {
                     if (isEmailVerified) {
-                        OpenTrailStatusDialog();
+                        if (isUpdateStatusVerified) {
+                            OpenTrailStatusDialog();
+                        } else {
+                            AlertDialogHelper.showCustomAlertDialog(context, "Trail Status", "You Do Not Have Permission To Update This Trail's Status");
+                        }
                     } else {
-                        AlertDialogHelper.showAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Updating Trails");
+                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Updating Trails, Or Refresh The Screen If You've Already Done So");
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Updating Trails");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Updating Trails");
                 }
             }
         });
@@ -198,15 +227,16 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
                             trailLocation = new LatLng(object.getParseGeoPoint("GeoLocation").getLatitude(), object.getParseGeoPoint("GeoLocation").getLongitude());
 
                             UpdateStatusIcon();
+                            IsAuthorizedToUpdateTrailStatus(trailNameString);
                         }
                     } else {
-                        AlertDialogHelper.showAlertDialog(context, "Oops", "Something went wrong, and we don't know what. \nGo back to the home screen and try again");
+                        AlertDialogHelper.showCustomAlertDialog(context, "Oops", "Something went wrong, and we don't know what. \nGo back to the home screen and try again");
                         e.printStackTrace();
                     }
                 }
             });
         } else {
-            AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
         }
     }
 
@@ -302,7 +332,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
             dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscriptions");
             modelTrails.SubscribeToChannel(trailNameString, subscribe, "");
         } else {
-            AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
         }
     }
 
@@ -354,7 +384,7 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         if (connectionDetector.isConnectingToInternet()) {
             CallChangeTrailStatusClass(choice);
         } else {
-            AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
         }
     }
 
@@ -367,13 +397,11 @@ public class TrailScreen extends BaseActivity implements OnMapReadyCallback
         dialog.dismiss();
         if (valid) {
             Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
-            //AlertDialogHelper.showAlertDialog(context, "Trail Status", "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status));
             UpdateStatusIcon();
             ModelTrails.SendOutAPushNotifications(trailNameString, status);
             Log.i(LOG, "Trail Status was changed");
         } else {
             Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
-            //AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
             Log.i(LOG, "Trail Status was not changed");
         }
     }

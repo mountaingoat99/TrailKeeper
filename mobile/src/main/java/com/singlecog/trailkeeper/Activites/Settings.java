@@ -64,7 +64,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 if(isAnonUser) {
                     Snackbar.make(view, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                 } else {
-                    if (ModelTrails.GetUserSubscriptions().size() > 0) {
+                    if (ModelTrails.GetUserSubscriptions() != null && ModelTrails.GetUserSubscriptions().size() > 0) {
                         Intent intent1 = new Intent(context, Notifications.class);
                         startActivity(intent1);
                     } else {

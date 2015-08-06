@@ -113,7 +113,7 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
                     dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscription");
                     modelTrails.SubscribeToChannel(GetTrailName(viewHolder), 1, LOG);
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });

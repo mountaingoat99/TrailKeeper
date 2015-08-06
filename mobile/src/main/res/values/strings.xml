@@ -89,5 +89,7 @@
     <string name="expand_state">Expand State Trails</string>
     <string name="trail_name_hint">Trail Name</string>
     <string name="btn_go">Go</string>
+    <string name="btn_refresh">Refresh</string>
+    <string name="btn_okay">Okay</string>
 
 </resources>

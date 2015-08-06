@@ -165,7 +165,7 @@ public class UpdateAccount extends BaseActivity {
                         Snackbar.make(v, R.string.snackbar_invalid_email, Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -181,10 +181,10 @@ public class UpdateAccount extends BaseActivity {
     public void UpdateEmailSuccess(boolean valid, String failMessage, String newEmail) {
         dialog.dismiss();
         if (valid) {
-            AlertDialogHelper.showAlertDialog(context, "Update Email", "Your New Email is " + newEmail +
+            AlertDialogHelper.showCustomAlertDialog(context, "Update Email", "Your New Email is " + newEmail +
                     "\nPlease check your email and verify your new address to have access to all the features in TrailKeeper.");
         } else {
-            AlertDialogHelper.showAlertDialog(context, "Update Email", failMessage);
+            AlertDialogHelper.showCustomAlertDialog(context, "Update Email", failMessage);
         }
     }
 
@@ -236,7 +236,7 @@ public class UpdateAccount extends BaseActivity {
                         Snackbar.make(v, R.string.snackbar_invalid_username, Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -252,9 +252,9 @@ public class UpdateAccount extends BaseActivity {
     public void UpdateUserNameSuccess(boolean valid, String failMessage, String newUserName) {
         dialog.dismiss();
         if (valid) {
-            AlertDialogHelper.showAlertDialog(context, "Update UserName", "Your New Username is " + newUserName);
+            AlertDialogHelper.showCustomAlertDialog(context, "Update UserName", "Your New Username is " + newUserName);
         } else {
-            AlertDialogHelper.showAlertDialog(context, "Update Username", failMessage);
+            AlertDialogHelper.showCustomAlertDialog(context, "Update Username", failMessage);
         }
     }
 
@@ -269,7 +269,7 @@ public class UpdateAccount extends BaseActivity {
                 if (connectionDetector.isConnectingToInternet()) {
                     PasswordReset(emailString);
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -284,9 +284,9 @@ public class UpdateAccount extends BaseActivity {
     public void PasswordResetSuccess(boolean valid, String failMessage) {
         dialog.dismiss();
         if(valid) {
-            AlertDialogHelper.showAlertDialog(context, "Reset Password", "Please check your email");
+            AlertDialogHelper.showCustomAlertDialog(context, "Reset Password", "Please check your email");
         } else {
-            AlertDialogHelper.showAlertDialog(context, "Reset Password", failMessage);
+            AlertDialogHelper.showCustomAlertDialog(context, "Reset Password", failMessage);
         }
     }
 
@@ -305,7 +305,7 @@ public class UpdateAccount extends BaseActivity {
                         Snackbar.make(v, "Your email is already verified", Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
@@ -328,7 +328,7 @@ public class UpdateAccount extends BaseActivity {
     }
 
     private void ShowSuccessfulVerifyMessage() {
-        AlertDialogHelper.showAlertDialog(this, "Email Sent", "Please check your email and verify your account to have access to all the features in TrailKeeper.");
+        AlertDialogHelper.showCustomAlertDialog(this, "Email Sent", "Please check your email and verify your account to have access to all the features in TrailKeeper.");
     }
 
     //endregion
@@ -354,7 +354,7 @@ public class UpdateAccount extends BaseActivity {
                         SignInToAccount(userNameString, passwordString);
                     }
                 } else {
-                    AlertDialogHelper.showAlertDialog(context, "No Connection", "You have no wifi or data connection");
+                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
