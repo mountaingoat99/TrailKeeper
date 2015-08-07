@@ -1,9 +1,6 @@
 package com.singlecog.trailkeeper.Activites;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -12,7 +9,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.GetCallback;
@@ -21,17 +17,14 @@ import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.R;
 
 
-import AsyncAdapters.AsyncLoadAllFromParse;
+import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllTrailsFromParse;
 import Helpers.CreateAccountHelper;
 import ParseObjects.ParseTrails;
-import models.ModelTrails;
 
 public class TrailKeeperApplication extends Application implements
         GoogleApiClient.ConnectionCallbacks,
@@ -96,7 +89,7 @@ public class TrailKeeperApplication extends Application implements
 
     public static void LoadAllFromParse() {
         try {
-            AsyncLoadAllFromParse load = new AsyncLoadAllFromParse();
+            AsyncLoadAllTrailsFromParse load = new AsyncLoadAllTrailsFromParse();
             load.execute();
         }catch (Exception e) {
             e.printStackTrace();
