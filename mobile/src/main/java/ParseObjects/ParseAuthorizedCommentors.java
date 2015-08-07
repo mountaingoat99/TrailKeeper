@@ -11,8 +11,8 @@ public class ParseAuthorizedCommentors extends ParseObject {
         return getString("userObjectId");
     }
 
-    public void SetUserObjectID(String trailID) {
-        put("userObjectId", trailID);
+    public void SetUserObjectID(String userId) {
+        put("userObjectId", userId);
     }
 
     public String getUserName() {

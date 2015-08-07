@@ -2,6 +2,7 @@ package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,12 +19,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Menu;
 
+import com.google.android.gms.appdatasearch.Feature;
 import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 
 import AsyncAdapters.AsyncTrailInfo;
 import Helpers.AlertDialogHelper;
@@ -104,34 +108,39 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     // TODO create a custom dialog screen
     private void showSignUpScreen(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.welcome_title);
+        final Dialog welcomeDialog = new Dialog(this);
+        welcomeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        welcomeDialog.setContentView(R.layout.dialog_first_welcome);
+        Button btnNotYet = (Button)welcomeDialog.findViewById(R.id.btn_not_yet);
+        Button btnOkay = (Button)welcomeDialog.findViewById(R.id.btn_okay);
 
-        builder.setMessage(R.string.welcome_message);
-
-        builder.setNegativeButton(R.string.button_not_yet, new DialogInterface.OnClickListener() {
+        btnNotYet.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                View v = mTrailOpenRecyclerView;
-                firstTimeLoad = false;
-                savePreferences("Firsttimeload", false);
-                Snackbar.make(v, R.string.snackbar_settings_reminder, Snackbar.LENGTH_LONG).show();
+            public void onClick(View v) {
+                welcomeDialog.dismiss();
+                View view = mTrailOpenRecyclerView;
+                Snackbar.make(view, R.string.snackbar_settings_reminder, Snackbar.LENGTH_LONG).show();
             }
         });
 
-        builder.setPositiveButton(R.string.button_sign_up, new DialogInterface.OnClickListener() {
+        btnOkay.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                firstTimeLoad = false;
-                savePreferences("Firsttimeload", false);
+            public void onClick(View v) {
+                welcomeDialog.dismiss();
                 Intent intent = new Intent(context, CreateAccount.class);
                 startActivity(intent);
             }
         });
 
-        verifyEmailDialog = builder.create();
-        verifyEmailDialog.show();
+        welcomeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                firstTimeLoad = false;
+                savePreferences("Firsttimeload", false);
+            }
+        });
+
+        welcomeDialog.show();
     }
 
     private void loadSavedPreferences(){

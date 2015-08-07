@@ -12,6 +12,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
@@ -26,6 +27,7 @@ import com.singlecog.trailkeeper.Activites.UpdateAccount;
 import java.util.ArrayList;
 import java.util.List;
 
+import ParseObjects.ParseAuthorizedCommentors;
 import models.ModelTrails;
 
 public class CreateAccountHelper {
@@ -170,7 +172,6 @@ public class CreateAccountHelper {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Create Account success");
-
                     createAccountActivity.UpdateCreateAccountSuccessMessage(true, null);
                 } else {
                     Log.i(LOG, "Failed Create Account message: " + e.getMessage());
@@ -178,6 +179,23 @@ public class CreateAccountHelper {
                 }
             }
         });
+    }
+
+    // set the users default can comment to true
+    public static void SetUsersCanComment(Boolean canComment) {
+        final ParseAuthorizedCommentors commentors = new ParseAuthorizedCommentors();
+        commentors.setCanComment(canComment);
+        commentors.setUserName(ParseUser.getCurrentUser().getUsername());
+        commentors.SetUserObjectID(ParseUser.getCurrentUser().getObjectId());
+        commentors.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.i(LOG, "Setting User Can Comment for " + ParseUser.getCurrentUser().getUsername() + " Failed");
+                }
+            }
+        });
+
     }
 
     public static void CheckUserVerified(){
@@ -206,9 +224,7 @@ public class CreateAccountHelper {
                     // here we want to associate an installation with a user
                     ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
                     parseInstallation.add("user", ParseUser.getCurrentUser());
-                    List<String> trailNames = new ArrayList<>(ModelTrails.GetTrailNamesForStatusChangeAuthorized());
-                    parseInstallation.add("updateTrailStatus", trailNames);
-                    parseInstallation.add("canComment", true);
+                    parseInstallation.add("userName", ParseUser.getCurrentUser().getUsername());
                     parseInstallation.saveInBackground();
                     TrailKeeperApplication.setIsEmailVerified(parseUser.getBoolean("emailVerified"));
                     if (whichActivity.equals(SIGNINACTIVITY)) {

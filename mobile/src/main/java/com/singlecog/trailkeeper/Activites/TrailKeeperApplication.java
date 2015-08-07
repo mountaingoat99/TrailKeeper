@@ -27,6 +27,9 @@ import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllCommentsFromParse;
 import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllTrailStatusFromParse;
 import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllTrailsFromParse;
 import Helpers.CreateAccountHelper;
+import ParseObjects.ParseAuthorizedCommentors;
+import ParseObjects.ParseComments;
+import ParseObjects.ParseTrailStatus;
 import ParseObjects.ParseTrails;
 
 public class TrailKeeperApplication extends Application implements
@@ -68,7 +71,9 @@ public class TrailKeeperApplication extends Application implements
 
         // add the Parse Subclasses
         ParseObject.registerSubclass(ParseTrails.class);
-        //ParseObject.registerSubclass(ParseComments.class);
+        ParseObject.registerSubclass(ParseComments.class);
+        ParseObject.registerSubclass(ParseAuthorizedCommentors.class);
+        ParseObject.registerSubclass(ParseTrailStatus.class);
 
         // Enable the Local Datastore
         Parse.enableLocalDatastore(getApplicationContext());

@@ -157,9 +157,7 @@ public class CreateAccount extends BaseActivity {
         }
         assert parseInstallation != null;
         parseInstallation.add("user", ParseUser.getCurrentUser());
-        List<String> trailNames = new ArrayList<>(ModelTrails.GetTrailNamesForStatusChangeAuthorized());
-        parseInstallation.add("updateTrailStatus", trailNames);
-        parseInstallation.add("canComment", true);
+        parseInstallation.add("userName", ParseUser.getCurrentUser().getUsername());
         parseInstallation.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -170,6 +168,8 @@ public class CreateAccount extends BaseActivity {
                 }
             }
         });
+
+        CreateAccountHelper.SetUsersCanComment(true);
     }
 
     // if successful we go right back to the StartScreen
