@@ -21,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,12 +31,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 
 import org.json.JSONArray;
@@ -466,7 +463,7 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
     public void onRefresh() {
         mSwipeLayout.setRefreshing(true);
 
-        TrailKeeperApplication.LoadAllFromParse();
+        TrailKeeperApplication.LoadAllTrailsFromParse();
         CreateAccountHelper.CheckUserVerified();
 
         new Handler().postDelayed(new Runnable() {

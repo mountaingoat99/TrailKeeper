@@ -100,17 +100,6 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     private void VerifyEmailDialog() {
         AlertDialogHelper.showCustomAlertDialog(context, "Thanks for signing up", "Please Check Your Email And Verify Your Account To The Features In TrailKeeper");
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Thanks for signing up!");
-//        builder.setMessage("Please check your email and verify your account to have access to all the features in TrailKeeper.");
-//        builder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        signUpDialog = builder.create();
-//        signUpDialog.show();
     }
 
     // TODO create a custom dialog screen
@@ -215,13 +204,22 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                         if (!trails.isEmpty()) {
                             SortTrails();
                         } else {
-                            onRefresh();
+                            CreateAccountHelper.CheckUserVerified();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // now set the cards back up and load the recycler view
+                                    SetUpTrailStatusCard();
+                                    CallAsyncTrailInfo();
+                                    mSwipeLayout.setRefreshing(false);
+                                }
+                            }, 3000);
+                            //onRefresh();
                             return;
                         }
                     } else {
                         View v = mTrailOpenRecyclerView;
                         Snackbar.make(v, R.string.snackbar_no_signal, Snackbar.LENGTH_LONG).show();
-                        //Toast.makeText(context, "Please Turn On GPS for to get the trails nearest your location", Toast.LENGTH_LONG).show();
                     }
                     ShowTrailCards();
                 }
@@ -322,7 +320,10 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         }
 
         // then refresh the Application class Parse Methods
-        TrailKeeperApplication.LoadAllFromParse();
+        TrailKeeperApplication.LoadAllTrailsFromParse();
+        TrailKeeperApplication.LoadAllCommentsFromParse();
+        TrailKeeperApplication.LoadAllAuthorizedCommentorsFromParse();
+        TrailKeeperApplication.LoadAllTrailStatusUpdatorsFromParse();
         CreateAccountHelper.CheckUserVerified();
         TrailKeeperApplication t = new TrailKeeperApplication();
         t.onConnected(bundle);

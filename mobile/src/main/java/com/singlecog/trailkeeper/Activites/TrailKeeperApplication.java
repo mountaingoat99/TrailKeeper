@@ -22,6 +22,9 @@ import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 
 
+import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllAuthorizedCommentorsFromParse;
+import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllCommentsFromParse;
+import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllTrailStatusFromParse;
 import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllTrailsFromParse;
 import Helpers.CreateAccountHelper;
 import ParseObjects.ParseTrails;
@@ -80,18 +83,49 @@ public class TrailKeeperApplication extends Application implements
         defaultACL.setPublicWriteAccess(true);
         ParseACL.setDefaultACL(defaultACL, true);
 
-        LoadAllFromParse();
+        LoadAllTrailsFromParse();
+        LoadAllCommentsFromParse();
+        LoadAllAuthorizedCommentorsFromParse();
+        LoadAllTrailStatusUpdatorsFromParse();
 
         // Check to see if the Users Email is verified
         CreateAccountHelper.CheckUserVerified();
 
     }
 
-    public static void LoadAllFromParse() {
+    // load all the objects from Parse
+    public static void LoadAllTrailsFromParse() {
         try {
             AsyncLoadAllTrailsFromParse load = new AsyncLoadAllTrailsFromParse();
             load.execute();
         }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void LoadAllCommentsFromParse() {
+        try {
+            AsyncLoadAllCommentsFromParse comments = new AsyncLoadAllCommentsFromParse();
+            comments.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void LoadAllAuthorizedCommentorsFromParse() {
+        try {
+            AsyncLoadAllAuthorizedCommentorsFromParse commentorsFromParse = new AsyncLoadAllAuthorizedCommentorsFromParse();
+            commentorsFromParse.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void LoadAllTrailStatusUpdatorsFromParse() {
+        try {
+            AsyncLoadAllTrailStatusFromParse trailStatusFromParse = new AsyncLoadAllTrailStatusFromParse();
+            trailStatusFromParse.execute();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
