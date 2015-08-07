@@ -6,32 +6,53 @@ import com.parse.ParseQuery;
 
 import java.util.Date;
 
-@ParseClassName("comments")
+@ParseClassName("Comments")
 public class ParseComments extends ParseObject {
 
-    public Integer getTrailID() {
-        return getInt("TrailID");
+    public String getTrailObjectID() {
+        return getString("trailObjectId");
     }
 
-    public void SetTrailID(Integer trailID) {
-        put("TrailID", trailID);
+    public void SetTrailObjectID(String trailID) {
+        put("trailObjectId", trailID);
+    }
+
+    public String getTrailName() {
+        return getString("trailName");
+    }
+
+    public void setTrailName(String trailName) {
+        put("trailName", trailName);
+    }
+
+    public String getUserObjectID() {
+        return getString("userObjectId");
+    }
+
+    public void SetUserObjectID(String trailID) {
+        put("userObjectId", trailID);
+    }
+
+    public String getUserName() {
+        return getString("userName");
+    }
+
+    public void setUserName(String userName) {
+        put("userName", userName);
     }
 
     public String getComment() {
-        return getString("Comment");
+        return getString("comment");
     }
 
     public void SetComment(String comment) {
-        put("Cmment", comment);
+        put("comment", comment);
     }
 
     public Date getCreatedAt(){
         return getDate("createdAt");
     }
 
-    public void setCreatedAt(Date createdAt) {
-        put("createdAt", createdAt);
-    }
 
     public static ParseQuery<ParseComments> getQuery() {
         return ParseQuery.getQuery(ParseComments.class);

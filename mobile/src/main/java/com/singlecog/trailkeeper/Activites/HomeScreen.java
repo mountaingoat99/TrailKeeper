@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.view.View;
 
 import AsyncAdapters.AsyncTrailInfo;
+import Helpers.AlertDialogHelper;
 import Helpers.CreateAccountHelper;
 import Helpers.GeoLocationHelper;
 import RecyclerAdapters.RecyclerViewHomeScreenAdapter;
@@ -98,19 +99,21 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     }
 
     private void VerifyEmailDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thanks for signing up!");
-        builder.setMessage("Please check your email and verify your account to have access to all the features in TrailKeeper.");
-        builder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        signUpDialog = builder.create();
-        signUpDialog.show();
+        AlertDialogHelper.showCustomAlertDialog(context, "Thanks for signing up", "Please Check Your Email And Verify Your Account To The Features In TrailKeeper");
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Thanks for signing up!");
+//        builder.setMessage("Please check your email and verify your account to have access to all the features in TrailKeeper.");
+//        builder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        signUpDialog = builder.create();
+//        signUpDialog.show();
     }
 
+    // TODO create a custom dialog screen
     private void showSignUpScreen(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.welcome_title);

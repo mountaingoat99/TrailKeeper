@@ -11,6 +11,7 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
+import ParseObjects.ParseComments;
 import ParseObjects.ParseTrails;
 
 public class AsyncLoadAllFromParse extends AsyncTask<Void, Void, Void>{
@@ -27,9 +28,7 @@ public class AsyncLoadAllFromParse extends AsyncTask<Void, Void, Void>{
                     new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if (e == null) {
-                                // load the dataadapters in the class
-                            } else {
+                            if (e != null) {
                                 Log.i("AsyncLoadAllFromParse",
                                         "Could not get all: "
                                                 + e.getMessage());
@@ -43,29 +42,27 @@ public class AsyncLoadAllFromParse extends AsyncTask<Void, Void, Void>{
         });
 
         //Load the ParseComments
-//        ParseQuery<ParseComments> query1 = ParseComments.getQuery();
-//        query1.findInBackground(new FindCallback<ParseComments>() {
-//            @Override
-//            public void done(List<ParseComments> comments, ParseException e) {
-//                if (e == null) {
-//                    ParseObject.pinAllInBackground(comments);
-//                    new SaveCallback() {
-//                        @Override
-//                        public void done(ParseException e) {
-//                            if (e == null) {
-//                                // load the dataadapters in the class
-//                            } else {
-//                                Log.i("AsyncLoadAllFromParse",
-//                                        "Could not get all: "
-//                                                + e.getMessage());
-//                            }
-//                        }
-//                    };
-//                } else {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        ParseQuery<ParseComments> query1 = ParseComments.getQuery();
+        query1.findInBackground(new FindCallback<ParseComments>() {
+            @Override
+            public void done(List<ParseComments> comments, ParseException e) {
+                if (e == null) {
+                    ParseObject.pinAllInBackground(comments);
+                    new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.i("AsyncLoadAllFromParse",
+                                        "Could not get all: "
+                                                + e.getMessage());
+                            }
+                        }
+                    };
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         return null;
     }
