@@ -4,6 +4,8 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import org.json.JSONArray;
+
 import java.util.Date;
 
 @ParseClassName("Comments")
@@ -52,7 +54,6 @@ public class ParseComments extends ParseObject {
     public Date getCreatedAt(){
         return getDate("createdAt");
     }
-
 
     public static ParseQuery<ParseComments> getQuery() {
         return ParseQuery.getQuery(ParseComments.class);
