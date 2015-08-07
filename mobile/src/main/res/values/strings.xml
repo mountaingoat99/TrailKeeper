@@ -91,5 +91,10 @@
     <string name="btn_go">Go</string>
     <string name="btn_refresh">Refresh</string>
     <string name="btn_okay">Okay</string>
+    <string name="dialog_welcome_title">Welcome!</string>
+    <string name="dialog_welcome_messageone">Would You Like To Sign Up For A Free Account?</string>
+    <string name="dialog_welcome_message_two">With An Active Account You Will Be Able To Use More Of The TrailKeeper Functions!</string>
+    <string name="dialog_not_yet">Not Yet</string>
+    <string name="dialog_sign_up">Sign Up</string>
 
 </resources>
