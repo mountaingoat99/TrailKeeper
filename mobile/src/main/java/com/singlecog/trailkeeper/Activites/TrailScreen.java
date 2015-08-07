@@ -31,14 +31,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +46,7 @@ import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
 import Helpers.ProgressDialogHelper;
+import ParseObjects.ParseAuthorizedCommentors;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
 import models.ModelTrails;
@@ -74,7 +73,7 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
     GoogleMap googleMap;
     private boolean isAnonUser;
     private boolean isEmailVerified;
-    private boolean isUpdateStatusVerified;
+    private boolean isValidCommentor = false;
     private View v;
 
     /**
@@ -103,6 +102,8 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
 
         connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();
+        CanComment();
+
         modelTrails = new ModelTrails(context, this);
         isAnonUser = CreateAccountHelper.IsAnonUser();
         SetUpViews();
@@ -138,6 +139,7 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
         ShowGoogleMap();
         SetUpBtnStatusClick();
         SetUpBtnSubscribeClick();
+        SetUpCommentButtonClick();
         mSwipeLayout.setEnabled(true);
     }
 
@@ -152,6 +154,23 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
             btnTrailStatus.setText("Trail Status");
         }
     }
+
+    public void CanComment() {
+        ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
+        query.whereEqualTo("userName", ParseUser.getCurrentUser().getUsername());
+        query.fromLocalDatastore();
+        query.getFirstInBackground(new GetCallback<ParseAuthorizedCommentors>() {
+            @Override
+            public void done(ParseAuthorizedCommentors parseAuthorizedCommentors, ParseException e) {
+                if (e == null) {
+                    isValidCommentor = (Boolean)parseAuthorizedCommentors.get("canComment");
+                } else {
+                    isValidCommentor = false;
+                }
+            }
+        });
+    }
+
 
     private void SetUpBtnSubscribeClick() {
         btnSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -170,22 +189,44 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
         });
     }
 
-    private void IsAuthorizedToUpdateTrailStatus(String trailName) {
-        isUpdateStatusVerified = false;
-        JSONArray trailnames = ParseInstallation.getCurrentInstallation().getJSONArray("updateTrailStatus");
-        for (int i = 0; trailnames.length() > i; i++){
-            String name = null;
-            try {
-                name = trailnames.getString(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+    private void SetUpCommentButtonClick() {
+        btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isAnonUser) {
+                    if (isEmailVerified) {
+                        if (isValidCommentor) {
+                            Snackbar.make(v, "Test Can Leave A Comment", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            AlertDialogHelper.showCustomAlertDialog(context, "Not Authorized", "You Have Been Banned From Leaving Comments. Please Contact Us If You Think This Is A Mistake.");
+                        }
+                    } else {
+                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Commenting, Or Refresh The Screen If You've Already Done So");
+                    }
+
+                } else {
+                    AlertDialogHelper.showCustomAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Leaving Comments.");
+                }
             }
-            if (name != null && name.equals(trailName)) {
-                isUpdateStatusVerified = true;
-                break;
-            }
-        }
+        });
     }
+
+//    private void IsValidCommentor(String trailName) {
+//        isUpdateStatusVerified = false;
+//        JSONArray trailnames = ParseInstallation.getCurrentInstallation().getJSONArray("updateTrailStatus");
+//        for (int i = 0; trailnames.length() > i; i++){
+//            String name = null;
+//            try {
+//                name = trailnames.getString(i);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            if (name != null && name.equals(trailName)) {
+//                isUpdateStatusVerified = true;
+//                break;
+//            }
+//        }
+//    }
 
     private void SetUpBtnStatusClick() {
         btnTrailStatus.setOnClickListener(new View.OnClickListener() {
@@ -193,11 +234,7 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
             public void onClick(View v) {
                 if (!isAnonUser) {
                     if (isEmailVerified) {
-                        //if (isUpdateStatusVerified) {
-                            OpenTrailStatusDialog();
-                        //} else {
-                            //AlertDialogHelper.showCustomAlertDialog(context, "Trail Status", "You Do Not Have Permission To Update This Trail's Status");
-                        //}
+                        OpenTrailStatusDialog();
                     } else {
                         AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Updating Trails, Or Refresh The Screen If You've Already Done So");
                     }
@@ -237,7 +274,6 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
                             trailLocation = new LatLng(object.getParseGeoPoint("geoLocation").getLatitude(), object.getParseGeoPoint("geoLocation").getLongitude());
 
                             UpdateStatusIcon();
-                            //IsAuthorizedToUpdateTrailStatus(trailNameString);
                         }
                     } else {
                         AlertDialogHelper.showCustomAlertDialog(context, "Oops", "Something went wrong, and we don't know what. \nGo back to the home screen and try again");
@@ -464,6 +500,9 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
         mSwipeLayout.setRefreshing(true);
 
         TrailKeeperApplication.LoadAllTrailsFromParse();
+        TrailKeeperApplication.LoadAllCommentsFromParse();
+        TrailKeeperApplication.LoadAllTrailStatusUpdatorsFromParse();
+        TrailKeeperApplication.LoadAllAuthorizedCommentorsFromParse();
         CreateAccountHelper.CheckUserVerified();
 
         new Handler().postDelayed(new Runnable() {
@@ -472,7 +511,7 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
                 //IsAuthorizedToUpdateTrailStatus(trailNameString);
                 isEmailVerified = TrailKeeperApplication.isEmailVerified();
                 isAnonUser = CreateAccountHelper.IsAnonUser();
-
+                CanComment();
                 mSwipeLayout.setRefreshing(false);
             }
         }, 3000);

@@ -1,8 +1,10 @@
 package ParseObjects;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 @ParseClassName("AuthorizedCommentors")
 public class ParseAuthorizedCommentors extends ParseObject {
@@ -23,7 +25,10 @@ public class ParseAuthorizedCommentors extends ParseObject {
         put("userName", userName);
     }
 
-    public Boolean getCanComment() { return getBoolean("canComment"); }
+    public Boolean getCanComment() {
+
+        return getBoolean("canComment");
+    }
 
     public void setCanComment(Boolean canComment) { put("canComment", canComment); }
 
