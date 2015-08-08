@@ -24,7 +24,7 @@ import com.singlecog.trailkeeper.R;
 public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    protected static final String TAG = "homeActivity";
+    protected static final String TAG = "TrailMap";
 
     /**
      * Provides the entry point to Google Play services.
@@ -38,6 +38,8 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
     private LatLng home;
     private int trailId;
     private String objectID;
+    private LatLng trailLocation;
+    private String trailNameString;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -49,9 +51,22 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         // get the latest device location
         buildGoogleApiClient();
 
-        Intent intent = getIntent();
-        trailId = intent.getIntExtra("trailID", 0);
-        objectID = intent.getStringExtra("objectID");
+        Bundle bundle = getIntent().getParcelableExtra("bundle");
+        if (bundle != null) {
+            trailId = bundle.getInt("trailID");
+            objectID = bundle.getString("objectID");
+            trailNameString = bundle.getString("trailName");
+            trailLocation = bundle.getParcelable("geoPoint");
+        }
+
+        home = TrailKeeperApplication.home;
+
+
+//        Intent intent = getIntent();
+//        trailId = intent.getIntExtra("trailID", 0);
+//        objectID = intent.getStringExtra("objectID");
+//        trailNameString = intent.getStringExtra("trailName");
+
     }
 
     //region Activity Methods
@@ -85,16 +100,26 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
 
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
+        if (trailLocation != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
             googleMap.addMarker(new MarkerOptions()
-                    .title("Home")
-                    .position(home));
+                    .title(trailNameString)
+                    .position(trailLocation)).showInfoWindow();
+
         } else {
             Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }
+
+//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//        if (mLastLocation != null) {
+//            home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
+//            googleMap.addMarker(new MarkerOptions()
+//                    .title("Home")
+//                    .position(home));
+//        } else {
+//            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
+//        }
     }
     //endregion
 

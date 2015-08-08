@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -488,8 +489,12 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
     @Override
     public void onMapLongClick(LatLng latLng) {
         Intent intent = new Intent(context, TrailMap.class);
-        intent.putExtra("trailID", trailId);
-        intent.putExtra("objectID", objectID);
+        Bundle args = new Bundle();
+        args.putParcelable("geoPoint", trailLocation);
+        args.putInt("trailID", trailId);
+        args.putString("objectID", objectID);
+        args.putString("trailName", trailNameString);
+        intent.putExtra("bundle", args);
         startActivity(intent);
     }
     //endregion
