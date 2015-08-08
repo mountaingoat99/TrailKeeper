@@ -53,10 +53,7 @@ import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
 import models.ModelTrails;
 
-public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,
-        OnMapReadyCallback
-        , GoogleMap.OnMapClickListener
-        , GoogleMap.OnMapLongClickListener{
+public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     //region Properties
     protected static final String LOG = "trailScreenActivity";
@@ -72,15 +69,10 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
     private ProgressDialog dialog;
     private ConnectionDetector connectionDetector;
     GestureDetectorCompat gestureDetector;
-    GoogleMap googleMap;
     private boolean isAnonUser;
     private boolean isEmailVerified;
     private boolean isValidCommentor = false;
     private View v;
-
-    /**
-     * Represents a geographical location.
-     */
     private LatLng trailLocation;
     private String trailNameString;
     private List<ModelTrailComments> comments;
@@ -138,7 +130,6 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
 
         // set up the Recycler View
         SetupCommentCard();
-        ShowGoogleMap();
         SetUpBtnStatusClick();
         SetUpBtnSubscribeClick();
         SetUpCommentButtonClick();
@@ -456,51 +447,6 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
     }
     //endregion
 
-    //region Google MapActivity Api Methods
-    private void ShowGoogleMap() {
-        // even if the connection is not successful we still want to call and show the map
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        googleMap = mapFragment.getMap();
-        googleMap.setOnMapClickListener(this);
-        googleMap.setOnMapLongClickListener(this);
-    }
-
-    // this gets called on the getMapAsync method
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.setMyLocationEnabled(true);
-
-        if (trailLocation != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
-            googleMap.addMarker(new MarkerOptions()
-                    .title(trailNameString)
-                    .position(trailLocation)).showInfoWindow();
-
-        } else {
-            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-        Toast.makeText(this,"You tapped the map yo!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        Intent intent = new Intent(context, TrailMap.class);
-        Bundle args = new Bundle();
-        args.putParcelable("geoPoint", trailLocation);
-        args.putInt("trailID", trailId);
-        args.putString("objectID", objectID);
-        args.putString("trailName", trailNameString);
-        intent.putExtra("bundle", args);
-        startActivity(intent);
-    }
-    //endregion
-
     //Region Swipe To Refresh
     @Override
     public void onRefresh() {
@@ -523,6 +469,5 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
             }
         }, 3000);
     }
-
     //endregion
 }
