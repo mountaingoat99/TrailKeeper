@@ -11,8 +11,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 
 import models.ModelTrailComments;
 
@@ -21,12 +22,12 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
     ProgressDialog dialog;
     private TrailScreen activity;
     private Context context;
-    private int mTrailID;
+    private String trailObectID;
 
-    public AsyncOneTrailComments(TrailScreen activity, Context context, int mTrailID) {
+    public AsyncOneTrailComments(TrailScreen activity, Context context, String trailObectID) {
         this.activity = activity;
         this.context = context;
-        this.mTrailID = mTrailID;
+        this.trailObectID = trailObectID;
     }
 
     @Override
@@ -43,27 +44,22 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
     protected final List<ModelTrailComments> doInBackground(List<ModelTrailComments>... comments) {
         final List<ModelTrailComments> passedComments = comments[0];
 
-        ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("Trails");
-        cQuery.whereEqualTo("trailId", mTrailID);
+        ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("Comments");
+        cQuery.whereEqualTo("trailObjectId", trailObectID);
+        cQuery.addDescendingOrder("workingCreatedDate");
         cQuery.fromLocalDatastore();
         cQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
                     if (list != null) {
+                        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.US);
                         for (ParseObject parseObject : list) {
                             // get the commentArray from the class
-                            List<Object> commentList = parseObject.getList("comments");
-                            List<Object> commentDateList = parseObject.getList("commentDate");
-                            int count = 0;
-                            for (Object cList : commentList){
-                                ModelTrailComments comment = new ModelTrailComments();
-                                comment.TrailComments = cList.toString();
-                                comment.CommentDate = commentDateList.get(count).toString();
-                                // add it to the list
-                                passedComments.add(comment);
-                                count++;
-                            }
+                            ModelTrailComments comment = new ModelTrailComments();
+                            comment.TrailComments = parseObject.get("comment").toString();
+                            comment.CommentDate = formatter.format(parseObject.getDate("workingCreatedDate"));
+                            passedComments.add(comment);
                         }
                         if (activity != null)
                             activity.SetUpTrailCommentRecyclerView();

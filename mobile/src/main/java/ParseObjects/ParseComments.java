@@ -51,8 +51,8 @@ public class ParseComments extends ParseObject {
         put("comment", comment);
     }
 
-    public Date getCreatedAt(){
-        return getDate("createdAt");
+    public Date getWorkingCreatedDate(){
+        return getDate("workingCreatedDate");
     }
 
     public static ParseQuery<ParseComments> getQuery() {

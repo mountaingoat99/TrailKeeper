@@ -127,7 +127,7 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
 
         // Call the Async method
         try {
-            AsyncOneTrailComments atc = new AsyncOneTrailComments(this, context, trailId);
+            AsyncOneTrailComments atc = new AsyncOneTrailComments(this, context, objectID);
             comments = new ArrayList<>();
             atc.execute(comments);
         }catch (Exception e) {
