@@ -58,18 +58,10 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
             trailNameString = bundle.getString("trailName");
             trailLocation = bundle.getParcelable("geoPoint");
         }
-
-        home = TrailKeeperApplication.home;
-
-
-//        Intent intent = getIntent();
-//        trailId = intent.getIntExtra("trailID", 0);
-//        objectID = intent.getStringExtra("objectID");
-//        trailNameString = intent.getStringExtra("trailName");
-
     }
 
     //region Activity Methods
+    // overriding this from the base class so the back button goes back the trail screen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -90,7 +82,7 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         // Inflate the menu; this adds items to the action bar if it is present.
         // right now we won't show anything here, but we may add menu items
         // to the individual layouts so we won't move this to the super class
-        //getMenuInflater().inflate(R.menu.menu_map, menu);
+        //getMenuInflater().inflate(R.menu.menu_trail_map, menu);
         return true;
     }
     //endregion
@@ -109,17 +101,6 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         } else {
             Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }
-
-//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//        if (mLastLocation != null) {
-//            home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
-//            googleMap.addMarker(new MarkerOptions()
-//                    .title("Home")
-//                    .position(home));
-//        } else {
-//            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
-//        }
     }
     //endregion
 
@@ -186,4 +167,5 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         mGoogleApiClient.connect();
     }
     //endregion
+
 }

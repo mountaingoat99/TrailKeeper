@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -212,23 +213,6 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
         });
     }
 
-//    private void IsValidCommentor(String trailName) {
-//        isUpdateStatusVerified = false;
-//        JSONArray trailnames = ParseInstallation.getCurrentInstallation().getJSONArray("updateTrailStatus");
-//        for (int i = 0; trailnames.length() > i; i++){
-//            String name = null;
-//            try {
-//                name = trailnames.getString(i);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            if (name != null && name.equals(trailName)) {
-//                isUpdateStatusVerified = true;
-//                break;
-//            }
-//        }
-//    }
-
     private void SetUpBtnStatusClick() {
         btnTrailStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -341,7 +325,25 @@ public class TrailScreen extends BaseActivity implements SwipeRefreshLayout.OnRe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_trail_screen, menu);
+        getMenuInflater().inflate(R.menu.menu_trail_screen, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_map_click:
+                Intent intent = new Intent(context, TrailMap.class);
+                Bundle args = new Bundle();
+                args.putParcelable("geoPoint", trailLocation);
+                args.putInt("trailID", trailId);
+                args.putString("objectID", objectID);
+                args.putString("trailName", trailNameString);
+                intent.putExtra("bundle", args);
+                startActivity(intent);
+                break;
+        }
         return true;
     }
     //endregion
