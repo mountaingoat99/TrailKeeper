@@ -12,6 +12,7 @@ import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,7 +59,11 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
                             // get the commentArray from the class
                             ModelTrailComments comment = new ModelTrailComments();
                             comment.TrailComments = parseObject.get("comment").toString();
-                            comment.CommentDate = formatter.format(parseObject.getDate("workingCreatedDate"));
+                            comment.CommentUserName = parseObject.get("userName").toString();
+                            if(parseObject.getDate("workingCreatedDate") != null)
+                                comment.CommentDate = formatter.format(parseObject.getDate("workingCreatedDate"));
+                            else
+                                comment.CommentDate = "";
                             passedComments.add(comment);
                         }
                         if (activity != null)
@@ -73,7 +78,6 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
         });
         return passedComments;
     }
-
 
     protected void onPostExecute(List<ModelTrailComments> passedComments) {
         dialog.dismiss();

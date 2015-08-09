@@ -29,6 +29,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import AsyncAdapters.AsyncTrailInfo;
 import Helpers.AlertDialogHelper;
 import Helpers.CreateAccountHelper;

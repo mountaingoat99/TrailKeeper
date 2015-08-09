@@ -12,18 +12,38 @@
     android:focusable="true"
     android:background="?android:attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/txt_comment_date"
-        android:text="test"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_comment_date"
+            android:text="test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="@dimen/text_size_small"/>
+
+        <TextView
+            android:id="@+id/txt_comment_user"
+            android:text="mountaingoat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="@dimen/text_size_small"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txt_trail_comment"
         android:text="test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:textSize="@dimen/text_size_large" />
 
 </LinearLayout>

@@ -15,9 +15,14 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SendCallback;
 import com.singlecog.trailkeeper.Activites.FindTrail;
 import com.singlecog.trailkeeper.Activites.Notifications;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,7 +35,6 @@ import RecyclerAdapters.RecyclerViewNotifications;
 public class ModelTrails {
 
     private static final String LOG = "ModelTrails";
-    private static int nextId = 0;
     private static CharSequence[] trailStatusNames;
     public String ObjectID;
     public int TrailID;
@@ -133,7 +137,7 @@ public class ModelTrails {
         return trailStatusNames = new CharSequence[]{"Open", "Closed", "Unknown"};
     }
 
-    public static void SendOutAPushNotifications(String trailNameString, int status) {
+    public static void SendOutAPushNotificationsForStatusUpdate(String trailNameString, int status) {
         ParsePush push = new ParsePush();
         String trailChannel = CreateChannelName(trailNameString);
         push.setChannel(trailChannel);
@@ -144,6 +148,36 @@ public class ModelTrails {
         else
             push.setMessage("We don't know if " + trailNameString + " trails are open or closed");
         push.sendInBackground();
+    }
+
+    public static void SendOutAPushNotificationForNewComment(String trailNameString, String Comment, int TrailID, String ObjectID) {
+        ParsePush push = new ParsePush();
+        String trailChannel = CreateChannelName(trailNameString);
+        push.setChannel(trailChannel);
+        Log.i(LOG, trailNameString + " has a new comment: " + Comment);
+        //String trailIdString = String.valueOf(TrailID);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("action", "com.singlecog.trailkeeper.NEW_NOTIF");
+            json.put("com.Parse.Channel", trailChannel);
+            json.put("trailId", TrailID);
+            json.put("trailObjectId", ObjectID);
+            json.put("trailName", trailNameString);
+            json.put("comment", Comment);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        push.setData(json);
+        push.sendInBackground(new SendCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.i(LOG, "Parse Push Failed " + e.getMessage());
+                }
+            }
+        });
     }
 
     //endregion

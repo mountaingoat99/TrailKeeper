@@ -96,5 +96,9 @@
     <string name="dialog_welcome_message_two">With An Active Account You Will Be Able To Use More Of The TrailKeeper Functions!</string>
     <string name="dialog_not_yet">Not Yet</string>
     <string name="dialog_sign_up">Sign Up</string>
+    <string name="btn_show_comments">All Comments</string>
+    <string name="btn_all_comments">Leave Comment</string>
+    <string name="btn_save">Save</string>
+    <string name="edittext_new_comment">New Comment</string>
 
 </resources>

@@ -59,7 +59,7 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.one_trail_comment_list, viewGroup, false);
+                inflate(R.layout.one_trail_comment_recycler_layout, viewGroup, false);
         return new ListItemViewHolder(itemView);
     }
 
@@ -67,7 +67,11 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
         ModelTrailComments model = items.get(position);
         viewHolder.trailComment.setText(model.TrailComments);
-        viewHolder.commentDate.setText(model.CommentDate);
+        if (model.CommentDate != null)
+            viewHolder.commentDate.setText(model.CommentDate + " - ");
+        else
+            viewHolder.commentDate.setText("");
+        viewHolder.commentUser.setText(model.CommentUserName);
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
     }
 
@@ -106,11 +110,13 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
         TextView trailComment;
         TextView commentDate;
+        TextView commentUser;
 
         public ListItemViewHolder(View itemView) {
             super(itemView);
             trailComment = (TextView) itemView.findViewById(R.id.txt_trail_comment);
             commentDate = (TextView)itemView.findViewById(R.id.txt_comment_date);
+            commentUser = (TextView)itemView.findViewById(R.id.txt_comment_user);
         }
     }
 }
