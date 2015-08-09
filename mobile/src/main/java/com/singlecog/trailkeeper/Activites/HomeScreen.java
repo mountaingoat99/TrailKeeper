@@ -52,7 +52,6 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     // this will let shared preference know if it needs to take longer for the first time load and
     // if we need to ask them to create an account for the first time
     private boolean firstTimeLoad = true;
-    private AlertDialog signUpDialog, verifyEmailDialog;
     private String userName;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

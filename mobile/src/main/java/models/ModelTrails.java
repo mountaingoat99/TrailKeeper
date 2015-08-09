@@ -1,7 +1,6 @@
 package models;
 
 import android.content.Context;
-import android.graphics.AvoidXfermode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -13,29 +12,22 @@ import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.SendCallback;
 import com.singlecog.trailkeeper.Activites.FindTrail;
-import com.singlecog.trailkeeper.Activites.Notifications;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 
+import Helpers.PushNotificationHelper;
 import RecyclerAdapters.RecyclerViewNotifications;
 
 public class ModelTrails {
 
     private static final String LOG = "ModelTrails";
-    private static CharSequence[] trailStatusNames;
+
     public String ObjectID;
     public int TrailID;
     public String TrailName;
@@ -119,65 +111,6 @@ public class ModelTrails {
                 break;
         }
         return statusName;
-    }
-
-    public static String CreateChannelName(String trail) {
-        return trail.replace(" ", "") + "Channel";
-    }
-
-    public  static String FormatChannelName(String trail) {
-        // strip out the word Channel
-        trail = trail.replace("Channel", "");
-        // add a space before each capital letter
-        trail = trail.replaceAll("([A-Z])", " $1").trim();
-        return trail;
-    }
-
-    public static CharSequence[] getTrailStatusNames() {
-        return trailStatusNames = new CharSequence[]{"Open", "Closed", "Unknown"};
-    }
-
-    public static void SendOutAPushNotificationsForStatusUpdate(String trailNameString, int status) {
-        ParsePush push = new ParsePush();
-        String trailChannel = CreateChannelName(trailNameString);
-        push.setChannel(trailChannel);
-        if (status == 1)
-            push.setMessage(trailNameString + " trails are closed!");
-        else if (status == 2)
-            push.setMessage(trailNameString + " trails are open!");
-        else
-            push.setMessage("We don't know if " + trailNameString + " trails are open or closed");
-        push.sendInBackground();
-    }
-
-    public static void SendOutAPushNotificationForNewComment(String trailNameString, String Comment, int TrailID, String ObjectID) {
-        ParsePush push = new ParsePush();
-        String trailChannel = CreateChannelName(trailNameString);
-        push.setChannel(trailChannel);
-        Log.i(LOG, trailNameString + " has a new comment: " + Comment);
-        //String trailIdString = String.valueOf(TrailID);
-        JSONObject json = new JSONObject();
-        try {
-            json.put("action", "com.singlecog.trailkeeper.NEW_NOTIF");
-            json.put("com.Parse.Channel", trailChannel);
-            json.put("trailId", TrailID);
-            json.put("trailObjectId", ObjectID);
-            json.put("trailName", trailNameString);
-            json.put("comment", Comment);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        push.setData(json);
-        push.sendInBackground(new SendCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.i(LOG, "Parse Push Failed " + e.getMessage());
-                }
-            }
-        });
     }
 
     //endregion
@@ -291,11 +224,6 @@ public class ModelTrails {
         });
     }
 
-    // Subscriptions are also channels on Parse
-    public static List<String> GetUserSubscriptions() {
-         return ParseInstallation.getCurrentInstallation().getList("channels");
-    }
-
     public void UpdateTrailStatus(String objectId, final int choice) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
 
@@ -324,7 +252,7 @@ public class ModelTrails {
 
     public void SubscribeToChannel(String trailName, int choice, final String whichActivity){    // 0 means Yes, 1 means No
         //When a user indicates they want trail Updates we subscribe them to them
-        final String trailNameChannel = CreateChannelName(trailName);
+        final String trailNameChannel = PushNotificationHelper.CreateChannelName(trailName);
         if (choice == 0) {
             ParsePush.subscribeInBackground(trailNameChannel, new SaveCallback() {
                 @Override

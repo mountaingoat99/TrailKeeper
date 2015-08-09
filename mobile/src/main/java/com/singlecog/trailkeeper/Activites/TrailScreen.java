@@ -36,12 +36,14 @@ import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
 import AsyncAdapters.AsyncOneTrailComments;
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
 import Helpers.ProgressDialogHelper;
+import Helpers.PushNotificationHelper;
 import ParseObjects.ParseAuthorizedCommentors;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
@@ -70,6 +72,7 @@ public class TrailScreen extends BaseActivity {
     private String trailNameString, newTrailCommentString;
     private List<ModelTrailComments> comments;
     private ModelTrails modelTrails;
+    private Boolean fromNotification = false;
     private final Context context = this;
     //endregion
 
@@ -88,20 +91,26 @@ public class TrailScreen extends BaseActivity {
         isAnonUser = CreateAccountHelper.IsAnonUser();
         SetUpViews();
 
-        // get the trailID from the previous view
-        Intent intent = getIntent();
-        trailId = intent.getIntExtra("trailID", 0);
-        objectID = intent.getStringExtra("objectID");
-
         Bundle b = getIntent().getExtras();
         if (b != null) {
             trailId = b.getInt("trailID");
             objectID = b.getString("objectID");
+            fromNotification = b.getBoolean("fromNotification");
+        }
+
+        if (fromNotification) {
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    GetTrailData();
+                }
+            }, 3000);
+        } else {
+            // call method to get items from Local DataStore to fill the Views
+            GetTrailData();
         }
 
 
-        // call method to get items from Local DataStore to fill the Views
-        GetTrailData();
 
 
         // sets the tap event on the recycler views
@@ -424,7 +433,7 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void SendOutNewCommentPushNotification() {
-        ModelTrails.SendOutAPushNotificationForNewComment(trailNameString, newTrailCommentString, trailId, objectID);
+        PushNotificationHelper.SendOutAPushNotificationForNewComment(trailNameString, newTrailCommentString, trailId, objectID);
     }
     //endregion
 
@@ -432,7 +441,7 @@ public class TrailScreen extends BaseActivity {
     private void OpenTrailStatusDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Set Trail Status");
-        builder.setSingleChoiceItems(ModelTrails.getTrailStatusNames(), -1, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(PushNotificationHelper.getTrailStatusNames(), -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -475,7 +484,7 @@ public class TrailScreen extends BaseActivity {
         if (valid) {
             Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
             UpdateStatusIcon();
-            ModelTrails.SendOutAPushNotificationsForStatusUpdate(trailNameString, status);
+            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status);
             Log.i(LOG, "Trail Status was changed");
         } else {
             Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();

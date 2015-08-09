@@ -1,7 +1,6 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +12,8 @@ import com.singlecog.trailkeeper.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helpers.PushNotificationHelper;
 import RecyclerAdapters.RecyclerViewNotifications;
-import models.ModelTrails;
 
 public class Notifications extends BaseActivity {
 
@@ -55,10 +54,10 @@ public class Notifications extends BaseActivity {
 
     private void getUserSubscriptions() {
         formattedSubscriptions = new ArrayList<>();
-        List<String> subscriptionsList = ModelTrails.GetUserSubscriptions();
+        List<String> subscriptionsList = PushNotificationHelper.GetUserSubscriptions();
 
         for (String string : subscriptionsList) {
-            string = ModelTrails.FormatChannelName(string);
+            string = PushNotificationHelper.FormatChannelName(string);
             formattedSubscriptions.add(string);
         }
     }

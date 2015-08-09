@@ -14,7 +14,7 @@ import android.widget.ListView;
 import com.singlecog.trailkeeper.R;
 
 import Helpers.CreateAccountHelper;
-import models.ModelTrails;
+import Helpers.PushNotificationHelper;
 
 public class Settings extends BaseActivity implements AdapterView.OnItemClickListener {
 
@@ -64,7 +64,7 @@ public class Settings extends BaseActivity implements AdapterView.OnItemClickLis
                 if(isAnonUser) {
                     Snackbar.make(view, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                 } else {
-                    if (ModelTrails.GetUserSubscriptions() != null && ModelTrails.GetUserSubscriptions().size() > 0) {
+                    if (PushNotificationHelper.GetUserSubscriptions() != null && PushNotificationHelper.GetUserSubscriptions().size() > 0) {
                         Intent intent1 = new Intent(context, Notifications.class);
                         startActivity(intent1);
                     } else {

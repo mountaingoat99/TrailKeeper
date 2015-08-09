@@ -133,6 +133,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 Intent intent = new Intent(context, TrailScreen.class);
                 intent.putExtra("trailID", id);
                 intent.putExtra("objectID", objectId);
+                intent.putExtra("fromNotification", false);
                 v.getContext().startActivity(intent);
             }
         });

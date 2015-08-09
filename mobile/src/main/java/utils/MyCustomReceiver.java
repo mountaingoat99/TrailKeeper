@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.parse.ParseInstallation;
+import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 import com.singlecog.trailkeeper.R;
 
@@ -45,35 +47,45 @@ public class MyCustomReceiver extends BroadcastReceiver {
         Integer TrailID = 0;
         String Comment = null;
         String trailName = null;
+        String InstallObjectID = null;
+        String ThisInstallObjectID = ParseInstallation.getCurrentInstallation().getObjectId();
 
         try {
             ObjectID = json != null ? json.getString("trailObjectId") : "";
             TrailID = json != null ? json.getInt("trailId") : 0;
             Comment = json != null ? json.getString("comment") : "";
             trailName = json != null ? json.getString("trailName") : "";
+            InstallObjectID = json != null ? json.getString("InstallationObjectId") : "";
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Intent intent = new Intent(context, TrailScreen.class);
-        Bundle b = new Bundle();
-        b.putInt("trailID", TrailID);
-        b.putString("objectID", ObjectID);
-        intent.putExtras(b);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (!ThisInstallObjectID.equals(InstallObjectID)) {
 
-        numMessages = 0;
-        NotificationManager mNotifM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            TrailKeeperApplication.LoadAllCommentsFromParse();
 
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(title)
-                        .setContentText(trailName + " has a new comment:" + "\n" + Comment)
-                        .setNumber(++numMessages);
+            Intent intent = new Intent(context, TrailScreen.class);
+            Bundle b = new Bundle();
+            b.putInt("trailID", TrailID);
+            b.putString("objectID", ObjectID);
+            b.putBoolean("fromNotification", true);
+            intent.putExtras(b);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mBuilder.setContentIntent(contentIntent);
+            numMessages = 0;
+            NotificationManager mNotifM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotifM.notify(NOTIFICATION_ID, mBuilder.build());
+            android.support.v4.app.NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle(title)
+                            .setContentText(trailName + " has a new comment:" + "\n" + Comment)
+                            .setNumber(++numMessages);
+
+            mBuilder.setContentIntent(contentIntent);
+            mBuilder.setAutoCancel(true);
+
+            mNotifM.notify(NOTIFICATION_ID, mBuilder.build());
+        }
     }
 }
