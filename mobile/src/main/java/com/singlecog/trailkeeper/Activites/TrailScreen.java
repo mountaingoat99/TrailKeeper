@@ -58,7 +58,7 @@ public class TrailScreen extends BaseActivity {
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
     private TextView trailName, trailCity, trailState;
     private ImageView trailStatus;
-    private Button btnComment, btnTrailStatus, btnSubscribe;
+    private Button btnComment, btnTrailStatus, btnSubscribe, btnAllCommments;
     private AlertDialog statusDialog;
     private ProgressDialog progressDialog;
     private ConnectionDetector connectionDetector;
@@ -119,13 +119,12 @@ public class TrailScreen extends BaseActivity {
                     }
                 });
 
-
-
         // set up the Recycler View
         SetupCommentCard();
         SetUpBtnStatusClick();
         SetUpBtnSubscribeClick();
         SetUpCommentButtonClick();
+        SetUpAllCommentButtonClick();
     }
 
     private void CallTrailCommentsAsync() {
@@ -166,7 +165,6 @@ public class TrailScreen extends BaseActivity {
             }
         });
     }
-
 
     private void SetUpBtnSubscribeClick() {
         btnSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +222,20 @@ public class TrailScreen extends BaseActivity {
         });
     }
 
+    private void SetUpAllCommentButtonClick() {
+        btnAllCommments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AllComments.class);
+                Bundle b = new Bundle();
+                b.putString("trailObjectId", objectID);
+                b.putBoolean("fromTrailScreen", true);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+    }
+
     private void SetUpViews() {
         trailName = (TextView)findViewById(R.id.txtTrail_name);
         trailStatus = (ImageView)findViewById(R.id.txtTrail_status);
@@ -232,6 +244,7 @@ public class TrailScreen extends BaseActivity {
         btnComment = (Button)findViewById(R.id.btn_leave_comment);
         btnTrailStatus = (Button)findViewById(R.id.btn_set_trail_status);
         btnSubscribe = (Button)findViewById(R.id.btn_subscribe);
+        btnAllCommments = (Button)findViewById(R.id.btn_all_comments);
         v = findViewById(R.id.linearlayout_root_main);
     }
 

@@ -31,6 +31,8 @@ public class AllComments extends BaseActivity {
     private RecyclerViewAllComments mRecyclerViewAllComments;
     private List<ModelTrailComments> comments;
     private ModelTrailComments modelTrailComments;
+    private Boolean isFromTrailScreen = false;
+    private String trailObjectID;
     private Dialog searchDialog;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -41,13 +43,22 @@ public class AllComments extends BaseActivity {
         super.onCreateDrawer();
         btnSearch = (FloatingActionButton)findViewById(R.id.search_fab);
 
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            trailObjectID = b.getString("trailObjectId");
+            isFromTrailScreen = b.getBoolean("fromTrailScreen");
+        }
+
         // call to get all the comments first
         modelTrailComments = new ModelTrailComments(context, this);
-        modelTrailComments.GetAllComments();
 
+        if (!isFromTrailScreen) {
+            modelTrailComments.GetAllComments();
+        } else {
+            modelTrailComments.GetCommentsByTrail(trailObjectID);
+        }
 
         setCommentRecyclerView();
-
         SetUpOnClickForFab();
     }
 
