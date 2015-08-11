@@ -13,6 +13,7 @@
 
     <!-- drawer -->
     <string name="find_trail">Find Trail</string>
+    <string name="comments">Comments</string>
     <string name="home">Home</string>
     <string name="map">Map</string>
     <string name="trail_admin">Trail Admin</string>
@@ -100,5 +101,6 @@
     <string name="btn_all_comments">Leave Comment</string>
     <string name="btn_save">Save</string>
     <string name="edittext_new_comment">New Comment</string>
+    <string name="title_activity_all_comments">All Comments</string>
 
 </resources>

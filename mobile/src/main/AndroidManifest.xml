@@ -161,12 +161,12 @@
         </receiver>
 
         <!-- custom Broadcast Receiver -->
-        <receiver android:name="utils.MyCustomReceiver">
+        <receiver android:name="utils.MyCustomReceiver" >
             <intent-filter>
                 <action android:name="com.singlecog.trailkeeper.NEW_NOTIF" />
+                <action android:name="com.singlecog.trailkeeper.NEW_STATUS_NOTIF" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -186,6 +186,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.singlecog.trailkeeper.Activites.Settings" />
+        </activity>
+        <activity
+            android:name=".Activites.AllComments"
+            android:label="@string/title_activity_all_comments" >
         </activity>
     </application>
 

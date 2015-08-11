@@ -77,6 +77,7 @@ public class BaseActivity extends AppCompatActivity {
                 new String[]{
                         getString(R.string.home),
                         getString(R.string.find_trail),
+                        getString(R.string.comments),
                         getString(R.string.map),
                         getString(R.string.trail_admin),
                         getString(R.string.profile),
@@ -104,18 +105,22 @@ public class BaseActivity extends AppCompatActivity {
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
                             case 2:
-                                intent = new Intent(BaseActivity.this, MapActivity.class);
+                                intent = new Intent(BaseActivity.this, AllComments.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
                             case 3:
-                                intent = new Intent(BaseActivity.this, TrailAdmin.class);
+                                intent = new Intent(BaseActivity.this, MapActivity.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
                             case 4:
-                                intent = new Intent(BaseActivity.this, Profile.class);
+                                intent = new Intent(BaseActivity.this, TrailAdmin.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
                             case 5:
+                                intent = new Intent(BaseActivity.this, Profile.class);
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                break;
+                            case 6:
                                 intent = new Intent(BaseActivity.this, Settings.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;

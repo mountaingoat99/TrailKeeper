@@ -21,42 +21,48 @@ public class PushNotificationHelper {
         String trailChannel = CreateChannelName(trailNameString);
         push.setChannel(trailChannel);
         Log.i(LOG, trailNameString + " has a new comment: " + Comment);
-        //String trailIdString = String.valueOf(TrailID);
         JSONObject json = new JSONObject();
         try {
-            json.put("action", "com.singlecog.trailkeeper.NEW_NOTIF");
+            json.put("action", "com.singlecog.trailkeeper.NEW_COMMENT_NOTIF");
             json.put("com.Parse.Channel", trailChannel);
             json.put("trailId", TrailID);
             json.put("trailObjectId", ObjectID);
             json.put("trailName", trailNameString);
             json.put("comment", Comment);
             json.put("InstallationObjectId", ParseInstallation.getCurrentInstallation().getObjectId());
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         push.setData(json);
-        push.sendInBackground();//new SendCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e != null) {
-//                    Log.i(LOG, "Parse Push Failed " + e.getMessage());
-//                }
-//            }
-//        });
+        push.sendInBackground();
     }
 
-    public static void SendOutAPushNotificationsForStatusUpdate(String trailNameString, int status) {
+    public static void SendOutAPushNotificationsForStatusUpdate(String trailNameString, int status, int TrailID, String ObjectID) {
         ParsePush push = new ParsePush();
+        String statusUpdate;
         String trailChannel = CreateChannelName(trailNameString);
         push.setChannel(trailChannel);
+        Log.i(LOG, trailNameString + " has an updated status ");
+        JSONObject json = new JSONObject();
+
         if (status == 1)
-            push.setMessage(trailNameString + " trails are closed!");
+            statusUpdate = trailNameString + " trails are closed!";
         else if (status == 2)
-            push.setMessage(trailNameString + " trails are open!");
+            statusUpdate =  trailNameString + " trails are open!";
         else
-            push.setMessage("We don't know if " + trailNameString + " trails are open or closed");
+            statusUpdate = "We don't know if " + trailNameString + " trails are open or closed";
+
+        try {
+            json.put("action", "com.singlecog.trailkeeper.NEW_STATUS_NOTIF");
+            json.put("com.Parse.Channel", trailChannel);
+            json.put("trailId", TrailID);
+            json.put("trailObjectId", ObjectID);
+            json.put("statusUpdate", statusUpdate);
+            json.put("InstallationObjectId", ParseInstallation.getCurrentInstallation().getObjectId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        push.setData(json);
         push.sendInBackground();
     }
 

@@ -36,7 +36,6 @@ import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 import AsyncAdapters.AsyncOneTrailComments;
 import Helpers.AlertDialogHelper;
@@ -102,16 +101,15 @@ public class TrailScreen extends BaseActivity {
             new android.os.Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    GetTrailData();
+                    CallTrailCommentsAsync();
                 }
             }, 3000);
         } else {
             // call method to get items from Local DataStore to fill the Views
-            GetTrailData();
+            CallTrailCommentsAsync();
         }
 
-
-
+        GetTrailData();
 
         // sets the tap event on the recycler views
         gestureDetector =
@@ -121,7 +119,7 @@ public class TrailScreen extends BaseActivity {
                     }
                 });
 
-        CallTrailAsync();
+
 
         // set up the Recycler View
         SetupCommentCard();
@@ -130,7 +128,7 @@ public class TrailScreen extends BaseActivity {
         SetUpCommentButtonClick();
     }
 
-    private void CallTrailAsync() {
+    private void CallTrailCommentsAsync() {
         // Call the Async method
         try {
             AsyncOneTrailComments atc = new AsyncOneTrailComments(this, context, objectID);
@@ -425,7 +423,7 @@ public class TrailScreen extends BaseActivity {
 
     public void SaveCommentWasSuccessful(Boolean success) {
         if (success) {
-            CallTrailAsync();
+            CallTrailCommentsAsync();
             SendOutNewCommentPushNotification();
         } else {
             Snackbar.make(v, "Something Went Wrong, Please Try Again", Snackbar.LENGTH_LONG).show();
@@ -484,7 +482,7 @@ public class TrailScreen extends BaseActivity {
         if (valid) {
             Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
             UpdateStatusIcon();
-            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status);
+            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailId, objectID);
             Log.i(LOG, "Trail Status was changed");
         } else {
             Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();

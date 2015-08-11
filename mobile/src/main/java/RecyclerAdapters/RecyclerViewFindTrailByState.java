@@ -106,10 +106,6 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
                     viewHolder.trailsInState.setVisibility(View.GONE);
                     viewHolder.showTrails = false;
                 }
-
-                // when a user clicks on a state show the Recycler view
-
-                // or instantiate the other recycler view here
             }
         });
     }
