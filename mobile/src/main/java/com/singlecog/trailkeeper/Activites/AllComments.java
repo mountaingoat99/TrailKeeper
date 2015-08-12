@@ -4,17 +4,14 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.singlecog.trailkeeper.Activites.BaseActivity;
 import com.singlecog.trailkeeper.R;
 
 import java.util.List;
@@ -26,7 +23,6 @@ public class AllComments extends BaseActivity {
 
     private String LOG = "AllComments";
     private final Context context = this;
-    private FloatingActionButton btnSearch;
     private RecyclerView mAllCommentsRecyclerView;
     private RecyclerViewAllComments mRecyclerViewAllComments;
     private List<ModelTrailComments> comments;
@@ -35,13 +31,16 @@ public class AllComments extends BaseActivity {
     private String trailObjectID;
     private Dialog searchDialog;
 
+    private FloatingActionButton fabSearch;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_comments);
         super.onCreateDrawer();
-        btnSearch = (FloatingActionButton)findViewById(R.id.search_fab);
+
+        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -67,7 +66,7 @@ public class AllComments extends BaseActivity {
     }
 
     private void SetUpOnClickForFab() {
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SearchDialog();
@@ -101,4 +100,5 @@ public class AllComments extends BaseActivity {
         mAllCommentsRecyclerView.setAdapter(mRecyclerViewAllComments);
         mAllCommentsRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
+
 }
