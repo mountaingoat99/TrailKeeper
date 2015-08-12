@@ -73,28 +73,31 @@ public class AllComments extends BaseActivity {
         fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
         fabUser = new MyFloatingActionButton.Builder(AllComments.this)
                 .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(R.color.accent)
+                .withButtonColor(getResources().getColor(R.color.accent))
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 16, 80)
+                //.withButtonSize(40)
                 .create();
         fabUser.setClickable(true);
-        fabUser.setVisibility(View.INVISIBLE);
+        fabUser.hideFloatingActionButton();
         fabTrails = new MyFloatingActionButton.Builder(AllComments.this)
                 .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(R.color.accent)
+                .withButtonColor(getResources().getColor(R.color.accent))
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 16, 160)
+                //.withButtonSize(40)
                 .create();
         fabTrails.setClickable(true);
-        fabTrails.setVisibility(View.INVISIBLE);
+        fabTrails.hideFloatingActionButton();
         fabAll = new MyFloatingActionButton.Builder(AllComments.this)
                 .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(R.color.accent)
+                .withButtonColor(getResources().getColor(R.color.accent))
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 16, 240)
+                //.withButtonSize(40)
                 .create();
         fabAll.setClickable(true);
-        fabAll.setVisibility(View.INVISIBLE);
+        fabAll.hideFloatingActionButton();
     }
 
     @Override
@@ -119,14 +122,14 @@ public class AllComments extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //TODO set up new fabs for other search
-                if (fabUser.getVisibility() == View.INVISIBLE) {
-                    fabUser.setVisibility(View.VISIBLE);
-                    fabTrails.setVisibility(View.VISIBLE);
-                    fabAll.setVisibility(View.VISIBLE);
-                } else if (fabUser.getVisibility() == View.VISIBLE) {
-                    fabUser.setVisibility(View.INVISIBLE);
-                    fabTrails.setVisibility(View.INVISIBLE);
-                    fabAll.setVisibility(View.INVISIBLE);
+                if (fabUser.isHidden()) {
+                    fabUser.showFloatingActionButton();
+                    fabTrails.showFloatingActionButton();
+                    fabAll.showFloatingActionButton();
+                } else {
+                    fabUser.hideFloatingActionButton();
+                    fabTrails.hideFloatingActionButton();
+                    fabAll.hideFloatingActionButton();
                 }
 
                 //SearchDialog();
