@@ -3,13 +3,17 @@ package com.singlecog.trailkeeper.Activites;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.singlecog.trailkeeper.R;
@@ -18,6 +22,7 @@ import java.util.List;
 
 import RecyclerAdapters.RecyclerViewAllComments;
 import models.ModelTrailComments;
+import utils.MyFloatingActionButton;
 
 public class AllComments extends BaseActivity {
 
@@ -30,6 +35,9 @@ public class AllComments extends BaseActivity {
     private Boolean isFromTrailScreen = false;
     private String trailObjectID;
     private Dialog searchDialog;
+    private MyFloatingActionButton fabUser;
+    private MyFloatingActionButton fabTrails;
+    private MyFloatingActionButton fabAll;
 
     private FloatingActionButton fabSearch;
 
@@ -40,7 +48,7 @@ public class AllComments extends BaseActivity {
         setContentView(R.layout.activity_all_comments);
         super.onCreateDrawer();
 
-        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
+        SetUpFabs();
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
@@ -61,6 +69,47 @@ public class AllComments extends BaseActivity {
         SetUpOnClickForFab();
     }
 
+    private void SetUpFabs() {
+        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
+        fabUser = new MyFloatingActionButton.Builder(AllComments.this)
+                .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
+                .withButtonColor(R.color.accent)
+                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
+                .withMargins(0, 0, 16, 80)
+                .create();
+        fabUser.setClickable(true);
+        fabUser.setVisibility(View.INVISIBLE);
+        fabTrails = new MyFloatingActionButton.Builder(AllComments.this)
+                .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
+                .withButtonColor(R.color.accent)
+                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
+                .withMargins(0, 0, 16, 160)
+                .create();
+        fabTrails.setClickable(true);
+        fabTrails.setVisibility(View.INVISIBLE);
+        fabAll = new MyFloatingActionButton.Builder(AllComments.this)
+                .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
+                .withButtonColor(R.color.accent)
+                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
+                .withMargins(0, 0, 16, 240)
+                .create();
+        fabAll.setClickable(true);
+        fabAll.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, HomeScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
+        }
+        return true;
+    }
+
     public void ReceiveCommentList(List<ModelTrailComments> comment) {
         comments = comment;
     }
@@ -69,7 +118,18 @@ public class AllComments extends BaseActivity {
         fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SearchDialog();
+                //TODO set up new fabs for other search
+                if (fabUser.getVisibility() == View.INVISIBLE) {
+                    fabUser.setVisibility(View.VISIBLE);
+                    fabTrails.setVisibility(View.VISIBLE);
+                    fabAll.setVisibility(View.VISIBLE);
+                } else if (fabUser.getVisibility() == View.VISIBLE) {
+                    fabUser.setVisibility(View.INVISIBLE);
+                    fabTrails.setVisibility(View.INVISIBLE);
+                    fabAll.setVisibility(View.INVISIBLE);
+                }
+
+                //SearchDialog();
             }
         });
     }
