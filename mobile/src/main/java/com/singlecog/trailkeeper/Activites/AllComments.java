@@ -1,49 +1,66 @@
 package com.singlecog.trailkeeper.Activites;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import ParseObjects.ParseAuthorizedCommentors;
 import RecyclerAdapters.RecyclerViewAllComments;
 import models.ModelTrailComments;
-import utils.MyFloatingActionButton;
+import models.ModelTrails;
 
 public class AllComments extends BaseActivity {
+
+    final static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
+    final static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
+    boolean mHidden = false;
 
     private String LOG = "AllComments";
     private final Context context = this;
     private RecyclerView mAllCommentsRecyclerView;
     private RecyclerViewAllComments mRecyclerViewAllComments;
+    private List<String> trailNames;
+    private List<String> userNames;
     private List<ModelTrailComments> comments;
     private ModelTrailComments modelTrailComments;
+    private ModelTrails modelTrails;
     private Boolean isFromTrailScreen = false;
     private String trailObjectID;
     private Dialog searchDialog;
-    private MyFloatingActionButton fabUser;
-    private MyFloatingActionButton fabTrails;
-    private MyFloatingActionButton fabAll;
-
+    private FloatingActionButton fabUser;
+    private FloatingActionButton fabTrails;
+    private FloatingActionButton fabAll;
     private FloatingActionButton fabSearch;
-    private int fabSearchbaseline;
-    private int fabSearchbottom;
+    private View view;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -51,7 +68,6 @@ public class AllComments extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_comments);
         super.onCreateDrawer();
-        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
         SetUpFabs();
 
         Bundle b = getIntent().getExtras();
@@ -60,8 +76,14 @@ public class AllComments extends BaseActivity {
             isFromTrailScreen = b.getBoolean("fromTrailScreen");
         }
 
+        GetAllUsersWhoComment();
+
         // call to get all the comments first
         modelTrailComments = new ModelTrailComments(context, this);
+
+        // call to get the trail names first
+        modelTrails = new ModelTrails(context, this);
+        modelTrails.GetTrailNames();
 
         if (!isFromTrailScreen) {
             modelTrailComments.GetAllComments();
@@ -73,67 +95,42 @@ public class AllComments extends BaseActivity {
         SetUpOnClickForFab();
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // get the height of the main layout once it is drawn
-        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
-        ViewTreeObserver treeObserver = fabSearch.getViewTreeObserver();
-        treeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Display display = getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                int height = size.y;
+    public void RecieveTrailNames(List<String> trails) {
+        trailNames = trails;
+    }
 
-                fabSearch.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                //fabSearchHeight = fabSearch.getMeasuredHeight();
-                fabSearchbottom= fabSearch.getBottom();
-                fabSearchbaseline = fabSearch.getBaseline();
+    public void hideFloatingActionButton(FloatingActionButton button) {
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", 1, 0);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", 1, 0);
+            AnimatorSet animSetXY = new AnimatorSet();
+            animSetXY.playTogether(scaleX, scaleY);
+            animSetXY.setInterpolator(accelerateInterpolator);
+            animSetXY.setDuration(100);
+            animSetXY.start();
+    }
 
+    public void showFloatingActionButton(FloatingActionButton button) {
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", 0, 1);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", 0, 1);
+            AnimatorSet animSetXY = new AnimatorSet();
+            animSetXY.playTogether(scaleX, scaleY);
+            animSetXY.setInterpolator(overshootInterpolator);
+            animSetXY.setDuration(200);
+            animSetXY.start();
+    }
 
-
-                //SetUpFabs();
-
-                //recyclerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                //mainLayoutHeight = recyclerLayout.getMeasuredHeight();
-            }
-        });
-
-
+    public boolean isHidden() {
+        return mHidden;
     }
 
     private void SetUpFabs() {
-
-        fabUser = new MyFloatingActionButton.Builder(AllComments.this)
-                .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(getResources().getColor(R.color.accent_one))
-                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
-                .withMargins(0, 0, 16, 80)
-                //.withButtonSize(60)
-                .create();
-
-        fabUser.setClickable(true);
-        fabUser.hideFloatingActionButton();
-        fabTrails = new MyFloatingActionButton.Builder(AllComments.this)
-                .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(getResources().getColor(R.color.accent_two))
-                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
-                .withMargins(0, 0, 16, 160)
-                //.withButtonSize(60)
-                .create();
-        fabTrails.setClickable(true);
-        fabTrails.hideFloatingActionButton();
-        fabAll = new MyFloatingActionButton.Builder(AllComments.this)
-                .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(getResources().getColor(R.color.accent_three))
-                .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
-                .withMargins(0, 0, 16, 240)
-                //.withButtonSize(60)
-                .create();
-        fabAll.setClickable(true);
-        fabAll.hideFloatingActionButton();
+        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
+        fabUser = (FloatingActionButton)findViewById(R.id.search_fab_by_user);
+        fabTrails = (FloatingActionButton)findViewById(R.id.search_fab_by_trail);
+        fabAll = (FloatingActionButton)findViewById(R.id.search_fab_by_all);
+        hideFloatingActionButton(fabUser);
+        hideFloatingActionButton(fabTrails);
+        hideFloatingActionButton(fabAll);
     }
 
     @Override
@@ -153,28 +150,144 @@ public class AllComments extends BaseActivity {
         comments = comment;
     }
 
+    public void SendToTrailScreen(ModelTrails trails) {
+        if (trails.TrailID > 0) {
+            searchDialog.dismiss();
+            modelTrailComments.GetCommentsByTrail(trails.getObjectID());
+            setCommentRecyclerView();
+        } else {
+            Snackbar.make(view, "Trail does not exist", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
     private void SetUpOnClickForFab() {
         fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO set up new fabs for other search
-                if (fabUser.isHidden()) {
-                    fabUser.showFloatingActionButton();
-                    fabTrails.showFloatingActionButton();
-                    fabAll.showFloatingActionButton();
+                if (isHidden()) {
+                    showFloatingActionButton(fabUser);
+                    showFloatingActionButton(fabTrails);
+                    showFloatingActionButton(fabAll);
+                    mHidden = false;
                 } else {
-                    fabUser.hideFloatingActionButton();
-                    fabTrails.hideFloatingActionButton();
-                    fabAll.hideFloatingActionButton();
+                    hideFloatingActionButton(fabUser);
+                    hideFloatingActionButton(fabTrails);
+                    hideFloatingActionButton(fabAll);
+                    mHidden = true;
                 }
+            }
+        });
 
-                //SearchDialog();
+        fabUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchByUserDialog();
+            }
+        });
+
+        fabTrails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchByTrailDialog();
+            }
+        });
+
+        fabAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchAllTrails();
             }
         });
     }
 
-    private void SearchDialog() {
+    public void GetAllUsersWhoComment() {
+        userNames = new ArrayList<>();
+        ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseAuthorizedCommentors>() {
+            @Override
+            public void done(List<ParseAuthorizedCommentors> list, ParseException e) {
+                for (ParseAuthorizedCommentors commentors : list) {
+                    String username;
+                    username = commentors.getUserName();
+                    userNames.add(username);
+                }
+            }
+        });
+    }
 
+    public void GetAllUserObjectIds(String userName, final View v) {
+        ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
+        query.whereEqualTo("userName", userName);
+        query.fromLocalDatastore();
+        query.getFirstInBackground(new GetCallback<ParseAuthorizedCommentors>() {
+            @Override
+            public void done(ParseAuthorizedCommentors parseAuthorizedCommentors, ParseException e) {
+                if (e == null) {
+                    modelTrailComments.GetCommentsByUser(parseAuthorizedCommentors.getUserObjectID());
+                    searchDialog.dismiss();
+                } else {
+                    Snackbar.make(v, "User Has No Comments", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void SearchByUserDialog() {
+        searchDialog = new Dialog(this);
+        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        searchDialog.setContentView(R.layout.dialog_search_comment_by_user);
+        final AutoCompleteTextView searchForTrailEditText = (AutoCompleteTextView)searchDialog.findViewById(R.id.edittext_search);
+        Button btnGo = (Button)searchDialog.findViewById(R.id.btn_load_comment_by_user);
+
+        // set the adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userNames);
+        searchForTrailEditText.setAdapter(adapter);
+        searchForTrailEditText.setThreshold(1);
+
+        btnGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (searchForTrailEditText.getText().length() > 0) {
+                    GetAllUserObjectIds(searchForTrailEditText.getText().toString().trim(), v);
+                } else {
+                    Snackbar.make(v, "Please enter a Username", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        searchDialog.show();
+    }
+
+    private void SearchByTrailDialog() {
+        searchDialog = new Dialog(this);
+        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        searchDialog.setContentView(R.layout.dialog_search_comment_by_trail);
+        final AutoCompleteTextView searchForTrailEditText = (AutoCompleteTextView)searchDialog.findViewById(R.id.edittext_search);
+        Button btnGo = (Button)searchDialog.findViewById(R.id.btn_load_comment_by_trail);
+
+        // set the adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, trailNames);
+        searchForTrailEditText.setAdapter(adapter);
+        searchForTrailEditText.setThreshold(1);
+
+        btnGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (searchForTrailEditText.getText().length() > 0) {
+                    view = v;
+                    modelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim(), context);
+                } else {
+                    Snackbar.make(v, "Please enter a Trail Name", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        searchDialog.show();
+    }
+
+    private void SearchAllTrails() {
+        modelTrailComments.GetAllComments();
+        setCommentRecyclerView();
     }
 
     @Override

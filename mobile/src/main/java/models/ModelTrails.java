@@ -13,6 +13,7 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+import com.singlecog.trailkeeper.Activites.AllComments;
 import com.singlecog.trailkeeper.Activites.FindTrail;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
@@ -40,6 +41,7 @@ public class ModelTrails {
     private TrailScreen trailScreen;
     private RecyclerViewNotifications notificationsScreen;
     private FindTrail findTrailScreen;
+    private AllComments allCommentsScreen;
 
     public ModelTrails()
     {
@@ -59,6 +61,11 @@ public class ModelTrails {
     public ModelTrails (Context context, FindTrail findTrail) {
         this.context = context;
         this.findTrailScreen = findTrail;
+    }
+
+    public ModelTrails (Context context, AllComments allComments) {
+        this.context = context;
+        this.allCommentsScreen = allComments;
     }
 
     public int getTrailID() {
@@ -150,7 +157,11 @@ public class ModelTrails {
                         String trailName = parseObject.get("trailName").toString();
                         trails.add(trailName);
                     }
-                    findTrailScreen.RecieveTrailNames(trails);
+                    if (findTrailScreen != null) {
+                        findTrailScreen.RecieveTrailNames(trails);
+                    } else {
+                        allCommentsScreen.RecieveTrailNames(trails);
+                    }
                 } else {
                     e.printStackTrace();
                 }
@@ -216,6 +227,8 @@ public class ModelTrails {
                         notifications.SendToTrailScreen(trails, context);
                     } else if (findTrailScreen != null) {
                         findTrailScreen.SendToTrailScreen(trails, context);
+                    } else if (allCommentsScreen != null) {
+                        allCommentsScreen.SendToTrailScreen(trails);
                     }
                 } else {
                     Log.d(name, "Not Retrieved");
