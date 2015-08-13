@@ -165,6 +165,7 @@ public class MyFloatingActionButton extends View {
         public Builder withButtonSize(int size) {
             size = convertToPixels(size, scale);
             params = new FrameLayout.LayoutParams(size, size);
+            //params = new FrameLayout.LayoutParams(size, size, Gravity.BOTTOM | Gravity.RIGHT);
             return this;
         }
 

@@ -4,17 +4,19 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.singlecog.trailkeeper.R;
 
@@ -40,6 +42,8 @@ public class AllComments extends BaseActivity {
     private MyFloatingActionButton fabAll;
 
     private FloatingActionButton fabSearch;
+    private int fabSearchbaseline;
+    private int fabSearchbottom;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -47,7 +51,7 @@ public class AllComments extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_comments);
         super.onCreateDrawer();
-
+        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
         SetUpFabs();
 
         Bundle b = getIntent().getExtras();
@@ -69,32 +73,64 @@ public class AllComments extends BaseActivity {
         SetUpOnClickForFab();
     }
 
-    private void SetUpFabs() {
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // get the height of the main layout once it is drawn
         fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
+        ViewTreeObserver treeObserver = fabSearch.getViewTreeObserver();
+        treeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int height = size.y;
+
+                fabSearch.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                //fabSearchHeight = fabSearch.getMeasuredHeight();
+                fabSearchbottom= fabSearch.getBottom();
+                fabSearchbaseline = fabSearch.getBaseline();
+
+
+
+                //SetUpFabs();
+
+                //recyclerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                //mainLayoutHeight = recyclerLayout.getMeasuredHeight();
+            }
+        });
+
+
+    }
+
+    private void SetUpFabs() {
+
         fabUser = new MyFloatingActionButton.Builder(AllComments.this)
                 .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(getResources().getColor(R.color.accent))
+                .withButtonColor(getResources().getColor(R.color.accent_one))
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 16, 80)
-                //.withButtonSize(40)
+                //.withButtonSize(60)
                 .create();
+
         fabUser.setClickable(true);
         fabUser.hideFloatingActionButton();
         fabTrails = new MyFloatingActionButton.Builder(AllComments.this)
                 .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(getResources().getColor(R.color.accent))
+                .withButtonColor(getResources().getColor(R.color.accent_two))
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 16, 160)
-                //.withButtonSize(40)
+                //.withButtonSize(60)
                 .create();
         fabTrails.setClickable(true);
         fabTrails.hideFloatingActionButton();
         fabAll = new MyFloatingActionButton.Builder(AllComments.this)
                 .withDrawable(getResources().getDrawable(R.mipmap.ic_search_small))
-                .withButtonColor(getResources().getColor(R.color.accent))
+                .withButtonColor(getResources().getColor(R.color.accent_three))
                 .withGravity(Gravity.BOTTOM | Gravity.RIGHT)
                 .withMargins(0, 0, 16, 240)
-                //.withButtonSize(40)
+                //.withButtonSize(60)
                 .create();
         fabAll.setClickable(true);
         fabAll.hideFloatingActionButton();
