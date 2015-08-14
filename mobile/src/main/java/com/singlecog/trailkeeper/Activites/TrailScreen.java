@@ -13,6 +13,8 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -23,6 +25,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -52,7 +56,7 @@ public class TrailScreen extends BaseActivity {
 
     //region Properties
     protected static final String LOG = "trailScreenActivity";
-    private int trailId, status;
+    private int trailId, status, trailStatusPin;
     private String objectID, trailSubscriptionStatus;
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
@@ -61,6 +65,7 @@ public class TrailScreen extends BaseActivity {
     private Button btnComment, btnTrailStatus, btnSubscribe, btnAllCommments;
     private AlertDialog statusDialog;
     private ProgressDialog progressDialog;
+    private Dialog trailStatusDialog;
     private ConnectionDetector connectionDetector;
     GestureDetectorCompat gestureDetector;
     private boolean isAnonUser;
@@ -73,6 +78,10 @@ public class TrailScreen extends BaseActivity {
     private ModelTrails modelTrails;
     private Boolean fromNotification = false;
     private final Context context = this;
+    private RadioButton rdoOpen;
+    private RadioButton rdoClosed;
+    private RadioButton rdoUnknown;
+
     //endregion
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -96,6 +105,8 @@ public class TrailScreen extends BaseActivity {
             objectID = b.getString("objectID");
             fromNotification = b.getBoolean("fromNotification");
         }
+
+        trailStatusPin = ModelTrails.GetTrailPin(objectID);
 
         if (fromNotification) {
             new android.os.Handler().postDelayed(new Runnable() {
@@ -278,8 +289,6 @@ public class TrailScreen extends BaseActivity {
         }
     }
 
-
-
     private void UpdateStatusIcon() {
         if (status == 1) {
             trailStatus.setImageResource(R.mipmap.red_closed);
@@ -450,31 +459,71 @@ public class TrailScreen extends BaseActivity {
 
     //region Trail Status Updates
     private void OpenTrailStatusDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Set Trail Status");
-        builder.setSingleChoiceItems(PushNotificationHelper.getTrailStatusNames(), -1, new DialogInterface.OnClickListener() {
+        trailStatusDialog = new Dialog(this);
+        trailStatusDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        trailStatusDialog.setContentView(R.layout.dialog_update_trail_status);
+        final EditText pinText = (EditText)trailStatusDialog.findViewById(R.id.edit_text_pin);
+        RadioGroup statusGroup = (RadioGroup)trailStatusDialog.findViewById(R.id.radio_trail_status);
+        rdoOpen = (RadioButton)trailStatusDialog.findViewById(R.id.status_open);
+        rdoClosed = (RadioButton)trailStatusDialog.findViewById(R.id.status_closed);
+        rdoUnknown = (RadioButton)trailStatusDialog.findViewById(R.id.status_unknown);
+
+        DoATextWatcher(pinText);
+
+        statusGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:                   // Open Trail
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.status_open:                      // Open Trail
                         status = 2;
                         ChangeTrailStatus(status);
                         break;
-                    case 1:                   // Close Trail
+                    case R.id.status_closed:                   // Close Trail
                         status = 1;
                         ChangeTrailStatus(status);
                         break;
-                    case 2:                   // Unknown
+                    case R.id.status_unknown:                   // Unknown
                         status = 3;
                         ChangeTrailStatus(status);
                         break;
                 }
-                dialog.dismiss();
+                trailStatusDialog.dismiss();
             }
         });
+        trailStatusDialog.show();
+    }
 
-        statusDialog = builder.create();
-        statusDialog.show();
+    private void DoATextWatcher(EditText pinText) {
+        pinText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals("")) {
+                    if (trailStatusPin == Integer.valueOf(s.toString())) {
+                        rdoOpen.setEnabled(true);
+                        rdoClosed.setEnabled(true);
+                        rdoUnknown.setEnabled(true);
+                    } else {
+                        rdoOpen.setEnabled(false);
+                        rdoClosed.setEnabled(false);
+                        rdoUnknown.setEnabled(false);
+                    }
+                } else {
+                    rdoOpen.setEnabled(false);
+                    rdoClosed.setEnabled(false);
+                    rdoUnknown.setEnabled(false);
+                }
+            }
+        });
     }
 
     private void ChangeTrailStatus(final int choice){

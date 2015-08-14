@@ -102,5 +102,10 @@
     <string name="btn_save">Save</string>
     <string name="edittext_new_comment">New Comment</string>
     <string name="title_activity_all_comments">All Comments</string>
+    <string name="set_trail_status">Set Trail Status</string>
+    <string name="trail_pin_hint">Trail Pin</string>
+    <string name="radio_button_open">Open</string>
+    <string name="radio_button_closed">Closed</string>
+    <string name="radio_button_unknown">Unknown</string>
 
 </resources>

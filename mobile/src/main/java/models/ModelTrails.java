@@ -169,6 +169,27 @@ public class ModelTrails {
         });
     }
 
+    // get the trail Pin based on ObjectID
+    public static int GetTrailPin(String objectID) {
+        List<ParseObject> trailPinList = new ArrayList<>();
+        int trailPin = 0;
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TrailStatus");
+        query.whereEqualTo("trailObjectId", objectID);
+
+        try {
+             trailPinList = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (trailPinList.size() > 0) {
+            for (ParseObject object : trailPinList) {
+                trailPin = Integer.valueOf(object.get("updateStatusPin").toString());
+            }
+        }
+        return trailPin;
+    }
+
     // gets the states for each trail we have
     public void GetTrailStates(final RecyclerView RecyclerView) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
