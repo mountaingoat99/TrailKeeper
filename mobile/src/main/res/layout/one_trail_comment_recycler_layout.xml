@@ -12,9 +12,21 @@
     android:focusable="true"
     android:background="?android:attr/selectableItemBackground">
 
+    <TextView
+        android:id="@+id/txt_trail_comment"
+        android:text="test"
+        android:textColor="@color/primary_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:textSize="@dimen/text_size_medium" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -24,26 +36,17 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="4dp"
             android:layout_marginEnd="4dp"
-            android:textSize="@dimen/text_size_small"/>
+            android:textSize="@dimen/text_size_super_mini"/>
 
         <TextView
             android:id="@+id/txt_comment_user"
             android:text="mountaingoat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:layout_marginEnd="4dp"
-            android:textSize="@dimen/text_size_small"/>
+            android:textSize="@dimen/text_size_super_mini"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_trail_comment"
-        android:text="test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
-        android:textSize="@dimen/text_size_large" />
+
 
 </LinearLayout>

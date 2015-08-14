@@ -61,6 +61,7 @@ public class AllComments extends BaseActivity {
     private FloatingActionButton fabAll;
     private FloatingActionButton fabSearch;
     private View view;
+    private View snackbarView;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -68,6 +69,7 @@ public class AllComments extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_comments);
         super.onCreateDrawer();
+        snackbarView = findViewById(R.id.linearlayout_root_main);
         SetUpFabs();
 
         Bundle b = getIntent().getExtras();
@@ -95,69 +97,28 @@ public class AllComments extends BaseActivity {
         SetUpOnClickForFab();
     }
 
-    public void RecieveTrailNames(List<String> trails) {
-        trailNames = trails;
-    }
-
-    public void hideFloatingActionButton(FloatingActionButton button) {
-            ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", 1, 0);
-            ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", 1, 0);
-            AnimatorSet animSetXY = new AnimatorSet();
-            animSetXY.playTogether(scaleX, scaleY);
-            animSetXY.setInterpolator(accelerateInterpolator);
-            animSetXY.setDuration(100);
-            animSetXY.start();
-    }
-
-    public void showFloatingActionButton(FloatingActionButton button) {
-            ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", 0, 1);
-            ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", 0, 1);
-            AnimatorSet animSetXY = new AnimatorSet();
-            animSetXY.playTogether(scaleX, scaleY);
-            animSetXY.setInterpolator(overshootInterpolator);
-            animSetXY.setDuration(200);
-            animSetXY.start();
-    }
-
-    public boolean isHidden() {
-        return mHidden;
-    }
-
-    private void SetUpFabs() {
-        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
-        fabUser = (FloatingActionButton)findViewById(R.id.search_fab_by_user);
-        fabTrails = (FloatingActionButton)findViewById(R.id.search_fab_by_trail);
-        fabAll = (FloatingActionButton)findViewById(R.id.search_fab_by_all);
-        hideFloatingActionButton(fabUser);
-        hideFloatingActionButton(fabTrails);
-        hideFloatingActionButton(fabAll);
-    }
-
+    //region Activity Setup
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                Intent intent = new Intent(this, HomeScreen.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                break;
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_all_comments, menu);
         return true;
     }
 
-    public void ReceiveCommentList(List<ModelTrailComments> comment) {
-        comments = comment;
+    private void setCommentRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+
+        mAllCommentsRecyclerView = (RecyclerView)findViewById(R.id.all_comment_recycler_view);
+        mAllCommentsRecyclerView.setLayoutManager(layoutManager);
+        mAllCommentsRecyclerView.setHasFixedSize(true);
     }
 
-    public void SendToTrailScreen(ModelTrails trails) {
-        if (trails.TrailID > 0) {
-            searchDialog.dismiss();
-            modelTrailComments.GetCommentsByTrail(trails.getObjectID());
-            setCommentRecyclerView();
-        } else {
-            Snackbar.make(view, "Trail does not exist", Snackbar.LENGTH_LONG).show();
-        }
+    public void SetUpCommentView() {
+        mRecyclerViewAllComments = new RecyclerViewAllComments(comments, context);
+        mAllCommentsRecyclerView.setAdapter(mRecyclerViewAllComments);
+        mAllCommentsRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void SetUpOnClickForFab() {
@@ -199,6 +160,78 @@ public class AllComments extends BaseActivity {
                 SearchAllTrails();
             }
         });
+    }
+
+    private void SetUpFabs() {
+        fabSearch = (FloatingActionButton)findViewById(R.id.search_fab);
+        fabUser = (FloatingActionButton)findViewById(R.id.search_fab_by_user);
+        fabTrails = (FloatingActionButton)findViewById(R.id.search_fab_by_trail);
+        fabAll = (FloatingActionButton)findViewById(R.id.search_fab_by_all);
+        hideFloatingActionButton(fabUser);
+        hideFloatingActionButton(fabTrails);
+        hideFloatingActionButton(fabAll);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, HomeScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
+        }
+        return true;
+    }
+    //endregion
+
+    public void RecieveTrailNames(List<String> trails) {
+        trailNames = trails;
+    }
+
+    public void ReceiveCommentList(List<ModelTrailComments> comment) {
+        // check here to see if the list has anything, if we are checking by user or trail
+        // the may not have had anything, and if so we just leave the fill list
+        if (comment.size() > 0) {
+            comments = comment;
+        } else {
+            Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    public void hideFloatingActionButton(FloatingActionButton button) {
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", 1, 0);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", 1, 0);
+            AnimatorSet animSetXY = new AnimatorSet();
+            animSetXY.playTogether(scaleX, scaleY);
+            animSetXY.setInterpolator(accelerateInterpolator);
+            animSetXY.setDuration(100);
+            animSetXY.start();
+    }
+
+    public void showFloatingActionButton(FloatingActionButton button) {
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", 0, 1);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", 0, 1);
+            AnimatorSet animSetXY = new AnimatorSet();
+            animSetXY.playTogether(scaleX, scaleY);
+            animSetXY.setInterpolator(overshootInterpolator);
+            animSetXY.setDuration(200);
+            animSetXY.start();
+    }
+
+    public boolean isHidden() {
+        return mHidden;
+    }
+
+    public void SendToTrailScreen(ModelTrails trails) {
+        if (trails.TrailID > 0) {
+            searchDialog.dismiss();
+            modelTrailComments.GetCommentsByTrail(trails.getObjectID());
+            setCommentRecyclerView();
+        } else {
+            Snackbar.make(snackbarView, "Trail does not exist", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public void GetAllUsersWhoComment() {
@@ -289,28 +322,4 @@ public class AllComments extends BaseActivity {
         modelTrailComments.GetAllComments();
         setCommentRecyclerView();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_all_comments, menu);
-        return true;
-    }
-
-    private void setCommentRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        layoutManager.scrollToPosition(0);
-
-        mAllCommentsRecyclerView = (RecyclerView)findViewById(R.id.all_comment_recycler_view);
-        mAllCommentsRecyclerView.setLayoutManager(layoutManager);
-        mAllCommentsRecyclerView.setHasFixedSize(true);
-    }
-
-    public void SetUpCommentView() {
-        mRecyclerViewAllComments = new RecyclerViewAllComments(comments, context);
-        mAllCommentsRecyclerView.setAdapter(mRecyclerViewAllComments);
-        mAllCommentsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
-
 }

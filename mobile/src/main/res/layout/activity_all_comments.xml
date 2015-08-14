@@ -3,7 +3,8 @@
     android:id="@+id/linearlayout_root_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     android:background="@android:color/white">
 
     <android.support.v4.widget.DrawerLayout
