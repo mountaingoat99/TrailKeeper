@@ -27,7 +27,6 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class AllComments extends BaseActivity {
 
     final static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
     final static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
-    boolean mHidden = false;
+    boolean mHidden = true;
 
     private String LOG = "AllComments";
     private final Context context = this;
@@ -60,7 +59,6 @@ public class AllComments extends BaseActivity {
     private FloatingActionButton fabTrails;
     private FloatingActionButton fabAll;
     private FloatingActionButton fabSearch;
-    private View view;
     private View snackbarView;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -95,6 +93,7 @@ public class AllComments extends BaseActivity {
 
         setCommentRecyclerView();
         SetUpOnClickForFab();
+
     }
 
     //region Activity Setup
@@ -308,7 +307,6 @@ public class AllComments extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (searchForTrailEditText.getText().length() > 0) {
-                    view = v;
                     modelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim(), context);
                 } else {
                     Snackbar.make(v, "Please enter a Trail Name", Snackbar.LENGTH_LONG).show();
