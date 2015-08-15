@@ -173,7 +173,7 @@ public class TrailKeeperApplication extends Application implements
             home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             // calls the AsyncTask for the Trails
         } else {
-            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();  //TODO make a call to send out a global message
         }
     }
 

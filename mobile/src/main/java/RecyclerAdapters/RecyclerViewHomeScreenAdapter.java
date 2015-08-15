@@ -67,6 +67,17 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         notifyItemRemoved(position);
     }
 
+//    public void clearData() {
+//        int size = items.size();
+//        if (size > 0) {
+//            for (int i = 0; i < size; i++) {
+//                items.remove(i);
+//                size = items.size();
+//            }
+//            this.notifyItemRangeRemoved(0, size);
+//        }
+//    }
+
     public ModelTrails getItem(int position) {
         return items.get(position);
     }

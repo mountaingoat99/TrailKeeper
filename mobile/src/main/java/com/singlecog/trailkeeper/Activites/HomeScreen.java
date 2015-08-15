@@ -1,7 +1,6 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,21 +17,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Menu;
-
-import com.google.android.gms.appdatasearch.Feature;
 import com.singlecog.trailkeeper.R;
-
-import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import AsyncAdapters.AsyncTrailInfo;
 import Helpers.AlertDialogHelper;
 import Helpers.CreateAccountHelper;
 import Helpers.GeoLocationHelper;
@@ -54,7 +44,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     private boolean firstTimeLoad = true;
     private String userName;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    //@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +75,8 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
         // set up the RecyclerViews
         SetUpTrailStatusCard();
-        CallAsyncTrailInfo();
+        trails = ModelTrails.GetAllTrailInfo();
+        SetUpTrailStatusRecyclerView();
 
         Bundle b = getIntent().getExtras();
         if (b != null){
@@ -102,13 +93,117 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                 }
             }
         }
+        CreateAccountHelper.CheckUserVerified();
     }
 
+    //region Activity Set up
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        firstTimeLoad = sp.getBoolean("Firsttimeload", true);
+    }
+
+    private void savePreferences(String key, boolean value) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    // Sets up the Trail Status Recycler View
+    private void SetUpTrailStatusCard() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+
+        mTrailOpenRecyclerView = (RecyclerView) findViewById(R.id.home_screen_recycler_view);
+        mTrailOpenRecyclerView.setLayoutManager(layoutManager);
+        mTrailOpenRecyclerView.setHasFixedSize(true);
+
+        // lets make sure the refresh only happens when the top card is fully visible
+        mTrailOpenRecyclerView.setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                boolean enabled = false;
+                if (recyclerView != null && recyclerView.getChildCount() > 0) {
+                    // check if the first card is visible
+                    boolean firstCardVisible = mTrailOpenAdapter.getItemViewType(0) == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstVisibleCard = recyclerView.getChildAt(0).getTop() == 0;
+                    // enable or disable the refresh layout
+                    enabled = firstCardVisible && topOfFirstVisibleCard;
+                }
+                mSwipeLayout.setEnabled(enabled);
+            }
+        });
+    }
+
+    // Fills the Trail Status Recycler View
+    public void SetUpTrailStatusRecyclerView(){
+        int runTime;
+        if (firstTimeLoad) {
+            runTime = 6000;
+        } else {
+            runTime = 3000;
+        }
+
+        // we want to give a few extra seconds for the Google Location API to load and connect
+        // but only if the current location is already null
+        if (TrailKeeperApplication.home == null) {
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!trails.isEmpty()) {  //if it's empty we'll do one more fetch
+                        SortTrails();
+                        ShowTrailCards();
+                    } else {
+                        trails = ModelTrails.GetAllTrailInfo();
+                        SortTrails();
+                        ShowTrailCards();
+                    }
+                }
+            }, runTime);
+        } else {
+            SortTrails();
+            ShowTrailCards();
+        }
+    }
+
+    private void ShowTrailCards(){
+        mSwipeLayout.setRefreshing(false);
+        mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails, context);
+        mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
+        mTrailOpenRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        // lets show the sign up screen if this is the first time they've been here
+        if (firstTimeLoad) {
+            showSignUpScreen();
+        }
+
+        // show a message in case the load did take too long
+        if (trails.isEmpty()) {
+            Snackbar.make(mSwipeLayout, "Some Bad Happened, Pull Down To Refresh" + userName, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_home_screen, menu);
+        return true;
+    }
+    //endregion
+
+    //region Dialogs
     private void VerifyEmailDialog() {
         AlertDialogHelper.showCustomAlertDialog(context, "Thanks for signing up", "Please Check Your Email And Verify Your Account To The Features In TrailKeeper");
     }
 
-    // TODO create a custom dialog screen
     private void showSignUpScreen(){
         final Dialog welcomeDialog = new Dialog(this);
         welcomeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -144,111 +239,9 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
         welcomeDialog.show();
     }
+    //endregion
 
-    private void loadSavedPreferences(){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        firstTimeLoad = sp.getBoolean("Firsttimeload", true);
-    }
-
-    private void savePreferences(String key, boolean value) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean(key, value);
-        editor.commit();
-    }
-
-    private void CallAsyncTrailInfo() {
-        try {
-            AsyncTrailInfo ati = new AsyncTrailInfo(this, context);
-            trails = new ArrayList<>();
-            ati.execute(trails);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Sets up the Trail Status Recycler View
-    private void SetUpTrailStatusCard() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        layoutManager.scrollToPosition(0);
-
-        mTrailOpenRecyclerView = (RecyclerView) findViewById(R.id.home_screen_recycler_view);
-        mTrailOpenRecyclerView.setLayoutManager(layoutManager);
-        mTrailOpenRecyclerView.setHasFixedSize(true);
-
-        // lets make sure the refresh only happens when the top card is fully visible
-        mTrailOpenRecyclerView.setOnScrollListener(new OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                boolean enabled = false;
-                if (recyclerView != null && recyclerView.getChildCount() > 0){
-                    // check if the first card is visible
-                    boolean firstCardVisible = mTrailOpenAdapter.getItemViewType(0) == 0;
-                    // check if the top of the first item is visible
-                    boolean topOfFirstVisibleCard = recyclerView.getChildAt(0).getTop() == 0;
-                    // enable or disable the refresh layout
-                    enabled = firstCardVisible && topOfFirstVisibleCard;
-                }
-                mSwipeLayout.setEnabled(enabled);
-            }
-        });
-    }
-
-    // Fills the Trail Status Recycler View
-    public void SetUpTrailStatusRecyclerView(){
-        // we want to give a few extra seconds for the Google Location API to load and connect
-        // but only if the current location is already null
-        if (TrailKeeperApplication.home == null) {
-            Handler handler = new Handler();
-            final Runnable r = new Runnable() {
-                @Override
-                public void run() {
-                    // first we will sort and get the distance correct
-                    if (TrailKeeperApplication.home != null) {
-                        if (!trails.isEmpty()) {
-                            SortTrails();
-                        } else {
-                            CreateAccountHelper.CheckUserVerified();
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // now set the cards back up and load the recycler view
-                                    SetUpTrailStatusCard();
-                                    CallAsyncTrailInfo();
-                                    mSwipeLayout.setRefreshing(false);
-                                }
-                            }, 3000);
-                            //onRefresh();
-                            return;
-                        }
-                    } else {
-                        View v = mTrailOpenRecyclerView;
-                        Snackbar.make(v, R.string.snackbar_no_signal, Snackbar.LENGTH_LONG).show();
-                    }
-                    ShowTrailCards();
-                }
-            };
-
-            // todo on the first time load lets set this to 6000
-            if (firstTimeLoad){
-                handler.postDelayed(r, 6000);
-            } else {
-                handler.postDelayed(r, 3000);
-            }
-        // if not null then we can go ahead and sort and show the cards
-        } else {
-            SortTrails();
-            ShowTrailCards();
-        }
-    }
-
+    //region Private Methods
     private void SortTrails(){
         for (int i = 0; trails.size() > i; i++) {
             // TODO once settings are working add Metric in here
@@ -264,26 +257,9 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
             }
         }
     }
+    //endregion
 
-    private void ShowTrailCards(){
-        mSwipeLayout.setRefreshing(false);
-        mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails, context);
-        mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
-        mTrailOpenRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        // lets show the sign up screen if this is the first time they've been here
-        if (firstTimeLoad) {
-            showSignUpScreen();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_home_screen, menu);
-        return true;
-    }
-
+    //region Location API implementation methods
     @Override
     public void onStart() {
         super.onStart();
@@ -311,23 +287,15 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
             TrailKeeperApplication.mGoogleApiClient.disconnect();
         }
     }
+    //endregion
 
-    // swipe to refresh
+    //region Swype To Refresh
     @Override
     public void onRefresh() {
 
         if (mTrailOpenAdapter != null) {
-
-            // first we remove all the items
-            for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
-                mTrailOpenAdapter.removeData(i);
-            }
-            for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
-                mTrailOpenAdapter.removeData(i);
-            }
-            for (int i = 0; mTrailOpenAdapter.getItemCount() > i; i++) {
-                mTrailOpenAdapter.removeData(i);
-            }
+            trails.clear();
+            mTrailOpenAdapter.notifyDataSetChanged();
         }
 
         // then refresh the Application class Parse Methods
@@ -336,17 +304,17 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         TrailKeeperApplication.LoadAllAuthorizedCommentorsFromParse();
         TrailKeeperApplication.LoadAllTrailStatusUpdatorsFromParse();
         CreateAccountHelper.CheckUserVerified();
-        TrailKeeperApplication t = new TrailKeeperApplication();
-        t.onConnected(bundle);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 // now set the cards back up and load the recycler view
+                trails = ModelTrails.GetAllTrailInfo();
                 SetUpTrailStatusCard();
-                CallAsyncTrailInfo();
+                SetUpTrailStatusRecyclerView();
                 mSwipeLayout.setRefreshing(false);
             }
         }, 3000);
     }
+    //endregion
 }
