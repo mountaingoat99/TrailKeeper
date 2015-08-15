@@ -8,18 +8,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -67,7 +64,6 @@ public class TrailScreen extends BaseActivity {
     private ProgressDialog progressDialog;
     private Dialog trailStatusDialog;
     private ConnectionDetector connectionDetector;
-    GestureDetectorCompat gestureDetector;
     private boolean isAnonUser;
     private boolean isEmailVerified;
     private boolean isValidCommentor = false;
@@ -122,16 +118,9 @@ public class TrailScreen extends BaseActivity {
 
         GetTrailData();
 
-        // sets the tap event on the recycler views
-        gestureDetector =
-                new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
-                    @Override public boolean onSingleTapUp(MotionEvent e) {
-                        return true;
-                    }
-                });
-
         // set up the Recycler View
         SetupCommentCard();
+        SetUpTrailCommentRecyclerView();
         SetUpBtnStatusClick();
         SetUpBtnSubscribeClick();
         SetUpCommentButtonClick();
@@ -141,7 +130,7 @@ public class TrailScreen extends BaseActivity {
     private void CallTrailCommentsAsync() {
         // Call the Async method
         try {
-            AsyncOneTrailComments atc = new AsyncOneTrailComments(this, context, objectID);
+            AsyncOneTrailComments atc = new AsyncOneTrailComments(objectID);
             comments = new ArrayList<>();
             atc.execute(comments);
         }catch (Exception e) {
@@ -302,12 +291,6 @@ public class TrailScreen extends BaseActivity {
 
     // sets up the trail comment recycler view
     public void SetUpTrailCommentRecyclerView() {
-        if (comments.size() == 0) {
-            ModelTrailComments comment = new ModelTrailComments();
-            comment.TrailComments = "No Comments Have Been Left Yet. You Should Add One!";
-            comments.add(0, comment);
-        }
-
         mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(comments);
         mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
 
@@ -443,9 +426,11 @@ public class TrailScreen extends BaseActivity {
         trailComments.CreateNewComment(objectID, trailNameString, comment);
     }
 
-    public void SaveCommentWasSuccessful(Boolean success) {
+    public void SaveCommentWasSuccessful(Boolean success, ModelTrailComments modelTrailComments) {
         if (success) {
-            CallTrailCommentsAsync();
+            comments.add(0, modelTrailComments);
+            mTrailCommentAdapter.notifyDataSetChanged();
+            progressDialog.dismiss();
             SendOutNewCommentPushNotification();
         } else {
             Snackbar.make(v, "Something Went Wrong, Please Try Again", Snackbar.LENGTH_LONG).show();

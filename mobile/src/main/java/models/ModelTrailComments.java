@@ -78,6 +78,35 @@ public class ModelTrailComments {
         });
     }
 
+    public static List<ModelTrailComments> GetAllCommentsByTrail(String trailObjectID) {
+        final List<ModelTrailComments> passedComments = new ArrayList<>();
+        ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("Comments");
+        cQuery.whereEqualTo("trailObjectId", trailObjectID);
+        cQuery.addDescendingOrder("workingCreatedDate");
+        cQuery.fromLocalDatastore();
+        try {
+            List<ParseObject> list = cQuery.find();
+            if (list != null) {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.US);
+                for (ParseObject parseObject : list) {
+                    // get the commentArray from the class
+                    ModelTrailComments comment = new ModelTrailComments();
+                    comment.TrailComments = parseObject.get("comment").toString();
+                    comment.CommentUserName = parseObject.get("userName").toString();
+                    if (parseObject.getDate("workingCreatedDate") != null)
+                        comment.CommentDate = formatter.format(parseObject.getDate("workingCreatedDate"));
+                    else
+                        comment.CommentDate = "";
+                    passedComments.add(comment);
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return passedComments;
+    }
+
     public void GetCommentsByTrail(String trailObjectID) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
         query.whereEqualTo("trailObjectId", trailObjectID);
@@ -143,24 +172,28 @@ public class ModelTrailComments {
     public void CreateNewComment(String trailObjectId, final String trailName, String Comment) {
 
         Calendar c = Calendar.getInstance();
+        final ModelTrailComments modelTrailComments = new ModelTrailComments(); // need to send this object back to update the recycler view
 
         final ParseComments parseComments = new ParseComments();
         parseComments.put("trailObjectId", trailObjectId);
         parseComments.put("trailName", trailName);
         parseComments.put("userObjectId", ParseUser.getCurrentUser().getObjectId());
         parseComments.put("userName", ParseUser.getCurrentUser().getUsername());
+        modelTrailComments.CommentUserName = ParseUser.getCurrentUser().getUsername();  //Recycler View Update
         parseComments.put("comment", Comment);
+        modelTrailComments.TrailComments = Comment;                                     //Recycler View Update
         parseComments.put("workingCreatedDate", c.getTime());
+        modelTrailComments.CommentDate = String.valueOf(c.getTime());                   //Recycler View Update
         parseComments.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Save Comment Completed");
                     parseComments.pinInBackground();
-                    trailScreen.SaveCommentWasSuccessful(true);
+                    trailScreen.SaveCommentWasSuccessful(true, modelTrailComments);
                 } else {
                     Log.i(LOG, "Save Comment Failed" + e.getMessage());
-                    trailScreen.SaveCommentWasSuccessful(false);
+                    trailScreen.SaveCommentWasSuccessful(false, null);
                 }
             }
         });

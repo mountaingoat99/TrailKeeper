@@ -33,7 +33,7 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
      * at the position passed into the method.
      *
      * @param newModelData The item to add to the data set.
-     * @param position The index of the item to remove.
+     * @param position The index of the item to add.
      */
     public void addData(ModelTrailComments newModelData, int position) {
         items.add(position, newModelData);
