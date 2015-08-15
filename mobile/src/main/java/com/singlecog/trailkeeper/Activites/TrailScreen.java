@@ -250,32 +250,27 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void GetTrailData() {
-        if (connectionDetector.isConnectingToInternet()) {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
-            query.fromLocalDatastore();
-            query.whereEqualTo("trailId", trailId);
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> list, ParseException e) {
-                    if (e == null) {
-                        for (ParseObject object : list) {
-                            trailNameString = object.get("trailName").toString();
-                            trailName.setText(trailNameString);
-                            status = object.getInt("status");
-                            trailCity.setText(object.get("city").toString());
-                            trailState.setText(object.get("state").toString());
-                            trailLocation = new LatLng(object.getParseGeoPoint("geoLocation").getLatitude(), object.getParseGeoPoint("geoLocation").getLongitude());
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
+        query.fromLocalDatastore();
+        query.whereEqualTo("trailId", trailId);
+        try {
+            List<ParseObject> list = query.find();
+            if (list.size() > 0) {
+                for (ParseObject object : list) {
+                    trailNameString = object.get("trailName").toString();
+                    trailName.setText(trailNameString);
+                    status = object.getInt("status");
+                    trailCity.setText(object.get("city").toString());
+                    trailState.setText(object.get("state").toString());
+                    trailLocation = new LatLng(object.getParseGeoPoint("geoLocation").getLatitude(), object.getParseGeoPoint("geoLocation").getLongitude());
 
-                            UpdateStatusIcon();
-                        }
-                    } else {
-                        AlertDialogHelper.showCustomAlertDialog(context, "Oops", "Something went wrong, and we don't know what. \nGo back to the home screen and try again");
-                        e.printStackTrace();
-                    }
+                    UpdateStatusIcon();
                 }
-            });
-        } else {
-            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
+            } else {
+                AlertDialogHelper.showCustomAlertDialog(context, "Oops", "Something went wrong, and we don't know what. \nGo back to the home screen and try again");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
