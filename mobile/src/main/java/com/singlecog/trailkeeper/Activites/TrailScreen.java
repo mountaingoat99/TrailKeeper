@@ -152,18 +152,19 @@ public class TrailScreen extends BaseActivity {
 
     public void CanComment() {
         ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
+        List<ParseAuthorizedCommentors> parseAuthorizedCommentors = new ArrayList<>();
+
         query.whereEqualTo("userName", ParseUser.getCurrentUser().getUsername());
         query.fromLocalDatastore();
-        query.getFirstInBackground(new GetCallback<ParseAuthorizedCommentors>() {
-            @Override
-            public void done(ParseAuthorizedCommentors parseAuthorizedCommentors, ParseException e) {
-                if (e == null) {
-                    isValidCommentor = (Boolean) parseAuthorizedCommentors.get("canComment");
-                } else {
-                    isValidCommentor = false;
-                }
-            }
-        });
+        try {
+            parseAuthorizedCommentors = query.find();
+            if (parseAuthorizedCommentors.size() > 0 ) {
+                isValidCommentor = (Boolean) parseAuthorizedCommentors.get(0).get("canComment");
+            } else isValidCommentor = false;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void SetUpBtnSubscribeClick() {
