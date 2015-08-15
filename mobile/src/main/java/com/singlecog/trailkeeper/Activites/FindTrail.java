@@ -15,18 +15,11 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-
 import com.singlecog.trailkeeper.R;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Handler;
-
-import AsyncAdapters.AsyncTrailInfo;
 import RecyclerAdapters.RecyclerViewFindTrailByState;
-import RecyclerAdapters.RecylerViewFindTrailInState;
 import models.ModelTrails;
 
 public class FindTrail extends BaseActivity {

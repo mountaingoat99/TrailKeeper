@@ -123,6 +123,38 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
+    // Replace the Async TrailInfo Method test to see if better
+    public static List<ModelTrails> GetAllTrailInfo() {
+        List<ModelTrails> passedTrails = new ArrayList<>();
+
+        //Parse
+        ParseQuery<ParseObject> tQuery = ParseQuery.getQuery("Trails");
+        tQuery.fromLocalDatastore();
+        try {
+            List<ParseObject> list = tQuery.find();
+            for (ParseObject parseObject : list) {
+                ModelTrails trail = new ModelTrails();
+                trail.ObjectID = parseObject.getObjectId();
+                trail.TrailID = parseObject.getInt("trailId");
+                trail.TrailName = parseObject.get("trailName").toString();
+                trail.TrailStatus = Integer.valueOf(parseObject.get("status").toString());
+                trail.TrailState = parseObject.get("state").toString();
+                trail.TrailCity = parseObject.get("city").toString();
+                trail.GeoLocation = parseObject.getParseGeoPoint("geoLocation");
+
+                passedTrails.add(trail);
+            }
+//            if (homeScreenActivity != null)
+//                homeScreenActivity.SetUpTrailStatusRecyclerView();
+//            if (commentActivity != null)
+//                commentActivity.SetUpTrailRecyclerView();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return passedTrails;
+    }
+
+
     // gets the trail names for the updateTrailStatus field in user
     // this field decides if a user can update a status, if a
     // user gets trail admin status we remove it from all other users
@@ -134,7 +166,7 @@ public class ModelTrails {
         query.fromLocalDatastore();
         try {
             trails = query.find();
-        } catch (ParseException e) {
+        } catch (ParseException     e) {
             e.printStackTrace();
         }
         for (int i = 0; trails.size() > i; i++) {

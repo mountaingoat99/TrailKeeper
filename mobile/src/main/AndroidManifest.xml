@@ -94,14 +94,6 @@
                 android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
         </activity>
         <activity
-            android:name=".Activites.Comments"
-            android:label="@string/title_activity_comments"
-            android:parentActivityName=".Activites.HomeScreen" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
-        </activity>
-        <activity
             android:name=".Activites.TrailMap"
             android:label="@string/title_activity_trail_map"
             android:parentActivityName=".Activites.TrailScreen" >
