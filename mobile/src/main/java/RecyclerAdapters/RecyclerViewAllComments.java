@@ -3,12 +3,9 @@ package RecyclerAdapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.singlecog.trailkeeper.R;
@@ -20,19 +17,12 @@ import models.ModelTrailComments;
 public class RecyclerViewAllComments extends RecyclerView.Adapter
             <RecyclerViewAllComments.ListItemViewHolder> {
 
-    private final String LOG = "RecyclerFindTrailState";
     private List<ModelTrailComments> items;
     private static ModelTrailComments model;
-    //private static List<ModelTrailComments> commentsList;
-    private SparseBooleanArray selectedItems;
     private Context context;
 
     public RecyclerViewAllComments(List<ModelTrailComments> modelData, Context context) {
-        if (modelData == null) {
-            throw new IllegalArgumentException("ModelData Must Not Be Null");
-        }
         this.items = modelData;
-        selectedItems = new SparseBooleanArray();
         this.context = context;
     }
 

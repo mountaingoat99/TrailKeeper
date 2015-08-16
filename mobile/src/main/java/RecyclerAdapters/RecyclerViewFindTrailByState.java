@@ -4,15 +4,12 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
@@ -29,20 +26,14 @@ import models.ModelTrails;
 public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
         <RecyclerViewFindTrailByState.ListItemViewHolder> {
 
-    private final String LOG = "RecyclerFindTrailState";
     private List<String> items;
     private static String model;
     private static List<ModelTrails> trailsByState;
     private SparseBooleanArray selectedItems;
     private Context context;
-
     private RecylerViewFindTrailInState mFindTrailInStateAdapter;
 
-
     public RecyclerViewFindTrailByState(List<String> modelData, Context context) {
-        if (modelData == null) {
-            throw new IllegalArgumentException("ModelData Must not be null");
-        }
         this.items = modelData;
         selectedItems = new SparseBooleanArray();
         this.context = context;

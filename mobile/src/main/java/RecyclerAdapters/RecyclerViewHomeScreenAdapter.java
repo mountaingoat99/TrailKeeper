@@ -36,51 +36,14 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
     private Context context;
 
     public RecyclerViewHomeScreenAdapter(List<ModelTrails> modelData, Context context) {
-        if (modelData == null) {
-            throw new IllegalArgumentException("modelData must not be null");
-        }
         items = modelData;
         selectedItems = new SparseBooleanArray();
         this.context = context;
     }
 
-    /**
-     * Adds and item into the underlying data set
-     * at the position passed into the method.
-     *
-     * @param newModelData The item to add to the data set.
-     * @param position The index of the item to remove.
-     */
-    public void addData(ModelTrails newModelData, int position) {
-        items.add(position, newModelData);
-        notifyItemInserted(position);
-    }
-
-    /**
-     * Removes the item that currently is at the passed in position from the
-     * underlying data set.
-     *
-     * @param position The index of the item to remove.
-     */
-    public void removeData(int position) {
-        items.remove(position);
-        notifyItemRemoved(position);
-    }
-
-//    public void clearData() {
-//        int size = items.size();
-//        if (size > 0) {
-//            for (int i = 0; i < size; i++) {
-//                items.remove(i);
-//                size = items.size();
-//            }
-//            this.notifyItemRangeRemoved(0, size);
-//        }
-//    }
-
-    public ModelTrails getItem(int position) {
-        return items.get(position);
-    }
+    //public ModelTrails getItem(int position) {
+        //return items.get(position);
+    //}
 
     public int getTrailID(RecyclerView.ViewHolder item){
         // use the view holder to get the Adapter Position
@@ -97,11 +60,11 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         return m.ObjectID;
     }
 
-    public ParseGeoPoint getLocation(RecyclerView.ViewHolder item){
-        int id = item.getAdapterPosition();
-        ModelTrails m = items.get(id);
-        return m.GeoLocation;
-    }
+//    public ParseGeoPoint getLocation(RecyclerView.ViewHolder item){
+//        int id = item.getAdapterPosition();
+//        ModelTrails m = items.get(id);
+//        return m.GeoLocation;
+//    }
 
     public ModelTrails getTrailModel(RecyclerView.ViewHolder item) {
         int id = item.getAdapterPosition();
@@ -182,33 +145,6 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    public void toggleSelection(int pos) {
-        if (selectedItems.get(pos, false)) {
-            selectedItems.delete(pos);
-        }
-        else {
-            selectedItems.put(pos, true);
-        }
-        notifyItemChanged(pos);
-    }
-
-    public void clearSelections() {
-        selectedItems.clear();
-        notifyDataSetChanged();
-    }
-
-    public int getSelectedItemCount() {
-        return selectedItems.size();
-    }
-
-    public List<Integer> getSelectedItems() {
-        List<Integer> items = new ArrayList<Integer>(selectedItems.size());
-        for (int i = 0; i < selectedItems.size(); i++) {
-            items.add(selectedItems.keyAt(i));
-        }
-        return items;
     }
 
     public final static class HomeScreenListViewHolder extends RecyclerView.ViewHolder {

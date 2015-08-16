@@ -21,39 +21,13 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     private SparseBooleanArray selectedItems;
 
     public RecyclerViewOneTrailCommentAdapter(List<ModelTrailComments> modelData) {
-        if (modelData == null) {
-            throw new IllegalArgumentException("modelData must not be null");
-        }
         items = modelData;
         selectedItems = new SparseBooleanArray();
     }
 
-    /**
-     * Adds and item into the underlying data set
-     * at the position passed into the method.
-     *
-     * @param newModelData The item to add to the data set.
-     * @param position The index of the item to add.
-     */
-    public void addData(ModelTrailComments newModelData, int position) {
-        items.add(position, newModelData);
-        notifyItemInserted(position);
-    }
-
-    /**
-     * Removes the item that currently is at the passed in position from the
-     * underlying data set.
-     *
-     * @param position The index of the item to remove.
-     */
-    public void removeData(int position) {
-        items.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public ModelTrailComments getItem(int position) {
-        return items.get(position);
-    }
+//    public ModelTrailComments getItem(int position) {
+//        return items.get(position);
+//    }
 
     @Override
     public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -78,33 +52,6 @@ public class RecyclerViewOneTrailCommentAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    public void toggleSelection(int pos) {
-        if (selectedItems.get(pos, false)) {
-            selectedItems.delete(pos);
-        }
-        else {
-            selectedItems.put(pos, true);
-        }
-        notifyItemChanged(pos);
-    }
-
-    public void clearSelections() {
-        selectedItems.clear();
-        notifyDataSetChanged();
-    }
-
-    public int getSelectedItemCount() {
-        return selectedItems.size();
-    }
-
-    public List<Integer> getSelectedItems() {
-        List<Integer> items = new ArrayList<Integer>(selectedItems.size());
-        for (int i = 0; i < selectedItems.size(); i++) {
-            items.add(selectedItems.keyAt(i));
-        }
-        return items;
     }
 
     public final static class ListItemViewHolder extends RecyclerView.ViewHolder {

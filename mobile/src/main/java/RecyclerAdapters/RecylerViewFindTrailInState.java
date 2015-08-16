@@ -24,16 +24,12 @@ import models.ModelTrails;
 public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         <RecylerViewFindTrailInState.ListItemViewHolder> {
 
-    private final String LOG = "RecyclerFindTrailInState";
     private List<ModelTrails> items;
     private static ModelTrails model;
     private SparseBooleanArray selectedItems;
     private Context context;
 
     public RecylerViewFindTrailInState(List<ModelTrails> modelData, Context context) {
-        if (modelData == null) {
-            throw new IllegalArgumentException("ModelData Must not be null");
-        }
         this.items = modelData;
         selectedItems = new SparseBooleanArray();
         this.context = context;
