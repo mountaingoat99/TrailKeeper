@@ -73,7 +73,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
             Bundle b = new Bundle();
             b.putInt("trailID", TrailID);
             b.putString("objectID", ObjectID);
-            b.putBoolean("fromNotification", true);
             intent.putExtras(b);
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -118,7 +117,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
             Bundle b = new Bundle();
             b.putInt("trailID", TrailID);
             b.putString("objectID", ObjectID);
-            b.putBoolean("fromNotification", true);
             intent.putExtras(b);
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

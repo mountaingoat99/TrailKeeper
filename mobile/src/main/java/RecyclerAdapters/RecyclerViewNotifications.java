@@ -64,19 +64,14 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         context.startActivity(intent);
     }
 
-    public void UpdateSubscriptionWasSuccessful(boolean valid, String message) {
+    public void UpdateSubscriptionWasSuccessful() {
         dialog.dismiss();
-        if (valid) {
-            removeItem(itemToRemove);
-            Snackbar.make(v, "You have been un-subscribed from " + trailNameString, Snackbar.LENGTH_LONG).show();
-            if (getItemCount() == 0) {
-                notificationActivity.finish();
-            }
-            Log.i(LOG, "Subscription for " + trailNameString + " was updated");
-        } else {
-            Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
-            Log.i(LOG, "Subscription for " + trailNameString + " was not updated");
+        removeItem(itemToRemove);
+        Snackbar.make(v, "You have been un-subscribed from " + trailNameString, Snackbar.LENGTH_LONG).show();
+        if (getItemCount() == 0) {
+            notificationActivity.finish();
         }
+        Log.i(LOG, "Subscription for " + trailNameString + " was updated");
     }
 
     public void removeItem(int position) {
@@ -111,7 +106,8 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
             public void onClick(View v) {
                 if (connectionDetector.isConnectingToInternet()) {
                     dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscription");
-                    modelTrails.SubscribeToChannel(GetTrailName(viewHolder), 1, LOG);
+                    modelTrails.SubscribeToChannel(GetTrailName(viewHolder), 1);
+                    UpdateSubscriptionWasSuccessful();
                 } else {
                     AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }

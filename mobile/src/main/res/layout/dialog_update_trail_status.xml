@@ -56,8 +56,7 @@
             android:text="@string/radio_button_open"
             android:layout_marginBottom="8dp"
             android:id="@+id/status_open"
-            android:enabled="false"
-            android:checked="true"/>
+            android:enabled="false"/>
 
         <RadioButton
             android:layout_width="match_parent"

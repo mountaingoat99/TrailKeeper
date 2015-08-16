@@ -72,7 +72,6 @@ public class TrailScreen extends BaseActivity {
     private String trailNameString, newTrailCommentString;
     private List<ModelTrailComments> comments;
     private ModelTrails modelTrails;
-    private Boolean fromNotification = false;
     private final Context context = this;
     private RadioButton rdoOpen;
     private RadioButton rdoClosed;
@@ -99,23 +98,10 @@ public class TrailScreen extends BaseActivity {
         if (b != null) {
             trailId = b.getInt("trailID");
             objectID = b.getString("objectID");
-            fromNotification = b.getBoolean("fromNotification");
         }
 
         trailStatusPin = ModelTrails.GetTrailPin(objectID);
-
-        if (fromNotification) {
-            new android.os.Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    CallTrailCommentsAsync();
-                }
-            }, 3000);
-        } else {
-            // call method to get items from Local DataStore to fill the Views
-            CallTrailCommentsAsync();
-        }
-
+        CallTrailCommentsAsync();
         GetTrailData();
 
         // set up the Recycler View
@@ -364,26 +350,12 @@ public class TrailScreen extends BaseActivity {
 
     private void UpdateSubscribeStatus(int subscribe) {
         if (connectionDetector.isConnectingToInternet()) {
-            progressDialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscriptions");
-            modelTrails.SubscribeToChannel(trailNameString, subscribe, "");
+            modelTrails.SubscribeToChannel(trailNameString, subscribe);
+            Snackbar.make(v, trailSubscriptionStatus, Snackbar.LENGTH_LONG).show();
         } else {
             AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
         }
     }
-
-    public void UpdateSubscriptionWasSuccessful(boolean valid, String message) {
-        progressDialog.dismiss();
-        if (valid) {
-            Snackbar.make(v, trailSubscriptionStatus, Snackbar.LENGTH_LONG).show();
-            //AlertDialogHelper.showAlertDialog(context, trailNameString, trailSubscriptionStatus);
-            Log.i(LOG, "Subscription change for " + trailNameString + " was updated");
-        } else {
-            Snackbar.make(v, trailSubscriptionStatus, Snackbar.LENGTH_LONG).show();
-            //AlertDialogHelper.showAlertDialog(context, "Try Again", "Something went wrong: " + message);
-            Log.i(LOG, "Subscription change for " + trailNameString + " was not updated");
-        }
-    }
-
     //endregion
 
     // region Comments
