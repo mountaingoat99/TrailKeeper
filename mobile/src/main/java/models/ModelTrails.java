@@ -316,11 +316,11 @@ public class ModelTrails {
 //                @Override
 //                public void done(ParseException e) {
 //                    if (e == null) {
-//                        Log.d(LOG, "successfully subscribed to the " + trailNameChannel + " broadcast channel.");
+//                        Log.d(TAG, "successfully subscribed to the " + trailNameChannel + " broadcast channel.");
 //                        SubscribeWasSuccessful(true, null, whichActivity);
 //                    } else {
 //                        SubscribeWasSuccessful(false, e.getMessage(), whichActivity);
-//                        Log.e(LOG, "failed to subscribe for push for " + trailNameChannel, e);
+//                        Log.e(TAG, "failed to subscribe for push for " + trailNameChannel, e);
 //                    }
 //                }
 //            });
@@ -329,11 +329,11 @@ public class ModelTrails {
 //                @Override
 //                public void done(ParseException e) {
 //                    if (e == null) {
-//                        Log.d(LOG, "successfully un-subscribed to the " + trailNameChannel + " broadcast channel.");
+//                        Log.d(TAG, "successfully un-subscribed to the " + trailNameChannel + " broadcast channel.");
 //                        SubscribeWasSuccessful(true, null, whichActivity);
 //                    } else {
 //                        SubscribeWasSuccessful(false, e.getMessage(), whichActivity);
-//                        Log.e(LOG, "failed to un-subscribe for push " + trailNameChannel, e);
+//                        Log.e(TAG, "failed to un-subscribe for push " + trailNameChannel, e);
 //                    }
 //                }
 //            });
@@ -363,14 +363,14 @@ public class ModelTrails {
 //            } else {
 //                notificationsScreen.UpdateSubscriptionWasSuccessful(true, null);
 //            }
-//            Log.d(LOG, "successfully changed subscriptions.");
+//            Log.d(TAG, "successfully changed subscriptions.");
 //        } else {
 //            if (whichActivity.isEmpty()) {
 //                trailScreen.UpdateSubscriptionWasSuccessful(valid, message);
 //            } else {
 //                notificationsScreen.UpdateSubscriptionWasSuccessful(false, message);
 //            }
-//            Log.e(LOG, "Unsuccessfully changed subscription");
+//            Log.e(TAG, "Unsuccessfully changed subscription");
 //        }
 //    }
     //endregion

@@ -1,13 +1,11 @@
 package com.singlecog.trailkeeper.Activites;
 
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -95,17 +93,6 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         }
         CreateAccountHelper.CheckUserVerified();
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        // Check which request we're responding to
-//        if (requestCode == 1) {
-//            // set up the RecyclerViews
-//            SetUpTrailStatusCard();
-//            trails = ModelTrails.GetAllTrailInfo();
-//            SetUpTrailStatusRecyclerView();
-//        }
-//    }
 
     //region Activity Set up
     private void loadSavedPreferences(){

@@ -27,8 +27,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -52,7 +50,7 @@ import models.ModelTrails;
 public class TrailScreen extends BaseActivity {
 
     //region Properties
-    protected static final String LOG = "trailScreenActivity";
+    protected static final String TAG = "trailScreenActivity";
     private int trailId, status, trailStatusPin;
     private String objectID, trailSubscriptionStatus;
     private RecyclerView mTrailCommentRecyclerView;
@@ -85,6 +83,7 @@ public class TrailScreen extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_screen);
+        Log.i(TAG, "Starting OnCreate Trail Screen");
         super.onCreateDrawer();
 
         connectionDetector = new ConnectionDetector(context);
@@ -116,6 +115,7 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void CallTrailCommentsAsync() {
+        Log.i(TAG, "Calling The Trail Comments Async");
         // Call the Async method
         try {
             AsyncOneTrailComments atc = new AsyncOneTrailComments(objectID);
@@ -238,6 +238,7 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void GetTrailData() {
+        Log.i(TAG, "Getting the Trail DATA");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();
         query.whereEqualTo("trailId", trailId);
@@ -275,6 +276,7 @@ public class TrailScreen extends BaseActivity {
 
     // sets up the trail comment recycler view
     public void SetUpTrailCommentRecyclerView() {
+        Log.i(TAG, "Setting up the trail comment card Rcyclcer view");
         mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(comments);
         mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
 
@@ -456,6 +458,10 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void DoATextWatcher(EditText pinText) {
+        // Once in awhile the pin doesn't get fetched correctly onCreate
+        if (trailStatusPin == 0) {
+            trailStatusPin = ModelTrails.GetTrailPin(objectID);
+        }
         pinText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -507,10 +513,10 @@ public class TrailScreen extends BaseActivity {
             Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
             UpdateStatusIcon();
             PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailId, objectID);
-            Log.i(LOG, "Trail Status was changed");
+            Log.i(TAG, "Trail Status was changed");
         } else {
             Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
-            Log.i(LOG, "Trail Status was not changed");
+            Log.i(TAG, "Trail Status was not changed");
         }
     }
     //endregion

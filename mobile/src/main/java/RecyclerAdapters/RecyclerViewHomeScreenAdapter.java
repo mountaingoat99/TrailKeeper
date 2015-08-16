@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import models.ModelTrails;
 public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         <RecyclerViewHomeScreenAdapter.HomeScreenListViewHolder> {
 
+    private final String TAG = "RecyclerViewHomeScreenAdapter";
     private List<ModelTrails> items;
     public static ModelTrails model;
     // Allows to remember the last item shown on screen
@@ -108,6 +110,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 intent.putExtra("trailID", id);
                 intent.putExtra("objectID", objectId);
                 intent.putExtra("fromNotification", false);
+                Log.i(TAG, "Sending Intent From Home Screen to Trail Screen");
                 v.getContext().startActivity(intent);
             }
         });
