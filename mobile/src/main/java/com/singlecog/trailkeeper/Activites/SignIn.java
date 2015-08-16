@@ -44,7 +44,7 @@ public class SignIn extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         view = findViewById(R.id.layout1);
-        super.onCreateDrawer(view);
+        super.onCreateDrawer(view, this);
         setUpView();
         if (savedInstanceState != null) {
             userNameString = savedInstanceState.getString("username");

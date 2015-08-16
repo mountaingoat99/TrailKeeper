@@ -85,7 +85,7 @@ public class TrailScreen extends BaseActivity {
         setContentView(R.layout.activity_trail_screen);
         Log.i(TAG, "Starting OnCreate Trail Screen");
         v = findViewById(R.id.linearlayout_root_main);
-        super.onCreateDrawer(v);
+        super.onCreateDrawer(v, this);
 
         connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();

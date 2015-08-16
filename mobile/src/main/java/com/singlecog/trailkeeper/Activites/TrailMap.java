@@ -49,7 +49,7 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         view = findViewById(R.id.linearlayout_root_main);
-        super.onCreateDrawer(view);
+        super.onCreateDrawer(view, this);
 
         // get the latest device location
         buildGoogleApiClient();

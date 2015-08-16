@@ -67,7 +67,7 @@ public class AllComments extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_comments);
         snackbarView = findViewById(R.id.linearlayout_root_main);
-        super.onCreateDrawer(snackbarView);
+        super.onCreateDrawer(snackbarView, this);
         SetUpFabs();
 
         Bundle b = getIntent().getExtras();

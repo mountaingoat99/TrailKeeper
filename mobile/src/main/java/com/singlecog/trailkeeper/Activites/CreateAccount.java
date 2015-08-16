@@ -50,7 +50,7 @@ public class CreateAccount extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
         v = findViewById(R.id.main_layout);
-        super.onCreateDrawer(v);
+        super.onCreateDrawer(v, this);
         SetUpViews();
         if (savedInstanceState != null) {
             emailString = savedInstanceState.getString("email");

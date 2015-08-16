@@ -62,7 +62,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         view = findViewById(R.id.linearlayout_root_main);
-        super.onCreateDrawer(view);
+        super.onCreateDrawer(view, this);
         markers = new HashMap<>();
 
         // get the trailID from the previous view

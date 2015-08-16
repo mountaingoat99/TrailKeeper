@@ -15,11 +15,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Menu;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.singlecog.trailkeeper.R;
 import java.util.List;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import Helpers.AlertDialogHelper;
 import Helpers.CreateAccountHelper;
@@ -48,7 +51,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_home_screen);
-        super.onCreateDrawer(mSwipeLayout);
+        super.onCreateDrawer(mSwipeLayout, this);
 
         if (savedInstanceState != null)
             bundle = savedInstanceState;

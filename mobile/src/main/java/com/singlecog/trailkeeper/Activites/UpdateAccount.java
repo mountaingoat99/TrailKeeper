@@ -46,7 +46,7 @@ public class UpdateAccount extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_account);
         mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
-        super.onCreateDrawer(mainLayout);
+        super.onCreateDrawer(mainLayout, this);
         SetUpView();
         if (savedInstanceState != null) {
             userNameString = savedInstanceState.getString("username");

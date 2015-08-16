@@ -39,7 +39,7 @@ public class FindTrail extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_trail);
         view = findViewById(R.id.linearlayout_root_main);
-        super.onCreateDrawer(view);
+        super.onCreateDrawer(view, this);
         btnSearch = (FloatingActionButton)findViewById(R.id.search_fab);
 
         // call to get the trail names first
