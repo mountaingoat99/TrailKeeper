@@ -8,7 +8,6 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
@@ -26,8 +25,6 @@ import Helpers.PushNotificationHelper;
 import RecyclerAdapters.RecyclerViewNotifications;
 
 public class ModelTrails {
-
-    private static final String LOG = "ModelTrails";
 
     public String ObjectID;
     public int TrailID;
@@ -144,16 +141,11 @@ public class ModelTrails {
 
                 passedTrails.add(trail);
             }
-//            if (homeScreenActivity != null)
-//                homeScreenActivity.SetUpTrailStatusRecyclerView();
-//            if (commentActivity != null)
-//                commentActivity.SetUpTrailRecyclerView();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return passedTrails;
     }
-
 
     // gets the trail names for the updateTrailStatus field in user
     // this field decides if a user can update a status, if a

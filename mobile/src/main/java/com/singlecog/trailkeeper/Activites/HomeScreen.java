@@ -96,6 +96,17 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         CreateAccountHelper.CheckUserVerified();
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        // Check which request we're responding to
+//        if (requestCode == 1) {
+//            // set up the RecyclerViews
+//            SetUpTrailStatusCard();
+//            trails = ModelTrails.GetAllTrailInfo();
+//            SetUpTrailStatusRecyclerView();
+//        }
+//    }
+
     //region Activity Set up
     private void loadSavedPreferences(){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);

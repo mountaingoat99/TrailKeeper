@@ -67,6 +67,7 @@ public class TrailScreen extends BaseActivity {
     private boolean isAnonUser;
     private boolean isEmailVerified;
     private boolean isValidCommentor = false;
+    private boolean isStatusUpdate = false;
     private View v;
     private LatLng trailLocation;
     private String trailNameString, newTrailCommentString;
@@ -98,6 +99,7 @@ public class TrailScreen extends BaseActivity {
         if (b != null) {
             trailId = b.getInt("trailID");
             objectID = b.getString("objectID");
+            isStatusUpdate = b.getBoolean("isStatusUpdate");
         }
 
         trailStatusPin = ModelTrails.GetTrailPin(objectID);
@@ -303,7 +305,14 @@ public class TrailScreen extends BaseActivity {
         int itemId = item.getItemId();
         switch (itemId) {
             case android.R.id.home:
-                finish();
+                // if this was a status update and the user came here from a notification
+                // then we want to restart the homescreen activity to reload all the trail data
+                if (isStatusUpdate) {
+                    Intent intentHome = new Intent(context, HomeScreen.class);
+                    startActivity(intentHome);
+                } else {
+                    finish();
+                }
             break;
             case R.id.action_map_click:
                 Intent intent = new Intent(context, TrailMap.class);
