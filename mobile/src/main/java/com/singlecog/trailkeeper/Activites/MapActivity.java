@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -53,13 +54,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
     private final Context context = this;
     private List<ModelTrails> trails;
     private Map<Marker, ModelTrails> markers;
+    private View view;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        super.onCreateDrawer();
+        view = findViewById(R.id.linearlayout_root_main);
+        super.onCreateDrawer(view);
         markers = new HashMap<>();
 
         // get the trailID from the previous view

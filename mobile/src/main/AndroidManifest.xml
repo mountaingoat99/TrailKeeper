@@ -62,30 +62,6 @@
                 android:value=".Activites.HomeScreen" />
         </activity>
         <activity
-            android:name=".Activites.TrailAdmin"
-            android:label="@string/title_activity_trail_admin"
-            android:parentActivityName=".Activites.HomeScreen" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activites.HomeScreen" />
-        </activity>
-        <activity
-            android:name=".Activites.Profile"
-            android:label="@string/title_activity_profile"
-            android:parentActivityName=".Activites.HomeScreen" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activites.HomeScreen" />
-        </activity>
-        <activity
-            android:name=".Activites.Settings"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".Activites.HomeScreen" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activites.HomeScreen" />
-        </activity>
-        <activity
             android:name=".Activites.TrailScreen"
             android:label="@string/title_activity_trail_screen"
             android:parentActivityName=".Activites.HomeScreen" >
@@ -107,7 +83,7 @@
             android:parentActivityName=".Activites.AccountSettings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Activites.Settings" />
+                android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
         </activity>
         <activity
             android:name=".Activites.SignIn"
@@ -115,7 +91,7 @@
             android:parentActivityName=".Activites.AccountSettings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Activites.Settings" />
+                android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
         </activity>
         <activity
             android:name=".Activites.UpdateAccount"
@@ -123,15 +99,15 @@
             android:parentActivityName=".Activites.AccountSettings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Activites.Settings" />
+                android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
         </activity>
         <activity
             android:name=".Activites.AccountSettings"
             android:label="@string/title_activity_account_settings"
-            android:parentActivityName=".Activites.Settings" >
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Activites.Settings" />
+                android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
         </activity>
 
         <service android:name="com.parse.PushService" />
@@ -174,11 +150,11 @@
         <activity
             android:name=".Activites.Notifications"
             android:label="@string/title_activity_notifications"
-            android:parentActivityName=".Activites.Settings" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.singlecog.trailkeeper.Activites.Settings" />
+            android:parentActivityName=".Activites.HomeScreen" >
         </activity>
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
         <activity
             android:name=".Activites.AllComments"
             android:label="@string/title_activity_all_comments" >

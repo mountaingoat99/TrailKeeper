@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +17,9 @@ import android.widget.ListView;
 
 import com.singlecog.trailkeeper.R;
 
+import Helpers.CreateAccountHelper;
+import Helpers.PushNotificationHelper;
+
 public class BaseActivity extends AppCompatActivity {
 
     //Navigation Drawer
@@ -24,8 +28,11 @@ public class BaseActivity extends AppCompatActivity {
     public ListView mDrawerList;
     public ActionBarDrawerToggle mDrawerToggle;
     public String mActivityTitle;
+    private View layoutView;
 
-    protected void onCreateDrawer() {
+    private boolean isAnonUser;
+
+    protected void onCreateDrawer(View view) {
         //Instantiate Navigation Drawer
         setupNavDrawer();
         setUpDrawer();
@@ -34,6 +41,9 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        isAnonUser = CreateAccountHelper.IsAnonUser();
+        layoutView = view;
     }
 
     @Override
@@ -79,9 +89,12 @@ public class BaseActivity extends AppCompatActivity {
                         getString(R.string.find_trail),
                         getString(R.string.comments),
                         getString(R.string.map),
-                        getString(R.string.trail_admin),
-                        getString(R.string.profile),
-                        getString(R.string.settings)
+                        getString(R.string.add_trail),
+                        getString(R.string.create_group),
+                        getString(R.string.trail_subscriptions),
+                        getString(R.string.account_settings),
+                        getString(R.string.request_trail_pin),
+                        getString(R.string.contact_us)
                 }));
 
         //Manage here what happens after item clicked in the Navigation Drawer
@@ -96,33 +109,58 @@ public class BaseActivity extends AppCompatActivity {
                     public void run() {
                         Intent intent;
                         switch (position) {
-                            case 0:
+                            case 0:   // home
                                 intent = new Intent(BaseActivity.this, HomeScreen.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
-                            case 1:
+                            case 1:   // Find Trail
                                 intent = new Intent(BaseActivity.this, FindTrail.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
-                            case 2:
+                            case 2:   // Comments
                                 intent = new Intent(BaseActivity.this, AllComments.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
-                            case 3:
+                            case 3:   // Map
                                 intent = new Intent(BaseActivity.this, MapActivity.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
-                            case 4:
-                                intent = new Intent(BaseActivity.this, TrailAdmin.class);
+                            case 4:   // Add Trail
+                                //intent = new Intent(BaseActivity.this, TrailAdmin.class);
+                                //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                break;
+                            case 5:   // Create Group
+                                //intent = new Intent(BaseActivity.this, Profile.class);
+                                //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                break;
+                            case 6:   // Subscriptions
+                                if (isAnonUser) {
+                                    Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    if (PushNotificationHelper.GetUserSubscriptions() != null && PushNotificationHelper.GetUserSubscriptions().size() > 0) {
+                                        intent = new Intent(BaseActivity.this, Notifications.class);
+                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                    } else {
+                                        Snackbar.make(layoutView, "You Have No Subscriptions", Snackbar.LENGTH_LONG).show();
+                                    }
+                                }
+                                break;
+                            case 7:   // Account Settings
+                                intent = new Intent(BaseActivity.this, AccountSettings.class);
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 break;
-                            case 5:
-                                intent = new Intent(BaseActivity.this, Profile.class);
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                            case 8:   // Request trail Pin
+                                if (isAnonUser) {
+                                    Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
+                                } else {
+                                        //intent = new Intent(BaseActivity.this, Notifications.class);
+                                        //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                }
+
                                 break;
-                            case 6:
-                                intent = new Intent(BaseActivity.this, Settings.class);
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                            case 9:   // Contact us
+
+
                                 break;
                         }
                     }

@@ -38,7 +38,8 @@ public class FindTrail extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_trail);
-        super.onCreateDrawer();
+        view = findViewById(R.id.linearlayout_root_main);
+        super.onCreateDrawer(view);
         btnSearch = (FloatingActionButton)findViewById(R.id.search_fab);
 
         // call to get the trail names first
@@ -88,7 +89,6 @@ public class FindTrail extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (searchForTrailEditText.getText().length() > 0) {
-                    view = v;
                     modelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim(), context);
                 } else {
                     Snackbar.make(v, "Please enter a Trail Name", Snackbar.LENGTH_LONG).show();

@@ -47,7 +47,8 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        super.onCreateDrawer();
+        mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_home_screen);
+        super.onCreateDrawer(mSwipeLayout);
 
         if (savedInstanceState != null)
             bundle = savedInstanceState;
@@ -55,7 +56,6 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         loadSavedPreferences();
 
         // set up the swipe pull to refresh
-        mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_home_screen);
         mSwipeLayout.setOnRefreshListener(this);
         mSwipeLayout.setColorSchemeResources(R.color.accent,
                 R.color.accent, R.color.accent,

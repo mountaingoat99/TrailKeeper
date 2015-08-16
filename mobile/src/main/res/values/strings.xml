@@ -12,10 +12,17 @@
     <string name="title_activity_trail_map">TrailMap</string>
 
     <!-- drawer -->
+    <string name="home">Home</string>
     <string name="find_trail">Find Trail</string>
     <string name="comments">Comments</string>
-    <string name="home">Home</string>
     <string name="map">Map</string>
+    <string name="add_trail">Add Trail</string>
+    <string name="create_group">Create Group</string>
+    <string name="trail_subscriptions">Trail Subscriptions</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="request_trail_pin">Get Trail Pin</string>
+    <string name="contact_us">Contact Us</string>
+
     <string name="trail_admin">Trail Admin</string>
     <string name="profile">Profile</string>
     <string name="settings">Settings</string>

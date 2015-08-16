@@ -84,7 +84,8 @@ public class TrailScreen extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_screen);
         Log.i(TAG, "Starting OnCreate Trail Screen");
-        super.onCreateDrawer();
+        v = findViewById(R.id.linearlayout_root_main);
+        super.onCreateDrawer(v);
 
         connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();
@@ -234,7 +235,6 @@ public class TrailScreen extends BaseActivity {
         btnTrailStatus = (Button)findViewById(R.id.btn_set_trail_status);
         btnSubscribe = (Button)findViewById(R.id.btn_subscribe);
         btnAllCommments = (Button)findViewById(R.id.btn_all_comments);
-        v = findViewById(R.id.linearlayout_root_main);
     }
 
     private void GetTrailData() {

@@ -36,13 +36,15 @@ public class SignIn extends BaseActivity {
     private InputMethodManager imm;
     private ProgressDialog dialog;
     private ConnectionDetector connectionDetector;
+    private View view;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        super.onCreateDrawer();
+        view = findViewById(R.id.layout1);
+        super.onCreateDrawer(view);
         setUpView();
         if (savedInstanceState != null) {
             userNameString = savedInstanceState.getString("username");

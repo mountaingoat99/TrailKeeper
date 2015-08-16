@@ -39,7 +39,8 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
-        super.onCreateDrawer();
+        v = findViewById(R.id.linearlayout_root_main);
+        super.onCreateDrawer(v);
         connectionDetector = new ConnectionDetector(context);
         isAnonUser = CreateAccountHelper.IsAnonUser();
         settingsList = (ListView)findViewById(R.id.listViewAccountSettings);

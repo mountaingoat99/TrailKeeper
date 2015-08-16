@@ -27,8 +27,8 @@ public class Notifications extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
-        super.onCreateDrawer();
         v = findViewById(R.id.linearlayout_root_main);
+        super.onCreateDrawer(v);
         getUserSubscriptions();
         SetUpRecyclerView();
     }

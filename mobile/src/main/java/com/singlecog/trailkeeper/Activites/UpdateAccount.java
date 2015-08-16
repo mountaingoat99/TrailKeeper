@@ -3,8 +3,6 @@ package com.singlecog.trailkeeper.Activites;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.InputType;
@@ -13,7 +11,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
-import com.singlecog.trailkeeper.Activites.BaseActivity;
-import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.R;
 
 import Helpers.AlertDialogHelper;
@@ -40,7 +35,6 @@ public class UpdateAccount extends BaseActivity {
     private EditText username, password;
     private Button btnSignIn, btnUpdateEmail, btnUpdateUsername, btnUpdatePassword, btnSendVerify;
     private String emailString, newEmailString, userNameString, newUserNameString, passwordString;
-    private View v;
     private boolean isSignedIn = false;
     private final Context context = this;
     private InputMethodManager imm;
@@ -51,7 +45,8 @@ public class UpdateAccount extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_account);
-        super.onCreateDrawer();
+        mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
+        super.onCreateDrawer(mainLayout);
         SetUpView();
         if (savedInstanceState != null) {
             userNameString = savedInstanceState.getString("username");
@@ -60,7 +55,6 @@ public class UpdateAccount extends BaseActivity {
             password.setText(passwordString);
             isSignedIn = savedInstanceState.getBoolean("isSignedIn");
         }
-        v = mainLayout;
         showCorrectView();
         connectionDetector = new ConnectionDetector(getApplicationContext());
         SetUpSignInClickEvent();
@@ -80,7 +74,6 @@ public class UpdateAccount extends BaseActivity {
         btnUpdatePassword = (Button)findViewById(R.id.btn_change_password);
         btnUpdateUsername = (Button)findViewById(R.id.btn_change_username);
         layout1 = (RelativeLayout)findViewById(R.id.layout_btn1);
-        mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
         layout2 = (LinearLayout)findViewById(R.id.layout_btn2);
         layout3 = (LinearLayout)findViewById(R.id.layout_btn3);
         layoutET = (LinearLayout)findViewById(R.id.layout_edittexts);
@@ -93,7 +86,7 @@ public class UpdateAccount extends BaseActivity {
             layoutET.setVisibility(View.GONE);
             layout2.setVisibility(View.VISIBLE);
             layout3.setVisibility(View.VISIBLE);
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
         } else {
             layout1.setVisibility(View.VISIBLE);
             layoutET.setVisibility(View.VISIBLE);
