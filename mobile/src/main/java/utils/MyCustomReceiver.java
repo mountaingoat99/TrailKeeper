@@ -9,13 +9,21 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 import com.singlecog.trailkeeper.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ParseObjects.ParseTrails;
 
 public class MyCustomReceiver extends BroadcastReceiver {
 
@@ -110,6 +118,21 @@ public class MyCustomReceiver extends BroadcastReceiver {
         }
 
         if (!ThisInstallObjectID.equals(InstallObjectID)) {
+
+            // need to unpin the trails first, then load the new trails
+            ParseQuery<ParseTrails> query = new ParseQuery<>("Trails");
+            query.fromLocalDatastore();
+            try {
+                List<ParseTrails> parseTrails = query.find();
+                for (ParseTrails trails : parseTrails) {
+                    if (trails.getObjectId().equals(ObjectID)) {
+                        trails.unpin();
+                        break;
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             TrailKeeperApplication.LoadAllTrailsFromParse();
 
