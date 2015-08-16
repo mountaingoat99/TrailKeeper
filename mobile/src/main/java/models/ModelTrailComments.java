@@ -172,6 +172,7 @@ public class ModelTrailComments {
     public void CreateNewComment(String trailObjectId, final String trailName, String Comment) {
 
         Calendar c = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.US);
         final ModelTrailComments modelTrailComments = new ModelTrailComments(); // need to send this object back to update the recycler view
 
         final ParseComments parseComments = new ParseComments();
@@ -183,7 +184,7 @@ public class ModelTrailComments {
         parseComments.put("comment", Comment);
         modelTrailComments.TrailComments = Comment;                                     //Recycler View Update
         parseComments.put("workingCreatedDate", c.getTime());
-        modelTrailComments.CommentDate = String.valueOf(c.getTime());                   //Recycler View Update
+        modelTrailComments.CommentDate = formatter.format(c.getTime());                   //Recycler View Update
         parseComments.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
