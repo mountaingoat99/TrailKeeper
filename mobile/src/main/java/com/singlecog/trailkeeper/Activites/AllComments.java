@@ -2,11 +2,9 @@ package com.singlecog.trailkeeper.Activites;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -61,7 +58,6 @@ public class AllComments extends BaseActivity {
     private FloatingActionButton fabSearch;
     private View snackbarView;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,12 +82,16 @@ public class AllComments extends BaseActivity {
         trailNames = modelTrails.GetTrailNames();
 
         if (!isFromTrailScreen) {
-            modelTrailComments.GetAllComments();
+            comments = modelTrailComments.GetAllComments();
+            if (comments.size() == 0) {
+                Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
+            }
         } else {
             modelTrailComments.GetCommentsByTrail(trailObjectID);
         }
 
         setCommentRecyclerView();
+        SetUpCommentView();
         SetUpOnClickForFab();
 
     }
@@ -185,6 +185,7 @@ public class AllComments extends BaseActivity {
     }
     //endregion
 
+    // TODO remove this once all refrences are gone
     public void ReceiveCommentList(List<ModelTrailComments> comment) {
         // check here to see if the list has anything, if we are checking by user or trail
         // the may not have had anything, and if so we just leave the fill list
@@ -313,7 +314,8 @@ public class AllComments extends BaseActivity {
     }
 
     private void SearchAllTrails() {
-        modelTrailComments.GetAllComments();
+        comments = modelTrailComments.GetAllComments();
         setCommentRecyclerView();
+        SetUpCommentView();
     }
 }
