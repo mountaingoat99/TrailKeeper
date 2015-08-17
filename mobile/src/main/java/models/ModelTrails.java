@@ -169,28 +169,20 @@ public class ModelTrails {
     }
 
     // gets the trail names
-    public void GetTrailNames() {
+    public List<String> GetTrailNames() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
+        List<String> trails = new ArrayList<>();
         query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                List<String> trails = new ArrayList<>();
-                if (e == null) {
-                    for (ParseObject parseObject : list) {
-                        String trailName = parseObject.get("trailName").toString();
-                        trails.add(trailName);
-                    }
-                    if (findTrailScreen != null) {
-                        findTrailScreen.RecieveTrailNames(trails);
-                    } else {
-                        allCommentsScreen.RecieveTrailNames(trails);
-                    }
-                } else {
-                    e.printStackTrace();
-                }
+        try {
+            List<ParseObject> list = query.find();
+            for (ParseObject parseObject : list) {
+                String trailName = parseObject.get("trailName").toString();
+                trails.add(trailName);
             }
-        });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return trails;
     }
 
     // get the trail Pin based on ObjectID

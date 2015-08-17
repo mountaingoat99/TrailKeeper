@@ -83,7 +83,7 @@ public class AllComments extends BaseActivity {
 
         // call to get the trail names first
         modelTrails = new ModelTrails(context, this);
-        modelTrails.GetTrailNames();
+        trailNames = modelTrails.GetTrailNames();
 
         if (!isFromTrailScreen) {
             modelTrailComments.GetAllComments();
@@ -184,10 +184,6 @@ public class AllComments extends BaseActivity {
         return true;
     }
     //endregion
-
-    public void RecieveTrailNames(List<String> trails) {
-        trailNames = trails;
-    }
 
     public void ReceiveCommentList(List<ModelTrailComments> comment) {
         // check here to see if the list has anything, if we are checking by user or trail

@@ -44,7 +44,7 @@ public class FindTrail extends BaseActivity {
 
         // call to get the trail names first
         modelTrails = new ModelTrails(context, this);
-        modelTrails.GetTrailNames();
+        trailNames = modelTrails.GetTrailNames();
 
         setUpdateRecyclerView();
         modelTrails.GetTrailStates(mFindTrailByStateRecyclerView);
@@ -58,10 +58,6 @@ public class FindTrail extends BaseActivity {
         // to the individual layouts so we won't move this to the super class
         //getMenuInflater().inflate(R.menu.menu_find_trail, menu);
         return true;
-    }
-
-    public void RecieveTrailNames(List<String> trails) {
-        trailNames = trails;
     }
 
     private void SetUpOnClickForFab() {
