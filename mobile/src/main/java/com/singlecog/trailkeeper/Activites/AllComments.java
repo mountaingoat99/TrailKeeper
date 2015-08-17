@@ -21,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.R;
@@ -47,7 +46,6 @@ public class AllComments extends BaseActivity {
     private List<String> trailNames;
     private List<String> userNames;
     private List<ModelTrailComments> comments;
-    private ModelTrailComments modelTrailComments;
     private ModelTrails modelTrails;
     private Boolean isFromTrailScreen = false;
     private String trailObjectID;
@@ -74,17 +72,14 @@ public class AllComments extends BaseActivity {
 
         GetAllUsersWhoComment();
 
-        // call to get all the comments first
-        modelTrailComments = new ModelTrailComments(context, this);
-
         // call to get the trail names first
         modelTrails = new ModelTrails(context, this);
         trailNames = modelTrails.GetTrailNames();
 
         if (!isFromTrailScreen) {
-            comments = modelTrailComments.GetAllComments();
+            comments = ModelTrailComments.GetAllComments();
         } else {
-            comments = modelTrailComments.GetCommentsByTrail(trailObjectID);
+            comments = ModelTrailComments.GetCommentsByTrail(trailObjectID);
         }
 
         if (comments.size() == 0) {
@@ -186,17 +181,6 @@ public class AllComments extends BaseActivity {
     }
     //endregion
 
-    // TODO remove this once all refrences are gone
-    public void ReceiveCommentList(List<ModelTrailComments> comment) {
-        // check here to see if the list has anything, if we are checking by user or trail
-        // the may not have had anything, and if so we just leave the fill list
-        if (comment.size() > 0) {
-            comments = comment;
-        } else {
-            Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
     public void hideFloatingActionButton(FloatingActionButton button) {
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", 1, 0);
             ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", 1, 0);
@@ -224,7 +208,7 @@ public class AllComments extends BaseActivity {
     public void SendToTrailScreen(ModelTrails trails) {
         if (trails.TrailID > 0) {
             searchDialog.dismiss();
-            comments = modelTrailComments.GetCommentsByTrail(trails.getObjectID());
+            comments = ModelTrailComments.GetCommentsByTrail(trails.getObjectID());
             setCommentRecyclerView();
             SetUpCommentView();
         } else {
@@ -252,17 +236,14 @@ public class AllComments extends BaseActivity {
         ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
         query.whereEqualTo("userName", userName);
         query.fromLocalDatastore();
-        query.getFirstInBackground(new GetCallback<ParseAuthorizedCommentors>() {
-            @Override
-            public void done(ParseAuthorizedCommentors parseAuthorizedCommentors, ParseException e) {
-                if (e == null) {
-                    modelTrailComments.GetCommentsByUser(parseAuthorizedCommentors.getUserObjectID());
-                    searchDialog.dismiss();
-                } else {
-                    Snackbar.make(v, "User Has No Comments", Snackbar.LENGTH_LONG).show();
-                }
-            }
-        });
+        try {
+            ParseAuthorizedCommentors parseAuthorizedCommentors = query.getFirst();
+            comments = ModelTrailComments.GetCommentsByUser(parseAuthorizedCommentors.getUserObjectID());
+            SetUpCommentView();
+            searchDialog.dismiss();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void SearchByUserDialog() {
@@ -316,7 +297,7 @@ public class AllComments extends BaseActivity {
     }
 
     private void SearchAllTrails() {
-        comments = modelTrailComments.GetAllComments();
+        comments = ModelTrailComments.GetAllComments();
         setCommentRecyclerView();
         SetUpCommentView();
     }

@@ -29,7 +29,6 @@ public class ModelTrailComments {
     public String CommentUserName;
     public Context context;
     public TrailScreen trailScreen;
-    public AllComments allCommentScreen;
 
     public ModelTrailComments()
     {
@@ -41,44 +40,34 @@ public class ModelTrailComments {
         this.trailScreen = trailScreen;
     }
 
-    public ModelTrailComments(Context context, AllComments allComments) {
-        this.allCommentScreen = allComments;
-        this.context = context;
-    }
-
     //Region Static Methods
-    public void GetCommentsByUser(String userObjectID) {
+    public static List<ModelTrailComments> GetCommentsByUser(String userObjectID) {
+        List<ModelTrailComments> comments = new ArrayList<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
         query.whereEqualTo("userObjectId", userObjectID);
         query.addDescendingOrder("workingCreatedDate");
         query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                List<ModelTrailComments> comments = new ArrayList<>();
-                if (e == null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.US);
-                    for (ParseObject parseObject : list) {
-                        ModelTrailComments comment = new ModelTrailComments();
-                        comment.TrailName = parseObject.get("trailName").toString();
-                        comment.TrailComments = parseObject.get("comment").toString();
-                        if (parseObject.getDate("workingCreatedDate") != null)
-                            comment.CommentDate = formatter.format(parseObject.getDate("workingCreatedDate"));
-                        else
-                            comment.CommentDate = "";
-                        comment.CommentUserName = parseObject.get("userName").toString();
-                        comments.add(comment);
-                    }
-                    allCommentScreen.ReceiveCommentList(comments);
-                    allCommentScreen.SetUpCommentView();
-                } else {
-                    e.printStackTrace();
-                }
+        try {
+            List<ParseObject> list = query.find();
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.US);
+            for (ParseObject parseObject : list) {
+                ModelTrailComments comment = new ModelTrailComments();
+                comment.TrailName = parseObject.get("trailName").toString();
+                comment.TrailComments = parseObject.get("comment").toString();
+                if (parseObject.getDate("workingCreatedDate") != null)
+                    comment.CommentDate = formatter.format(parseObject.getDate("workingCreatedDate"));
+                else
+                    comment.CommentDate = "";
+                comment.CommentUserName = parseObject.get("userName").toString();
+                comments.add(comment);
             }
-        });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return comments;
     }
 
-    public List<ModelTrailComments> GetCommentsByTrail(String trailObjectID) {
+    public static List<ModelTrailComments> GetCommentsByTrail(String trailObjectID) {
         List<ModelTrailComments> comments = new ArrayList<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
         query.whereEqualTo("trailObjectId", trailObjectID);
@@ -104,7 +93,7 @@ public class ModelTrailComments {
         return comments;
     }
 
-    public List<ModelTrailComments> GetAllComments() {
+    public static List<ModelTrailComments> GetAllComments() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
         List<ModelTrailComments> comments = new ArrayList<>();
         query.fromLocalDatastore();
