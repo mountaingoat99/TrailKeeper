@@ -141,12 +141,10 @@ public class TrailScreen extends BaseActivity {
 
     public void CanComment() {
         ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
-        List<ParseAuthorizedCommentors> parseAuthorizedCommentors = new ArrayList<>();
-
         query.whereEqualTo("userName", ParseUser.getCurrentUser().getUsername());
         query.fromLocalDatastore();
         try {
-            parseAuthorizedCommentors = query.find();
+            List<ParseAuthorizedCommentors>  parseAuthorizedCommentors = query.find();
             if (parseAuthorizedCommentors.size() > 0 ) {
                 isValidCommentor = (Boolean) parseAuthorizedCommentors.get(0).get("canComment");
             } else isValidCommentor = false;

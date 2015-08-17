@@ -237,16 +237,16 @@ public class AllComments extends BaseActivity {
         userNames = new ArrayList<>();
         ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
         query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<ParseAuthorizedCommentors>() {
-            @Override
-            public void done(List<ParseAuthorizedCommentors> list, ParseException e) {
-                for (ParseAuthorizedCommentors commentors : list) {
-                    String username;
-                    username = commentors.getUserName();
-                    userNames.add(username);
-                }
+        try {
+            List<ParseAuthorizedCommentors> list = query.find();
+            for (ParseAuthorizedCommentors commentors : list) {
+                String username = commentors.getUserName();
+                userNames.add(username);
             }
-        });
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void GetAllUserObjectIds(String userName, final View v) {
