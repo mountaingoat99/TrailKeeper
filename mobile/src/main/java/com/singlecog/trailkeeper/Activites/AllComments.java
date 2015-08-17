@@ -46,6 +46,7 @@ public class AllComments extends BaseActivity {
     private List<String> trailNames;
     private List<String> userNames;
     private List<ModelTrailComments> comments;
+    private List<ModelTrailComments> testComments;
     private ModelTrails modelTrails;
     private Boolean isFromTrailScreen = false;
     private String trailObjectID;
@@ -79,7 +80,10 @@ public class AllComments extends BaseActivity {
         if (!isFromTrailScreen) {
             comments = ModelTrailComments.GetAllComments();
         } else {
-            comments = ModelTrailComments.GetCommentsByTrail(trailObjectID);
+            testComments = ModelTrailComments.GetCommentsByTrail(trailObjectID);
+            if (testComments.size() > 0) {
+                comments = testComments;
+            }
         }
 
         if (comments.size() == 0) {
@@ -89,7 +93,6 @@ public class AllComments extends BaseActivity {
         setCommentRecyclerView();
         SetUpCommentView();
         SetUpOnClickForFab();
-
     }
 
     //region Activity Setup
@@ -208,10 +211,16 @@ public class AllComments extends BaseActivity {
     public void SendToTrailScreen(ModelTrails trails) {
         if (trails.TrailID > 0) {
             searchDialog.dismiss();
-            comments = ModelTrailComments.GetCommentsByTrail(trails.getObjectID());
+            testComments = ModelTrailComments.GetCommentsByTrail(trails.getObjectID());
+            if (testComments.size() > 0) {
+                comments = testComments;
+            } else {
+                Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
+            }
             setCommentRecyclerView();
             SetUpCommentView();
         } else {
+            searchDialog.dismiss();
             Snackbar.make(snackbarView, "Trail does not exist", Snackbar.LENGTH_LONG).show();
         }
     }
@@ -226,7 +235,6 @@ public class AllComments extends BaseActivity {
                 String username = commentors.getUserName();
                 userNames.add(username);
             }
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -238,11 +246,20 @@ public class AllComments extends BaseActivity {
         query.fromLocalDatastore();
         try {
             ParseAuthorizedCommentors parseAuthorizedCommentors = query.getFirst();
-            comments = ModelTrailComments.GetCommentsByUser(parseAuthorizedCommentors.getUserObjectID());
+            testComments = ModelTrailComments.GetCommentsByUser(parseAuthorizedCommentors.getUserObjectID());
+            if (testComments.size() > 0) {
+                comments = testComments;
+            } else {
+                Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
+            }
             SetUpCommentView();
             searchDialog.dismiss();
         } catch (ParseException e) {
             e.printStackTrace();
+            if (e.getCode() == 101) {
+                searchDialog.dismiss();
+                Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
