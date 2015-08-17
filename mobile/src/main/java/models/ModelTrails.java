@@ -36,9 +36,6 @@ public class ModelTrails {
     public float distance;
     private Context context;
     private TrailScreen trailScreen;
-    private RecyclerViewNotifications notificationsScreen;
-    private FindTrail findTrailScreen;
-    private AllComments allCommentsScreen;
 
     public ModelTrails()
     {
@@ -48,21 +45,6 @@ public class ModelTrails {
     public ModelTrails(Context context, TrailScreen trailScreen) {
         this.context = context;
         this.trailScreen = trailScreen;
-    }
-
-    public ModelTrails (Context context, RecyclerViewNotifications notifications) {
-        this.context = context;
-        this.notificationsScreen = notifications;
-    }
-
-    public ModelTrails (Context context, FindTrail findTrail) {
-        this.context = context;
-        this.findTrailScreen = findTrail;
-    }
-
-    public ModelTrails (Context context, AllComments allComments) {
-        this.context = context;
-        this.allCommentsScreen = allComments;
     }
 
     public int getTrailID() {
@@ -83,22 +65,22 @@ public class ModelTrails {
 
     //Region Static Methods
 
-    public static String ConvertTrailStatus(ModelTrails model){
-        String statusName = "";
-
-        switch (model.TrailStatus){
-            case 1:
-                statusName = "Closed";
-                break;
-            case 2:
-                statusName = "Open";
-                break;
-            case 3:
-                statusName = "Unknown";
-                break;
-        }
-        return statusName;
-    }
+//    public static String ConvertTrailStatus(ModelTrails model){
+//        String statusName = "";
+//
+//        switch (model.TrailStatus){
+//            case 1:
+//                statusName = "Closed";
+//                break;
+//            case 2:
+//                statusName = "Open";
+//                break;
+//            case 3:
+//                statusName = "Unknown";
+//                break;
+//        }
+//        return statusName;
+//    }
 
     public static String ConvertTrailStatus(int status){
         String statusName = "";
@@ -120,7 +102,6 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
-    // Replace the Async TrailInfo Method test to see if better
     public static List<ModelTrails> GetAllTrailInfo() {
         List<ModelTrails> passedTrails = new ArrayList<>();
 
@@ -150,26 +131,26 @@ public class ModelTrails {
     // gets the trail names for the updateTrailStatus field in user
     // this field decides if a user can update a status, if a
     // user gets trail admin status we remove it from all other users
-    public static List<String> GetTrailNamesForStatusChangeAuthorized() {
-        List<String> trailNames = new ArrayList<>();
-        List<ParseObject> trails = new ArrayList<>();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
-
-        query.fromLocalDatastore();
-        try {
-            trails = query.find();
-        } catch (ParseException     e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; trails.size() > i; i++) {
-            String trailname = trails.get(i).get("trailName").toString();
-            trailNames.add(trailname);
-        }
-        return trailNames;
-    }
+//    public static List<String> GetTrailNamesForStatusChangeAuthorized() {
+//        List<String> trailNames = new ArrayList<>();
+//        List<ParseObject> trails = new ArrayList<>();
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
+//
+//        query.fromLocalDatastore();
+//        try {
+//            trails = query.find();
+//        } catch (ParseException     e) {
+//            e.printStackTrace();
+//        }
+//        for (int i = 0; trails.size() > i; i++) {
+//            String trailname = trails.get(i).get("trailName").toString();
+//            trailNames.add(trailname);
+//        }
+//        return trailNames;
+//    }
 
     // gets the trail names
-    public List<String> GetTrailNames() {
+    public static List<String> GetTrailNames() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         List<String> trails = new ArrayList<>();
         query.fromLocalDatastore();
@@ -207,27 +188,23 @@ public class ModelTrails {
     }
 
     // gets the states for each trail we have
-    public void GetTrailStates(final RecyclerView RecyclerView) {
+    public static Set<String> GetTrailStates() {
+        Set<String> uniqueStates = new HashSet<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                if (e == null) {
-                    Set<String> uniqueStates = new HashSet<>();
-                    for (ParseObject parseObject : list) {
-                        String trailState;
-                        trailState = parseObject.get("state").toString();
-                        // Set will only add unique States, and will sort Alphabetically
-                        uniqueStates.add(trailState);
-                    }
-                    FindTrail findTrail = new FindTrail();
-                    findTrail.SetUpStateRecyclerView(uniqueStates, context, RecyclerView);
-                } else {
-                    e.printStackTrace();
-                }
+        try {
+            List<ParseObject> list = query.find();
+            for (ParseObject parseObject : list) {
+                String trailState;
+                trailState = parseObject.get("state").toString();
+                // Set will only add unique States, and will sort Alphabetically
+                uniqueStates.add(trailState);
             }
-        });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return uniqueStates;
     }
 
     // get the trails for any given state, pass in the state abbreviation
@@ -244,34 +221,23 @@ public class ModelTrails {
     }
 
     // query the local datastore to get the trailID and Object from a trail name
-    public void GetTrailIDs(final String name, final Context context) {
+    public static ModelTrails GetTrailIDs(final String name) {
+        ModelTrails trails = new ModelTrails();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.whereEqualTo("trailName", name);
         query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                if (e == null) {
-                    ModelTrails trails = new ModelTrails();
-                    Log.d(name, "Retrieved");
-                    for (ParseObject trail : list) {
-                        trails.setObjectID(trail.getObjectId());
-                        trails.setTrailID(trail.getInt("trailId"));
-                    }
-                    // lets decide which screen to send back the info
-                    if (notificationsScreen != null) {
-                        RecyclerViewNotifications notifications = new RecyclerViewNotifications();
-                        notifications.SendToTrailScreen(trails, context);
-                    } else if (findTrailScreen != null) {
-                        findTrailScreen.SendToTrailScreen(trails, context);
-                    } else if (allCommentsScreen != null) {
-                        allCommentsScreen.SendToTrailScreen(trails);
-                    }
-                } else {
-                    Log.d(name, "Not Retrieved");
-                }
+        try {
+            List<ParseObject> list = query.find();
+            Log.d(name, "Retrieved");
+            for (ParseObject trail : list) {
+                trails.setObjectID(trail.getObjectId());
+                trails.setTrailID(trail.getInt("trailId"));
             }
-        });
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return trails;
     }
 
     public void UpdateTrailStatus(String objectId, final int choice) {
@@ -304,41 +270,17 @@ public class ModelTrails {
         //When a user indicates they want trail Updates we subscribe them to them
         final String trailNameChannel = PushNotificationHelper.CreateChannelName(trailName);
         if (choice == 0) {
-            ParsePush.subscribeInBackground(trailNameChannel);  //, new SaveCallback() {
-//                @Override
-//                public void done(ParseException e) {
-//                    if (e == null) {
-//                        Log.d(TAG, "successfully subscribed to the " + trailNameChannel + " broadcast channel.");
-//                        SubscribeWasSuccessful(true, null, whichActivity);
-//                    } else {
-//                        SubscribeWasSuccessful(false, e.getMessage(), whichActivity);
-//                        Log.e(TAG, "failed to subscribe for push for " + trailNameChannel, e);
-//                    }
-//                }
-//            });
+            ParsePush.subscribeInBackground(trailNameChannel);
         } else {
-            ParsePush.unsubscribeInBackground(trailNameChannel); //, new SaveCallback() {
-//                @Override
-//                public void done(ParseException e) {
-//                    if (e == null) {
-//                        Log.d(TAG, "successfully un-subscribed to the " + trailNameChannel + " broadcast channel.");
-//                        SubscribeWasSuccessful(true, null, whichActivity);
-//                    } else {
-//                        SubscribeWasSuccessful(false, e.getMessage(), whichActivity);
-//                        Log.e(TAG, "failed to un-subscribe for push " + trailNameChannel, e);
-//                    }
-//                }
-//            });
+            ParsePush.unsubscribeInBackground(trailNameChannel);
         }
     }
 
     public float getDistance() {
         return distance;
     }
-
     //endregion
 
-    // Region Private Methods
     private void TrailStatusUpdateSuccessful(boolean valid, String message) {
         if (valid) {
             trailScreen.TrailStatusUpdateWasSuccessful(valid, null);
@@ -346,24 +288,4 @@ public class ModelTrails {
             trailScreen.TrailStatusUpdateWasSuccessful(valid, message);
         }
     }
-
-    // here we will call the TrailScreen class and let them know it was valid
-//    private void SubscribeWasSuccessful(boolean valid, String message, String whichActivity) {
-//        if (valid) {
-//            if (whichActivity.isEmpty()) {
-//                trailScreen.UpdateSubscriptionWasSuccessful(valid, null);
-//            } else {
-//                notificationsScreen.UpdateSubscriptionWasSuccessful(true, null);
-//            }
-//            Log.d(TAG, "successfully changed subscriptions.");
-//        } else {
-//            if (whichActivity.isEmpty()) {
-//                trailScreen.UpdateSubscriptionWasSuccessful(valid, message);
-//            } else {
-//                notificationsScreen.UpdateSubscriptionWasSuccessful(false, message);
-//            }
-//            Log.e(TAG, "Unsuccessfully changed subscription");
-//        }
-//    }
-    //endregion
 }

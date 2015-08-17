@@ -34,7 +34,6 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
     private Context context;
     private ProgressDialog dialog;
     private String trailNameString;
-    private ModelTrails modelTrails;
     private int itemToRemove;
     private View v;
     private Notifications notificationActivity;
@@ -46,10 +45,7 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         this.context = context;
         this.v = v;
         connectionDetector = new ConnectionDetector(context);
-        modelTrails = new ModelTrails(context, this);
     }
-
-    public RecyclerViewNotifications(){}
 
     private String GetTrailName(RecyclerView.ViewHolder item) {
         itemToRemove = item.getAdapterPosition();
@@ -57,7 +53,7 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         return items.get(item.getAdapterPosition());
     }
 
-    public void SendToTrailScreen(ModelTrails trails, Context context) {
+    public void SendToTrailScreen(ModelTrails trails) {
         Intent intent = new Intent(context, TrailScreen.class);
         intent.putExtra("trailID", trails.getTrailID());
         intent.putExtra("objectID", trails.getObjectID());
@@ -96,8 +92,8 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ModelTrails trails = new ModelTrails();
-                trails.GetTrailIDs(GetTrailName(viewHolder), context);
+                ModelTrails trails = ModelTrails.GetTrailIDs(GetTrailName(viewHolder));
+                SendToTrailScreen(trails);
             }
         });
 
@@ -106,6 +102,7 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
             public void onClick(View v) {
                 if (connectionDetector.isConnectingToInternet()) {
                     dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscription");
+                    ModelTrails modelTrails = new ModelTrails();
                     modelTrails.SubscribeToChannel(GetTrailName(viewHolder), 1);
                     UpdateSubscriptionWasSuccessful();
                 } else {

@@ -47,7 +47,6 @@ public class AllComments extends BaseActivity {
     private List<String> userNames;
     private List<ModelTrailComments> comments;
     private List<ModelTrailComments> testComments;
-    private ModelTrails modelTrails;
     private Boolean isFromTrailScreen = false;
     private String trailObjectID;
     private Dialog searchDialog;
@@ -72,10 +71,7 @@ public class AllComments extends BaseActivity {
         }
 
         GetAllUsersWhoComment();
-
-        // call to get the trail names first
-        modelTrails = new ModelTrails(context, this);
-        trailNames = modelTrails.GetTrailNames();
+        trailNames = ModelTrails.GetTrailNames();
 
         if (!isFromTrailScreen) {
             comments = ModelTrailComments.GetAllComments();
@@ -208,7 +204,7 @@ public class AllComments extends BaseActivity {
         return mHidden;
     }
 
-    public void SendToTrailScreen(ModelTrails trails) {
+    private void SendToTrailScreen(ModelTrails trails) {
         if (trails.TrailID > 0) {
             searchDialog.dismiss();
             testComments = ModelTrailComments.GetCommentsByTrail(trails.getObjectID());
@@ -304,7 +300,8 @@ public class AllComments extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (searchForTrailEditText.getText().length() > 0) {
-                    modelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim(), context);
+                    ModelTrails trails = ModelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim());
+                    SendToTrailScreen(trails);
                 } else {
                     Snackbar.make(v, "Please enter a Trail Name", Snackbar.LENGTH_LONG).show();
                 }

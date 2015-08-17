@@ -30,7 +30,7 @@ public class FindTrail extends BaseActivity {
     private RecyclerView mFindTrailByStateRecyclerView;
     private RecyclerViewFindTrailByState mFindTrailByStateAdapter;
     private List<String> trailNames;
-    private ModelTrails modelTrails;
+    private Set<String> states;
     private View view;
     private Dialog searchDialog;
 
@@ -42,12 +42,11 @@ public class FindTrail extends BaseActivity {
         super.onCreateDrawer(view, this);
         btnSearch = (FloatingActionButton)findViewById(R.id.search_fab);
 
-        // call to get the trail names first
-        modelTrails = new ModelTrails(context, this);
-        trailNames = modelTrails.GetTrailNames();
+        trailNames = ModelTrails.GetTrailNames();
 
         setUpdateRecyclerView();
-        modelTrails.GetTrailStates(mFindTrailByStateRecyclerView);
+        states = ModelTrails.GetTrailStates();
+        SetUpStateRecyclerView();
         SetUpOnClickForFab();
     }
 
@@ -85,7 +84,8 @@ public class FindTrail extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (searchForTrailEditText.getText().length() > 0) {
-                    modelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim(), context);
+                    ModelTrails trails = ModelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim());
+                    SendToTrailScreen(trails);
                 } else {
                     Snackbar.make(v, "Please enter a Trail Name", Snackbar.LENGTH_LONG).show();
                 }
@@ -94,7 +94,7 @@ public class FindTrail extends BaseActivity {
         searchDialog.show();
     }
 
-    public void SendToTrailScreen(ModelTrails trails, Context context) {
+    private void SendToTrailScreen(ModelTrails trails) {
         if (trails.TrailID > 0) {
             searchDialog.dismiss();
             Intent intent = new Intent(context, TrailScreen.class);
@@ -116,12 +116,12 @@ public class FindTrail extends BaseActivity {
         mFindTrailByStateRecyclerView.setHasFixedSize(true);
     }
 
-    public void SetUpStateRecyclerView(Set<String> states, Context passedContext, RecyclerView RecyclerView) {
+    public void SetUpStateRecyclerView() {
         List<String> trailStates = new ArrayList<>();
         // convert the set to a List for the Recycler Adapter
         trailStates.addAll(states);
-        mFindTrailByStateAdapter = new RecyclerViewFindTrailByState(trailStates, passedContext);
-        RecyclerView.setAdapter(mFindTrailByStateAdapter);
-        RecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mFindTrailByStateAdapter = new RecyclerViewFindTrailByState(trailStates, context);
+        mFindTrailByStateRecyclerView.setAdapter(mFindTrailByStateAdapter);
+        mFindTrailByStateRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 }
