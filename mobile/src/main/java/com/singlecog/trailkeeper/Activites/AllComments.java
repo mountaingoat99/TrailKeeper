@@ -83,11 +83,12 @@ public class AllComments extends BaseActivity {
 
         if (!isFromTrailScreen) {
             comments = modelTrailComments.GetAllComments();
-            if (comments.size() == 0) {
-                Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
-            }
         } else {
-            modelTrailComments.GetCommentsByTrail(trailObjectID);
+            comments = modelTrailComments.GetCommentsByTrail(trailObjectID);
+        }
+
+        if (comments.size() == 0) {
+            Snackbar.make(snackbarView, "No Comments Have Been Left", Snackbar.LENGTH_LONG).show();
         }
 
         setCommentRecyclerView();
@@ -223,8 +224,9 @@ public class AllComments extends BaseActivity {
     public void SendToTrailScreen(ModelTrails trails) {
         if (trails.TrailID > 0) {
             searchDialog.dismiss();
-            modelTrailComments.GetCommentsByTrail(trails.getObjectID());
+            comments = modelTrailComments.GetCommentsByTrail(trails.getObjectID());
             setCommentRecyclerView();
+            SetUpCommentView();
         } else {
             Snackbar.make(snackbarView, "Trail does not exist", Snackbar.LENGTH_LONG).show();
         }
