@@ -37,7 +37,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@color/primary"/>
+        android:background="@color/black"/>
 
     <RadioGroup
         android:id="@+id/radio_trail_status"

@@ -30,7 +30,7 @@
             android:layout_height="1dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/primary"/>
+            android:background="@color/black"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
