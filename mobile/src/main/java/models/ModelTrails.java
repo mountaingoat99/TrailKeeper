@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import Helpers.PushNotificationHelper;
-import RecyclerAdapters.RecyclerViewNotifications;
 
 public class ModelTrails {
 
@@ -64,24 +63,6 @@ public class ModelTrails {
     }
 
     //Region Static Methods
-
-//    public static String ConvertTrailStatus(ModelTrails model){
-//        String statusName = "";
-//
-//        switch (model.TrailStatus){
-//            case 1:
-//                statusName = "Closed";
-//                break;
-//            case 2:
-//                statusName = "Open";
-//                break;
-//            case 3:
-//                statusName = "Unknown";
-//                break;
-//        }
-//        return statusName;
-//    }
-
     public static String ConvertTrailStatus(int status){
         String statusName = "";
 
@@ -99,9 +80,6 @@ public class ModelTrails {
         return statusName;
     }
 
-    //endregion
-
-    //Region Public Methods
     public static List<ModelTrails> GetAllTrailInfo() {
         List<ModelTrails> passedTrails = new ArrayList<>();
 
@@ -128,27 +106,6 @@ public class ModelTrails {
         return passedTrails;
     }
 
-    // gets the trail names for the updateTrailStatus field in user
-    // this field decides if a user can update a status, if a
-    // user gets trail admin status we remove it from all other users
-//    public static List<String> GetTrailNamesForStatusChangeAuthorized() {
-//        List<String> trailNames = new ArrayList<>();
-//        List<ParseObject> trails = new ArrayList<>();
-//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
-//
-//        query.fromLocalDatastore();
-//        try {
-//            trails = query.find();
-//        } catch (ParseException     e) {
-//            e.printStackTrace();
-//        }
-//        for (int i = 0; trails.size() > i; i++) {
-//            String trailname = trails.get(i).get("trailName").toString();
-//            trailNames.add(trailname);
-//        }
-//        return trailNames;
-//    }
-
     // gets the trail names
     public static List<String> GetTrailNames() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
@@ -174,7 +131,7 @@ public class ModelTrails {
         query.whereEqualTo("trailObjectId", objectID);
 
         try {
-             trailPinList = query.find();
+            trailPinList = query.find();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -213,7 +170,7 @@ public class ModelTrails {
         query.whereEqualTo("state", state);
         query.fromLocalDatastore();
         try {
-           return query.find();
+            return query.find();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -240,30 +197,21 @@ public class ModelTrails {
         return trails;
     }
 
+    //endregion
+
+    //Region Public Methods
     public void UpdateTrailStatus(String objectId, final int choice) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
-
-        query.getInBackground(objectId, new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (e == null) {
-                    parseObject.put("status", choice);
-                    parseObject.saveEventually(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                // call class methods to send info back to activity
-                                TrailStatusUpdateSuccessful(true, null);
-                            } else {
-                                TrailStatusUpdateSuccessful(false, e.getMessage());
-                            }
-                        }
-                    });
-                } else {
-                    TrailStatusUpdateSuccessful(false, e.getMessage());
-                }
-            }
-        });
+        query.fromLocalDatastore();
+        try {
+            ParseObject parseObject = query.get(objectId);
+            parseObject.put("status", choice);
+            parseObject.saveInBackground();
+            TrailStatusUpdateSuccessful(true, null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            TrailStatusUpdateSuccessful(false, e.getMessage());
+        }
     }
 
     public void SubscribeToChannel(String trailName, int choice){    // 0 means Yes, 1 means No
