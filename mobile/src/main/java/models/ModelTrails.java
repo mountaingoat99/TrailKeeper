@@ -1,19 +1,13 @@
 package models;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
-import com.singlecog.trailkeeper.Activites.AllComments;
-import com.singlecog.trailkeeper.Activites.FindTrail;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
 import java.util.ArrayList;
