@@ -37,6 +37,7 @@ public class BaseActivity extends AppCompatActivity {
     public ActionBarDrawerToggle mDrawerToggle;
     public String mActivityTitle;
     private View layoutView;
+    private Activity activity;
 
     private boolean isAnonUser;
 
@@ -63,6 +64,7 @@ public class BaseActivity extends AppCompatActivity {
 
         isAnonUser = CreateAccountHelper.IsAnonUser();
         layoutView = view;
+        this.activity = activity;
     }
 
     @Override
@@ -126,23 +128,40 @@ public class BaseActivity extends AppCompatActivity {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        String activityName = activity.getLocalClassName();
                         Intent intent;
                         switch (position) {
                             case 0:   // home
-                                intent = new Intent(BaseActivity.this, HomeScreen.class);
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                if (!activityName.equalsIgnoreCase("Activites.HomeScreen")) {
+                                    intent = new Intent(BaseActivity.this, HomeScreen.class);
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                } else {
+                                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                                }
                                 break;
                             case 1:   // Find Trail
-                                intent = new Intent(BaseActivity.this, FindTrail.class);
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                if (!activityName.equalsIgnoreCase("Activites.FindTrail")) {
+                                    intent = new Intent(BaseActivity.this, FindTrail.class);
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                } else {
+                                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                                }
                                 break;
                             case 2:   // Comments
-                                intent = new Intent(BaseActivity.this, AllComments.class);
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                if (!activityName.equalsIgnoreCase("Activites.AllComments")) {
+                                    intent = new Intent(BaseActivity.this, AllComments.class);
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                } else {
+                                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                                }
                                 break;
                             case 3:   // Map
-                                intent = new Intent(BaseActivity.this, MapActivity.class);
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                if (!activityName.equalsIgnoreCase("Activites.MapActivity")) {
+                                    intent = new Intent(BaseActivity.this, MapActivity.class);
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                } else {
+                                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                                }
                                 break;
                             case 4:   // Add Trail
                                 //intent = new Intent(BaseActivity.this, TrailAdmin.class);
@@ -157,16 +176,24 @@ public class BaseActivity extends AppCompatActivity {
                                     Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                                 } else {
                                     if (PushNotificationHelper.GetUserSubscriptions() != null && PushNotificationHelper.GetUserSubscriptions().size() > 0) {
-                                        intent = new Intent(BaseActivity.this, Notifications.class);
-                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                        if (!activityName.equalsIgnoreCase("Activites.Notifications")) {
+                                            intent = new Intent(BaseActivity.this, Notifications.class);
+                                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                        } else {
+                                            mDrawerLayout.closeDrawer(GravityCompat.START);
+                                        }
                                     } else {
                                         Snackbar.make(layoutView, "You Have No Subscriptions", Snackbar.LENGTH_LONG).show();
                                     }
                                 }
                                 break;
                             case 7:   // Account Settings
-                                intent = new Intent(BaseActivity.this, AccountSettings.class);
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                if (!activityName.equalsIgnoreCase("Activites.AccountSettings")) {
+                                    intent = new Intent(BaseActivity.this, AccountSettings.class);
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                } else {
+                                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                                }
                                 break;
                             case 8:   // Request trail Pin
                                 if (isAnonUser) {
