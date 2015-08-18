@@ -123,6 +123,7 @@ public class ModelTrails {
         int trailPin = 0;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TrailStatus");
         query.whereEqualTo("trailObjectId", objectID);
+        query.fromLocalDatastore();
 
         try {
             trailPinList = query.find();
@@ -200,7 +201,8 @@ public class ModelTrails {
         try {
             ParseObject parseObject = query.get(objectId);
             parseObject.put("status", choice);
-            parseObject.saveInBackground();
+            parseObject.saveEventually();
+            parseObject.pinInBackground();
             TrailStatusUpdateSuccessful(true, null);
         } catch (ParseException e) {
             e.printStackTrace();

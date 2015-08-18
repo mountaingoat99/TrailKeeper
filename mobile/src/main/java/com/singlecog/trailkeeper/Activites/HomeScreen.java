@@ -188,7 +188,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
         // show a message in case the load did take too long
         if (trails.isEmpty()) {
-            Snackbar.make(mSwipeLayout, "Some Bad Happened, Pull Down To Refresh" + userName, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mSwipeLayout, "Some Bad Happened, Pull Down To Refresh", Snackbar.LENGTH_LONG).show();
         }
     }
 

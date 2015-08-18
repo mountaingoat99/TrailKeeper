@@ -61,11 +61,12 @@ public class TrailScreen extends BaseActivity {
     private AlertDialog statusDialog;
     private ProgressDialog progressDialog;
     private Dialog trailStatusDialog;
-    private ConnectionDetector connectionDetector;
+    //private ConnectionDetector connectionDetector;
     private boolean isAnonUser;
     private boolean isEmailVerified;
     private boolean isValidCommentor = false;
     private boolean isStatusUpdate = false;
+    private boolean statusHasBeenUpdated = false;
     private View v;
     private LatLng trailLocation;
     private String trailNameString, newTrailCommentString;
@@ -87,7 +88,7 @@ public class TrailScreen extends BaseActivity {
         v = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(v, this);
 
-        connectionDetector = new ConnectionDetector(context);
+        //connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();
         CanComment();
 
@@ -307,7 +308,7 @@ public class TrailScreen extends BaseActivity {
             case android.R.id.home:
                 // if this was a status update and the user came here from a notification
                 // then we want to restart the homescreen activity to reload all the trail data
-                if (isStatusUpdate) {
+                if (isStatusUpdate || statusHasBeenUpdated) {
                     Intent intentHome = new Intent(context, HomeScreen.class);
                     startActivity(intentHome);
                 } else {
@@ -358,12 +359,12 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void UpdateSubscribeStatus(int subscribe) {
-        if (connectionDetector.isConnectingToInternet()) {
+        //if (connectionDetector.isConnectingToInternet()) {
             modelTrails.SubscribeToChannel(trailNameString, subscribe);
             Snackbar.make(v, trailSubscriptionStatus, Snackbar.LENGTH_LONG).show();
-        } else {
-            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
-        }
+        //} else {
+          //  AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
+        //}
     }
     //endregion
 
@@ -404,10 +405,10 @@ public class TrailScreen extends BaseActivity {
     }
 
     public void SaveCommentWasSuccessful(Boolean success, ModelTrailComments modelTrailComments) {
+        progressDialog.dismiss();
         if (success) {
             comments.add(0, modelTrailComments);
             mTrailCommentAdapter.notifyDataSetChanged();
-            progressDialog.dismiss();
             SendOutNewCommentPushNotification();
         } else {
             Snackbar.make(v, "Something Went Wrong, Please Try Again", Snackbar.LENGTH_LONG).show();
@@ -456,10 +457,6 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void DoATextWatcher(EditText pinText) {
-        // Once in awhile the pin doesn't get fetched correctly onCreate
-        if (trailStatusPin == 0) {
-            trailStatusPin = ModelTrails.GetTrailPin(objectID);
-        }
         pinText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -493,11 +490,11 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void ChangeTrailStatus(final int choice){
-        if (connectionDetector.isConnectingToInternet()) {
+        //if (connectionDetector.isConnectingToInternet()) {
             CallChangeTrailStatusClass(choice);
-        } else {
-            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
-        }
+        //} else {
+            //AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
+        //}
     }
 
     private void CallChangeTrailStatusClass(int choice) {
@@ -511,6 +508,7 @@ public class TrailScreen extends BaseActivity {
             Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
             UpdateStatusIcon();
             PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailId, objectID);
+            statusHasBeenUpdated = true;
             Log.i(TAG, "Trail Status was changed");
         } else {
             Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
