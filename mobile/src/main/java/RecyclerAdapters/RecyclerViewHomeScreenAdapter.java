@@ -29,7 +29,7 @@ import models.ModelTrails;
 public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         <RecyclerViewHomeScreenAdapter.HomeScreenListViewHolder> {
 
-    private final String TAG = "RecyclerViewHomeScreenAdapter";
+    private final String TAG = "RecyclerViewHomeAdapter";
     private List<ModelTrails> items;
     public static ModelTrails model;
     // Allows to remember the last item shown on screen

@@ -100,14 +100,10 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         viewHolder.btnUnsubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (connectionDetector.isConnectingToInternet()) {
                     dialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Subscription");
                     ModelTrails modelTrails = new ModelTrails();
                     modelTrails.SubscribeToChannel(GetTrailName(viewHolder), 1);
                     UpdateSubscriptionWasSuccessful();
-                } else {
-                    AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
-                }
             }
         });
     }
