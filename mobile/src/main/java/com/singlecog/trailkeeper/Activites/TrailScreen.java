@@ -61,7 +61,7 @@ public class TrailScreen extends BaseActivity {
     private AlertDialog statusDialog;
     private ProgressDialog progressDialog;
     private Dialog trailStatusDialog;
-    //private ConnectionDetector connectionDetector;
+    private ConnectionDetector connectionDetector;
     private boolean isAnonUser;
     private boolean isEmailVerified;
     private boolean isValidCommentor = false;
@@ -88,7 +88,7 @@ public class TrailScreen extends BaseActivity {
         v = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(v, this);
 
-        //connectionDetector = new ConnectionDetector(context);
+        connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();
         CanComment();
 
@@ -489,12 +489,13 @@ public class TrailScreen extends BaseActivity {
         });
     }
 
+    // TODO until the javascript to send push is working we need a data connection on status change
     private void ChangeTrailStatus(final int choice){
-        //if (connectionDetector.isConnectingToInternet()) {
+        if (connectionDetector.isConnectingToInternet()) {
             CallChangeTrailStatusClass(choice);
-        //} else {
-            //AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
-        //}
+        } else {
+            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
+        }
     }
 
     private void CallChangeTrailStatusClass(int choice) {

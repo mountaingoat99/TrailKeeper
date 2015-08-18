@@ -63,7 +63,7 @@ public class PushNotificationHelper {
             e.printStackTrace();
         }
         push.setData(json);
-        push.sendInBackground();
+        push.sendInBackground();     // TODO until the javascript to send push is working we need a data connection on status change
     }
 
     public static CharSequence[] getTrailStatusNames() {
