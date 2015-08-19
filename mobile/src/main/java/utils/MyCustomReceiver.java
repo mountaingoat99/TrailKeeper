@@ -5,7 +5,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import Helpers.PushNotificationHelper;
 import ParseObjects.ParseTrails;
 
 public class MyCustomReceiver extends BroadcastReceiver {
@@ -36,23 +40,54 @@ public class MyCustomReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         try {
 
+            // checking for an internet connection and seeing if we need to send off a push
+            final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (wifi.isConnected() || mobile.isConnected()) {
+                SendPushIfNeeded(context);
+                Log.i(TAG, "Network is reconnected");
+            }
+
             String action = intent.getAction();
-            String channel = intent.getExtras().getString("com.Parse.Channel");
-            JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
-            Log.i(TAG, " got action " + action + " on channel " + channel);
 
             if (action.equalsIgnoreCase("com.singlecog.trailkeeper.NEW_COMMENT_NOTIF")) {
+                String channel = intent.getExtras().getString("com.Parse.Channel");
+                JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+                Log.i(TAG, " got action " + action + " on channel " + channel);
                 generateCommentNotification(context, json);
             }
 
             if (action.equalsIgnoreCase("com.singlecog.trailkeeper.NEW_STATUS_NOTIF")) {
+                String channel = intent.getExtras().getString("com.Parse.Channel");
+                JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+                Log.i(TAG, " got action " + action + " on channel " + channel);
                 generateStatusNotification(context, json);
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void SendPushIfNeeded(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean hasPushWaiting = sp.getBoolean("hasPushWaiting", false);
+        if (hasPushWaiting) {
+            savePreferences(context, "hasPushWaiting", false);
+            String trailNameString = sp.getString("trailNameString", "");
+            int status = sp.getInt("status", 0);
+            int trailID = sp.getInt("trailId", 0);
+            String objectID = sp.getString("objectId", "");
+            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailID, objectID);
+        }
+    }
+
+    private void savePreferences(Context context, String key, boolean value) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
     }
 
     private void generateCommentNotification(Context context, JSONObject json) {

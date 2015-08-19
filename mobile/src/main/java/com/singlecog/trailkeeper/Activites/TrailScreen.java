@@ -7,8 +7,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -491,11 +493,11 @@ public class TrailScreen extends BaseActivity {
 
     // TODO until the javascript to send push is working we need a data connection on status change
     private void ChangeTrailStatus(final int choice){
-        if (connectionDetector.isConnectingToInternet()) {
+        //if (connectionDetector.isConnectingToInternet()) {
             CallChangeTrailStatusClass(choice);
-        } else {
-            AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
-        }
+        //} else {
+            //AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
+        //}
     }
 
     private void CallChangeTrailStatusClass(int choice) {
@@ -508,13 +510,33 @@ public class TrailScreen extends BaseActivity {
         if (valid) {
             Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
             UpdateStatusIcon();
-            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailId, objectID);
+
+            // here we need to check if there is a connection
+            // if no connection we save the push in shared preferences
+            // and use the Broadcast Receiver to wait for one
+            // if connection we send it right out
+            if (connectionDetector.isConnectingToInternet()) {
+                PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailId, objectID);
+            } else {
+                savePushToSharedPreferences();
+            }
             statusHasBeenUpdated = true;
             Log.i(TAG, "Trail Status was changed");
         } else {
             Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
             Log.i(TAG, "Trail Status was not changed");
         }
+    }
+
+    private void savePushToSharedPreferences() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("hasPushWaiting", true);
+        editor.putString("trailNameString", trailNameString);
+        editor.putInt("status", status);
+        editor.putInt("trailId", trailId);
+        editor.putString("objectId", objectID);
+        editor.apply();
     }
     //endregion
 }

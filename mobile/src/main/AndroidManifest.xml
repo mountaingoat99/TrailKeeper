@@ -149,6 +149,7 @@
             <intent-filter>
                 <action android:name="com.singlecog.trailkeeper.NEW_COMMENT_NOTIF" />
                 <action android:name="com.singlecog.trailkeeper.NEW_STATUS_NOTIF" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
         <receiver

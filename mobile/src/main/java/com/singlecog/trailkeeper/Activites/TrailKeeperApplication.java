@@ -1,9 +1,12 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -46,6 +49,7 @@ public class TrailKeeperApplication extends Application implements
     public static Location mLastLocation;
     public static LatLng home;
     public static boolean isEmailVerified = false;
+    private Context context = this;
 
     /*
      * Define a request code to send to Google Play services
@@ -97,6 +101,14 @@ public class TrailKeeperApplication extends Application implements
         // Check to see if the Users Email is verified
         CreateAccountHelper.CheckUserVerified();
 
+        savePreferences();
+    }
+
+    private void savePreferences() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("hasPushWaiting", false);
+        editor.apply();
     }
 
     // load all the objects from Parse
