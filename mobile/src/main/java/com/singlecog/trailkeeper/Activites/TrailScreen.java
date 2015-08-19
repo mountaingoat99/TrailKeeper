@@ -110,8 +110,19 @@ public class TrailScreen extends BaseActivity {
         GetTrailData();
 
         // set up the Recycler View
+        // need to check version here. Ice Cream Sandwich
+        // loads the Async task really slow
         SetupCommentCard();
-        SetUpTrailCommentRecyclerView();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SetUpTrailCommentRecyclerView();
+                }
+            },1000 );
+        } else {
+            SetUpTrailCommentRecyclerView();
+        }
         SetUpBtnStatusClick();
         SetUpBtnSubscribeClick();
         SetUpCommentButtonClick();
@@ -277,7 +288,7 @@ public class TrailScreen extends BaseActivity {
 
     // sets up the trail comment recycler view
     public void SetUpTrailCommentRecyclerView() {
-        Log.i(TAG, "Setting up the trail comment card Rcyclcer view");
+        Log.i(TAG, "Setting up the trail comment card Recyclcer view");
         mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(comments);
         mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
 
