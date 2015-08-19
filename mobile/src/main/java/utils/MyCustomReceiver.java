@@ -112,7 +112,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
             Intent intent = new Intent(context, TrailScreen.class);
             Bundle b = new Bundle();
             b.putString("objectID", ObjectID);
-            b.putBoolean("isStatusUpdate", false);
             intent.putExtras(b);
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -169,7 +168,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
             Intent intent = new Intent(context, TrailScreen.class);
             Bundle b = new Bundle();
             b.putString("objectID", ObjectID);
-            b.putBoolean("isStatusUpdate", true);
             intent.putExtras(b);
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
