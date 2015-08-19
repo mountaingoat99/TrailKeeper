@@ -37,7 +37,6 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
      */
     protected Location mLastLocation;
     private LatLng home;
-    private int trailId;
     private String objectID;
     private LatLng trailLocation;
     private String trailNameString;
@@ -56,7 +55,6 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
 
         Bundle bundle = getIntent().getParcelableExtra("bundle");
         if (bundle != null) {
-            trailId = bundle.getInt("trailID");
             objectID = bundle.getString("objectID");
             trailNameString = bundle.getString("trailName");
             trailLocation = bundle.getParcelable("geoPoint");
@@ -71,7 +69,6 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         switch (itemId) {
             case android.R.id.home:
                 Intent intent = new Intent(this, TrailScreen.class);
-                intent.putExtra("trailID", trailId);
                 intent.putExtra("objectID", objectID);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

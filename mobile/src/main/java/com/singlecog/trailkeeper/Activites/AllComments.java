@@ -205,7 +205,7 @@ public class AllComments extends BaseActivity {
     }
 
     private void SendToTrailScreen(ModelTrails trails) {
-        if (trails.TrailID > 0) {
+        if (!trails.getObjectID().isEmpty()) {
             searchDialog.dismiss();
             testComments = ModelTrailComments.GetCommentsByTrail(trails.getObjectID());
             if (testComments.size() > 0) {
@@ -300,7 +300,7 @@ public class AllComments extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (searchForTrailEditText.getText().length() > 0) {
-                    ModelTrails trails = ModelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim());
+                    ModelTrails trails = ModelTrails.GetTrailObjectIDs(searchForTrailEditText.getText().toString().trim());
                     SendToTrailScreen(trails);
                 } else {
                     Snackbar.make(v, "Please enter a Trail Name", Snackbar.LENGTH_LONG).show();

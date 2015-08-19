@@ -16,7 +16,7 @@ public class PushNotificationHelper {
 
     private static final String LOG = "PushNotificationHelper";
 
-    public static void SendOutAPushNotificationForNewComment(String trailNameString, String Comment, int TrailID, String ObjectID) {
+    public static void SendOutAPushNotificationForNewComment(String trailNameString, String Comment, String ObjectID) {
         ParsePush push = new ParsePush();
         String trailChannel = CreateChannelName(trailNameString);
         push.setChannel(trailChannel);
@@ -25,7 +25,6 @@ public class PushNotificationHelper {
         try {
             json.put("action", "com.singlecog.trailkeeper.NEW_COMMENT_NOTIF");
             json.put("com.Parse.Channel", trailChannel);
-            json.put("trailId", TrailID);
             json.put("trailObjectId", ObjectID);
             json.put("trailName", trailNameString);
             json.put("comment", Comment);
@@ -37,7 +36,7 @@ public class PushNotificationHelper {
         push.sendInBackground();
     }
 
-    public static void SendOutAPushNotificationsForStatusUpdate(String trailNameString, int status, int TrailID, String ObjectID) {
+    public static void SendOutAPushNotificationsForStatusUpdate(String trailNameString, int status, String ObjectID) {
         ParsePush push = new ParsePush();
         String statusUpdate;
         String trailChannel = CreateChannelName(trailNameString);
@@ -55,7 +54,6 @@ public class PushNotificationHelper {
         try {
             json.put("action", "com.singlecog.trailkeeper.NEW_STATUS_NOTIF");
             json.put("com.Parse.Channel", trailChannel);
-            json.put("trailId", TrailID);
             json.put("trailObjectId", ObjectID);
             json.put("statusUpdate", statusUpdate);
             json.put("InstallationObjectId", ParseInstallation.getCurrentInstallation().getObjectId());

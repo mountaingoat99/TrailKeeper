@@ -20,7 +20,6 @@ import Helpers.PushNotificationHelper;
 public class ModelTrails {
 
     public String ObjectID;
-    public int TrailID;
     public String TrailName;
     public int TrailStatus;
     public String TrailCity;
@@ -38,14 +37,6 @@ public class ModelTrails {
     public ModelTrails(Context context, TrailScreen trailScreen) {
         this.context = context;
         this.trailScreen = trailScreen;
-    }
-
-    public int getTrailID() {
-        return TrailID;
-    }
-
-    public void setTrailID(int trailID) {
-        TrailID = trailID;
     }
 
     public String getObjectID() {
@@ -85,7 +76,6 @@ public class ModelTrails {
             for (ParseObject parseObject : list) {
                 ModelTrails trail = new ModelTrails();
                 trail.ObjectID = parseObject.getObjectId();
-                trail.TrailID = parseObject.getInt("trailId");
                 trail.TrailName = parseObject.get("trailName").toString();
                 trail.TrailStatus = Integer.valueOf(parseObject.get("status").toString());
                 trail.TrailState = parseObject.get("state").toString();
@@ -172,8 +162,8 @@ public class ModelTrails {
         return null;
     }
 
-    // query the local datastore to get the trailID and Object from a trail name
-    public static ModelTrails GetTrailIDs(final String name) {
+    // query the local datastore to get the ObjectID from a trail name
+    public static ModelTrails GetTrailObjectIDs(final String name) {
         ModelTrails trails = new ModelTrails();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.whereEqualTo("trailName", name);
@@ -183,7 +173,6 @@ public class ModelTrails {
             Log.d(name, "Retrieved");
             for (ParseObject trail : list) {
                 trails.setObjectID(trail.getObjectId());
-                trails.setTrailID(trail.getInt("trailId"));
             }
 
         } catch (ParseException e) {

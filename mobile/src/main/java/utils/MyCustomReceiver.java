@@ -77,9 +77,8 @@ public class MyCustomReceiver extends BroadcastReceiver {
             savePreferences(context, "hasPushWaiting", false);
             String trailNameString = sp.getString("trailNameString", "");
             int status = sp.getInt("status", 0);
-            int trailID = sp.getInt("trailId", 0);
             String objectID = sp.getString("objectId", "");
-            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailID, objectID);
+            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, objectID);
         }
     }
 
@@ -92,7 +91,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
     private void generateCommentNotification(Context context, JSONObject json) {
         String ObjectID = null;
-        Integer TrailID = 0;
         String Comment = null;
         String trailName = null;
         String InstallObjectID = null;
@@ -100,7 +98,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
         try {
             ObjectID = json != null ? json.getString("trailObjectId") : "";
-            TrailID = json != null ? json.getInt("trailId") : 0;
             Comment = json != null ? json.getString("comment") : "";
             trailName = json != null ? json.getString("trailName") : "";
             InstallObjectID = json != null ? json.getString("InstallationObjectId") : "";
@@ -114,7 +111,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
             Intent intent = new Intent(context, TrailScreen.class);
             Bundle b = new Bundle();
-            b.putInt("trailID", TrailID);
             b.putString("objectID", ObjectID);
             b.putBoolean("isStatusUpdate", false);
             intent.putExtras(b);
@@ -139,14 +135,12 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
     private void generateStatusNotification(Context context, JSONObject json) {
         String ObjectID = null;
-        Integer TrailID = 0;
         String StatusUpdate = null;
         String InstallObjectID = null;
         String ThisInstallObjectID = ParseInstallation.getCurrentInstallation().getObjectId();
 
         try {
             ObjectID = json != null ? json.getString("trailObjectId") : "";
-            TrailID = json != null ? json.getInt("trailId") : 0;
             StatusUpdate = json != null ? json.getString("statusUpdate") : "";
             InstallObjectID = json != null ? json.getString("InstallationObjectId") : "";
         } catch (JSONException e) {
@@ -174,7 +168,6 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
             Intent intent = new Intent(context, TrailScreen.class);
             Bundle b = new Bundle();
-            b.putInt("trailID", TrailID);
             b.putString("objectID", ObjectID);
             b.putBoolean("isStatusUpdate", true);
             intent.putExtras(b);

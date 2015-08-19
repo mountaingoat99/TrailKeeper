@@ -19,7 +19,6 @@ import com.singlecog.trailkeeper.R;
 
 import java.util.List;
 
-import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
 import Helpers.ProgressDialogHelper;
 import models.ModelTrails;
@@ -55,7 +54,6 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
 
     public void SendToTrailScreen(ModelTrails trails) {
         Intent intent = new Intent(context, TrailScreen.class);
-        intent.putExtra("trailID", trails.getTrailID());
         intent.putExtra("objectID", trails.getObjectID());
         context.startActivity(intent);
     }
@@ -92,7 +90,7 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ModelTrails trails = ModelTrails.GetTrailIDs(GetTrailName(viewHolder));
+                ModelTrails trails = ModelTrails.GetTrailObjectIDs(GetTrailName(viewHolder));
                 SendToTrailScreen(trails);
             }
         });

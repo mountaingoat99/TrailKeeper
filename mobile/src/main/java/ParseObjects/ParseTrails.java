@@ -12,14 +12,6 @@ import java.util.Date;
 @ParseClassName("Trails")
 public class ParseTrails extends ParseObject {
 
-    public Integer getTrailID() {
-        return getInt("trailId");
-    }
-
-    public void SetTrailID(Integer trailID) {
-        put("trailId", trailID);
-    }
-
     public String getTrailName() {
         return getString("trailName");
     }

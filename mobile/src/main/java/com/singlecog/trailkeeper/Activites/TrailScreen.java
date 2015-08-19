@@ -53,7 +53,7 @@ public class TrailScreen extends BaseActivity {
 
     //region Properties
     protected static final String TAG = "trailScreenActivity";
-    private int trailId, status, trailStatusPin;
+    private int status, trailStatusPin;
     private String objectID, trailSubscriptionStatus;
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
@@ -100,7 +100,6 @@ public class TrailScreen extends BaseActivity {
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
-            trailId = b.getInt("trailID");
             objectID = b.getString("objectID");
             isStatusUpdate = b.getBoolean("isStatusUpdate");
         }
@@ -253,7 +252,7 @@ public class TrailScreen extends BaseActivity {
         Log.i(TAG, "Getting the Trail DATA");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();
-        query.whereEqualTo("trailId", trailId);
+        query.whereEqualTo("objectId", objectID);
         try {
             List<ParseObject> list = query.find();
             if (list.size() > 0) {
@@ -332,7 +331,6 @@ public class TrailScreen extends BaseActivity {
                 Intent intent = new Intent(context, TrailMap.class);
                 Bundle args = new Bundle();
                 args.putParcelable("geoPoint", trailLocation);
-                args.putInt("trailID", trailId);
                 args.putString("objectID", objectID);
                 args.putString("trailName", trailNameString);
                 intent.putExtra("bundle", args);
@@ -429,7 +427,7 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void SendOutNewCommentPushNotification() {
-        PushNotificationHelper.SendOutAPushNotificationForNewComment(trailNameString, newTrailCommentString, trailId, objectID);
+        PushNotificationHelper.SendOutAPushNotificationForNewComment(trailNameString, newTrailCommentString, objectID);
     }
     //endregion
 
@@ -527,7 +525,7 @@ public class TrailScreen extends BaseActivity {
             // and use the Broadcast Receiver to wait for one
             // if connection we send it right out
             if (connectionDetector.isConnectingToInternet()) {
-                PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, trailId, objectID);
+                PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, objectID);
             } else {
                 savePushToSharedPreferences();
             }
@@ -545,7 +543,6 @@ public class TrailScreen extends BaseActivity {
         editor.putBoolean("hasPushWaiting", true);
         editor.putString("trailNameString", trailNameString);
         editor.putInt("status", status);
-        editor.putInt("trailId", trailId);
         editor.putString("objectId", objectID);
         editor.apply();
     }

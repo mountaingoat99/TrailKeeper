@@ -50,7 +50,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
     private LatLng home;
     private LatLng trailLocation;
     private String trailName, objectID;
-    private int trailStatus, trailId;
+    private int trailStatus;
     private final Context context = this;
     private List<ModelTrails> trails;
     private Map<Marker, ModelTrails> markers;
@@ -65,13 +65,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
         super.onCreateDrawer(view, this);
         markers = new HashMap<>();
 
-        // get the trailID from the previous view
+        // get the trail ObjectID from the previous view
         Bundle bundle = getIntent().getParcelableExtra("bundle");
         if (bundle != null) {
             trailLocation = bundle.getParcelable("geoPoint");
             trailName = bundle.getString("trailName");
             trailStatus = bundle.getInt("trailStatus");
-            trailId = bundle.getInt("trailID");
             objectID = bundle.getString("objectID");
         }
 
@@ -104,7 +103,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                 for (Map.Entry<Marker, ModelTrails> entry : markers.entrySet()) {
                     if (entry.getKey().getId().equals(marker.getId())) {
                         Intent intent = new Intent(context, TrailScreen.class);
-                        intent.putExtra("trailID", entry.getValue().getTrailID());
                         intent.putExtra("objectID", entry.getValue().getObjectID());
                         startActivity(intent);
                     }
@@ -173,7 +171,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 marker.showInfoWindow();
                 ModelTrails trail = new ModelTrails();
-                trail.setTrailID(trailId);
                 trail.setObjectID(objectID);
                 AddToMarkerList(marker, trail);
             } else if (trailStatus == 2) {
@@ -183,7 +180,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                 marker.showInfoWindow();
                 ModelTrails trail = new ModelTrails();
-                trail.setTrailID(trailId);
                 trail.setObjectID(objectID);
                 AddToMarkerList(marker, trail);
             } else {
@@ -193,7 +189,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                 marker.showInfoWindow();
                 ModelTrails trail = new ModelTrails();
-                trail.setTrailID(trailId);
                 trail.setObjectID(objectID);
                 AddToMarkerList(marker, trail);
             }
@@ -226,7 +221,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 marker.showInfoWindow();
                 ModelTrails trail = new ModelTrails();
-                trail.setTrailID(trailId);
                 trail.setObjectID(objectID);
                 AddToMarkerList(marker, trail);
             } else if (trailStatus == 2) {
@@ -236,7 +230,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                 marker.showInfoWindow();
                 ModelTrails trail = new ModelTrails();
-                trail.setTrailID(trailId);
                 trail.setObjectID(objectID);
                 AddToMarkerList(marker, trail);
             } else {
@@ -246,7 +239,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                 marker.showInfoWindow();
                 ModelTrails trail = new ModelTrails();
-                trail.setTrailID(trailId);
                 trail.setObjectID(objectID);
                 AddToMarkerList(marker, trail);
             }
@@ -259,7 +251,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
 
     private void AddToMarkerList(Marker marker, ModelTrails trail) {
         ModelTrails markerTrail = new ModelTrails();
-        markerTrail.setTrailID(trail.TrailID);
         markerTrail.setObjectID(trail.ObjectID);
         markers.put(marker, markerTrail);
     }

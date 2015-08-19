@@ -84,7 +84,7 @@ public class FindTrail extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (searchForTrailEditText.getText().length() > 0) {
-                    ModelTrails trails = ModelTrails.GetTrailIDs(searchForTrailEditText.getText().toString().trim());
+                    ModelTrails trails = ModelTrails.GetTrailObjectIDs(searchForTrailEditText.getText().toString().trim());
                     SendToTrailScreen(trails);
                 } else {
                     Snackbar.make(v, "Please enter a Trail Name", Snackbar.LENGTH_LONG).show();
@@ -95,10 +95,9 @@ public class FindTrail extends BaseActivity {
     }
 
     private void SendToTrailScreen(ModelTrails trails) {
-        if (trails.TrailID > 0) {
+        if (!trails.getObjectID().isEmpty()) {
             searchDialog.dismiss();
             Intent intent = new Intent(context, TrailScreen.class);
-            intent.putExtra("trailID", trails.getTrailID());
             intent.putExtra("objectID", trails.getObjectID());
             context.startActivity(intent);
         } else {

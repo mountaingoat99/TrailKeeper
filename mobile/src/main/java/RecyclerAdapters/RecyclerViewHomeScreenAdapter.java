@@ -47,14 +47,14 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         //return items.get(position);
     //}
 
-    public int getTrailID(RecyclerView.ViewHolder item){
-        // use the view holder to get the Adapter Position
-        int id =  item.getAdapterPosition();
-        // then use the AdapterPosition to get the Model
-        ModelTrails m = items.get(id);
-        // return the TrailID from the model
-        return m.TrailID;
-    }
+//    public int getTrailID(RecyclerView.ViewHolder item){
+//        // use the view holder to get the Adapter Position
+//        int id =  item.getAdapterPosition();
+//        // then use the AdapterPosition to get the Model
+//        ModelTrails m = items.get(id);
+//        // return the TrailID from the model
+//        return m.TrailID;
+//    }
 
     public String GetObjectID(RecyclerView.ViewHolder item) {
         int id = item.getAdapterPosition();
@@ -104,10 +104,8 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         viewHolder.btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = getTrailID(viewHolder);
                 String objectId = GetObjectID(viewHolder);
                 Intent intent = new Intent(context, TrailScreen.class);
-                intent.putExtra("trailID", id);
                 intent.putExtra("objectID", objectId);
                 intent.putExtra("fromNotification", false);
                 Log.i(TAG, "Sending Intent From Home Screen to Trail Screen");
@@ -126,7 +124,6 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 args.putParcelable("geoPoint", geoPoint);
                 args.putString("trailName", model.TrailName);
                 args.putInt("trailStatus", model.TrailStatus);
-                args.putInt("trailID", model.TrailID);
                 args.putString("objectID", model.ObjectID);
                 intent.putExtra("bundle", args);
                 v.getContext().startActivity(intent);

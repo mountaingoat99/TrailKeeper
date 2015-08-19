@@ -35,14 +35,14 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         this.context = context;
     }
 
-    public int getTrailID(RecyclerView.ViewHolder item){
-        // use the view holder to get the Adapter Position
-        int id =  item.getAdapterPosition();
-        // then use the AdapterPosition to get the Model
-        ModelTrails m = items.get(id);
-        // return the TrailID from the model
-        return m.TrailID;
-    }
+//    public int getTrailID(RecyclerView.ViewHolder item){
+//        // use the view holder to get the Adapter Position
+//        int id =  item.getAdapterPosition();
+//        // then use the AdapterPosition to get the Model
+//        ModelTrails m = items.get(id);
+//        // return the TrailID from the model
+//        return m.TrailID;
+//    }
 
     public String GetObjectID(RecyclerView.ViewHolder item) {
         int id = item.getAdapterPosition();
@@ -79,10 +79,8 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         viewHolder.trailTouchPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = getTrailID(viewHolder);
                 String objectId = GetObjectID(viewHolder);
                 Intent intent = new Intent(context, TrailScreen.class);
-                intent.putExtra("trailID", id);
                 intent.putExtra("objectID", objectId);
                 v.getContext().startActivity(intent);
             }
