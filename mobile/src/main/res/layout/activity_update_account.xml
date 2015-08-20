@@ -75,7 +75,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginRight="4dp"
-                        android:background="@color/primary"/>
+                        android:background="@color/black"/>
 
                     <EditText
                         android:id="@+id/edittext_password"
@@ -96,7 +96,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginRight="4dp"
-                        android:background="@color/primary"/>
+                        android:background="@color/black"/>
 
                     </LinearLayout>
 

@@ -164,8 +164,16 @@ public class BaseActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 4:   // Add Trail
-                                //intent = new Intent(BaseActivity.this, TrailAdmin.class);
-                                //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                if (isAnonUser) {
+                                    Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    if (!activityName.equalsIgnoreCase("Activites.AddTrail")) {
+                                        intent = new Intent(BaseActivity.this, AddTrail.class);
+                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                    } else {
+                                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                                    }
+                                }
                                 break;
                             case 5:   // Create Group
                                 //intent = new Intent(BaseActivity.this, Profile.class);
