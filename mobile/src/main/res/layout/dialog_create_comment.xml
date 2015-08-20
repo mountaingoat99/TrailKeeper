@@ -20,7 +20,7 @@
             android:layout_marginRight="16dp"
             android:padding="10dp"
             android:hint="@string/edittext_new_comment"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:textColorHint="@color/secondary_text"
             android:background="@android:color/white"/>
 

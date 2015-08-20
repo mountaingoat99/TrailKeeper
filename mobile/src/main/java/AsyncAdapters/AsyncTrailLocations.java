@@ -10,6 +10,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.singlecog.trailkeeper.Activites.AddTrail;
 import com.singlecog.trailkeeper.Activites.MapActivity;
 
 import java.util.List;
@@ -26,6 +27,11 @@ public class AsyncTrailLocations extends AsyncTask<List<ModelTrails>, Integer, L
 
     public AsyncTrailLocations(MapActivity mapActivity, Context context, LatLng currentLocation) {
         this.mapActivity = mapActivity;
+        this.context = context;
+        this.currentLocation = currentLocation;
+    }
+
+    public AsyncTrailLocations(Context context, LatLng currentLocation) {
         this.context = context;
         this.currentLocation = currentLocation;
     }

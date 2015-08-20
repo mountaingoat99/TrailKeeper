@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -20,8 +23,18 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.singlecog.trailkeeper.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import AsyncAdapters.AsyncTrailLocations;
+import Helpers.GeoLocationHelper;
+import models.ModelTrails;
 
 public class AddTrail extends BaseActivity implements
         OnMapReadyCallback
@@ -33,8 +46,16 @@ public class AddTrail extends BaseActivity implements
     protected static final String TAG = "AddTrailActivity";
     private final Context context = this;
     private View view;
+    private EditText editTextTrailName, editTextCity;
+    private AutoCompleteTextView editTextState, editTextCountry;
+    private Switch aSwitchCurrentLocation;
+
     GoogleMap googleMap;
     protected Location mLastLocation;
+    private LatLng trailLocation;
+    private String trailName, objectID;
+    private int trailStatus;
+    private List<ModelTrails> trails;
     private LatLng home;
     protected GoogleApiClient mGoogleApiClient;
 
@@ -44,32 +65,44 @@ public class AddTrail extends BaseActivity implements
         setContentView(R.layout.activity_add_trail);
         view = findViewById(R.id.main_layout);
         super.onCreateDrawer(view, this);
-
+        setUpView();
         // get the latest device location
         buildGoogleApiClient();
 
+        // calls the AsyncTask for the distance
+        try {
+            AsyncTrailLocations ati = new AsyncTrailLocations(context, home);
+            trails = new ArrayList<>();
+            ati.execute(trails);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //setCreateMarkerListener();
+    }
+
+    //private void setCreateMarkerListener() {
+
+//        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//            @Override
+//            public void onMapClick(LatLng latLng) {
+//
+//            }
+//        });
+//    }
+
+    private void setUpView() {
+        editTextTrailName = (EditText)findViewById(R.id.edittext_trail_name);
+        editTextCity = (EditText)findViewById(R.id.edittext_city);
+        editTextState = (AutoCompleteTextView)findViewById(R.id.edittext_state);
+        editTextCountry = (AutoCompleteTextView)findViewById(R.id.edittext_country);
+        aSwitchCurrentLocation = (Switch)findViewById(R.id.switch_current_location);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_trail, menu);
+        //getMenuInflater().inflate(R.menu.menu_add_trail, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     //region Google MapActivity Api Methods
@@ -88,24 +121,118 @@ public class AddTrail extends BaseActivity implements
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        googleMap.addMarker(new MarkerOptions()
-                .title("Current Location")
-                .position(home)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
-//        if (trailLocation != null) {
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
-//            googleMap.addMarker(new MarkerOptions()
-//                       .title("Current Location")
-//                       .position(trailLocation)).showInfoWindow();
-//
-//            } else {
-//                Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
-//            }
+
+        // get the distance from Current Location to Trails first
+        // this only runs on every call to this activity
+        // because we still want to show all the other trails when they move around
+        if(trails != null) {
+            for (int i = 0; trails.size() > i; i++){
+                trails.get(i).distance = (float)Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
+            }
+
+            // then sort them
+            GeoLocationHelper.SortTrails(trails);
+
+            // for now we will show all the trail, TODO we may cut that list down as it grows
+            for (int i = 0; i < trails.size(); i++) {
+                LatLng trailHomeLocation = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
+
+                // 1 closed, 2 open, 3 unknown
+                if (trails.get(i).TrailStatus == 1) {
+                    Marker marker = googleMap.addMarker(new MarkerOptions()
+                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .position(trailHomeLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    marker.showInfoWindow();
+
+                } else if (trails.get(i).TrailStatus == 2) {
+                    Marker marker = googleMap.addMarker(new MarkerOptions()
+                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .position(trailHomeLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    marker.showInfoWindow();
+                } else {
+                    Marker marker = googleMap.addMarker(new MarkerOptions()
+                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .position(trailHomeLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                    marker.showInfoWindow();
+                }
+            }
         }
+        // if coming from the Map Button in the Main Trail Screen
+        // Should have a trailLocation and if device location is not null
+        if (trailLocation != null && mLastLocation != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
+
+            // 1 closed, 2 open, 3 unknown
+            if (trailStatus == 1) {
+                Marker marker = googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                marker.showInfoWindow();
+                ModelTrails trail = new ModelTrails();
+                trail.setObjectID(objectID);
+            } else if (trailStatus == 2) {
+                Marker marker = googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                marker.showInfoWindow();
+                ModelTrails trail = new ModelTrails();
+                trail.setObjectID(objectID);
+            } else {
+                Marker marker = googleMap.addMarker(new MarkerOptions()
+                        .title(trailName)
+                        .position(trailLocation)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                marker.showInfoWindow();
+                ModelTrails trail = new ModelTrails();
+                trail.setObjectID(objectID);
+            }
+
+            googleMap.addMarker(new MarkerOptions()
+                    .title("Current Location")
+                    .position(home)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
+        }
+        // if coming from the Menu Map Button (trailLocation should be null)
+        // and Device location is not null
+        else if (mLastLocation != null && trailLocation == null) {
+            home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
+            googleMap.addMarker(new MarkerOptions()
+                    .title("Current Location")
+                    .position(home)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
+        } else {
+            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Toast.makeText(this,"You tapped the map yo!", Toast.LENGTH_SHORT).show();
+        // Creating a marker
+        MarkerOptions markerOptions = new MarkerOptions();
+
+        // Setting the position for the marker
+        markerOptions.position(latLng);
+
+        // Setting the title for the marker.
+        // This will be displayed on taping the marker
+        markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
+        // Clears the previously touched position
+        googleMap.clear();
+
+        // Animating to the touched position
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        // Placing a marker on the touched position
+        googleMap.addMarker(markerOptions);
+
+        //Toast.makeText(this,"You tapped the map yo!", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:hint="Trail Name"
-                        android:inputType="textEmailAddress"
+                        android:inputType="textCapWords"
                         android:textColorHint="@color/secondary_text"
                         android:background="@android:color/white"/>
 
@@ -78,6 +78,7 @@
                                 android:layout_marginTop="2dp"
                                 android:padding="10dp"
                                 android:hint="City"
+                                android:inputType="textCapWords"
                                 android:textColorHint="@color/secondary_text"
                                 android:background="@android:color/white"/>
 
@@ -104,6 +105,7 @@
                                 android:layout_marginTop="2dp"
                                 android:padding="10dp"
                                 android:hint="State"
+                                android:inputType="textCapCharacters"
                                 android:textColorHint="@color/secondary_text"
                                 android:background="@android:color/white"/>
 
@@ -131,13 +133,14 @@
                             android:layout_marginRight="8dp"
                             android:orientation="vertical">
 
-                            <EditText
+                            <AutoCompleteTextView
                                 android:id="@+id/edittext_country"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:padding="10dp"
                                 android:hint="Country"
+                                android:inputType="textCapWords"
                                 android:textColorHint="@color/secondary_text"
                                 android:background="@android:color/white"/>
 
@@ -198,7 +201,7 @@
                 android:layout_gravity="center"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 card_view:cardUseCompatPadding="true"
                 card_view:cardElevation="4dp"
                 card_view:cardCornerRadius="4dp"
