@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
@@ -172,9 +173,9 @@ public class MyCustomReceiver extends BroadcastReceiver {
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             numMessages = 0;
-            NotificationManager mNotifM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            final NotificationManager mNotifM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            android.support.v4.app.NotificationCompat.Builder mBuilder =
+            final android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle(_Title)
@@ -184,7 +185,14 @@ public class MyCustomReceiver extends BroadcastReceiver {
             mBuilder.setContentIntent(contentIntent);
             mBuilder.setAutoCancel(true);
 
-            mNotifM.notify(NOTIFICATION_ID, mBuilder.build());
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mNotifM.notify(NOTIFICATION_ID, mBuilder.build());
+                }
+            }, 5000);
+
+
         }
     }
 }

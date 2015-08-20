@@ -85,7 +85,6 @@
     <string name="send_email">Send Email</string>
     <string name="title_activity_update_account">Update Account</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="update_account_title">Sign In To Update Account</string>
     <string name="update_email">Update Email</string>
     <string name="verify_email">Verify Email</string>
@@ -114,5 +113,6 @@
     <string name="radio_button_open">Open</string>
     <string name="radio_button_closed">Closed</string>
     <string name="radio_button_unknown">Unknown</string>
+    <string name="title_activity_add_trail">Add Trail</string>
 
 </resources>

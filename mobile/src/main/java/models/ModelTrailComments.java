@@ -14,11 +14,13 @@ import com.singlecog.trailkeeper.Activites.AllComments;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import ParseObjects.ParseComments;
+import ParseObjects.ParseTrailStatus;
 
 public class ModelTrailComments {
 
@@ -145,18 +147,5 @@ public class ModelTrailComments {
             Log.i(LOG, "Save Comment Failed" + e.getMessage());
             trailScreen.SaveCommentWasSuccessful(false, null);
         }
-//        parseComments.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e == null) {
-//                    Log.i(LOG, "Save Comment Completed");
-//                    parseComments.pinInBackground();
-//                    trailScreen.SaveCommentWasSuccessful(true, modelTrailComments);
-//                } else {
-//                    Log.i(LOG, "Save Comment Failed" + e.getMessage());
-//                    trailScreen.SaveCommentWasSuccessful(false, null);
-//                }
-//            }
-//        });
     }
 }

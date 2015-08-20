@@ -44,22 +44,6 @@ public class ParseTrails extends ParseObject {
         put("status", status);
     }
 
-    public JSONArray getComments(){
-        return getJSONArray("comments");
-    }
-
-    public void setComment(String comment){
-        put("comment", comment);
-    }
-
-    public JSONArray getCommentDate(){
-        return getJSONArray("commentDate");
-    }
-
-    public void setCommentDate(String commentDate){
-        put("commentDate", commentDate);
-    }
-
     public Date getUpdatedAt(){
         return getDate("updatedAt");
     }

@@ -120,7 +120,7 @@
         <activity
             android:name=".Activites.AllComments"
             android:label="@string/title_activity_all_comments"
-            android:parentActivityName=".Activites.HomeScreen">
+            android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
@@ -164,7 +164,14 @@
             </intent-filter>
         </receiver>
 
-
+        <activity
+            android:name=".Activites.AddTrail"
+            android:label="@string/title_activity_add_trail"
+            android:parentActivityName=".Activites.HomeScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
+        </activity>
     </application>
 
 </manifest>
