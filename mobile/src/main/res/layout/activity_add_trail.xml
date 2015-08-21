@@ -3,7 +3,9 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.singlecog.trailkeeper.Activites.AddTrail">
+    tools:context="com.singlecog.trailkeeper.Activites.AddTrail"
+
+    android:background="@android:color/white">
 
     <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,230 +13,213 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/layout1"
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout
+            xmlns:sothree="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/sliding_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
-            android:orientation="vertical">
+            android:gravity="bottom"
+            sothree:umanoShadowHeight="6dp"
+            sothree:umanoOverlay="true"
+            sothree:umanoFadeColor="@android:color/transparent"
+            sothree:umanoScrollableView="@+id/layout2">
 
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/create_trail_card_view"
-                android:layout_gravity="center"
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                card_view:cardUseCompatPadding="true"
-                card_view:cardElevation="4dp"
-                card_view:cardCornerRadius="4dp"
-                android:visibility="visible">
+                android:padding="16dp"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:padding="10dp"
-                    android:background="@android:color/white">
-
-                    <EditText
-                        android:id="@+id/edittext_trail_name"
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingRight="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="5dp"
-                        android:hint="Trail Name"
-                        android:inputType="textCapWords"
-                        android:textColorHint="@color/secondary_text"
-                        android:background="@android:color/white"/>
+                        android:background="@android:color/white">
 
-                    <View
-                        android:id="@+id/view2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        <EditText
+                            android:id="@+id/edittext_trail_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="5dp"
+                            android:hint="Trail Name"
+                            android:inputType="textCapWords"
+                            android:textColorHint="@color/secondary_text"
+                            android:background="@android:color/white"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/layout_city"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:orientation="vertical">
-
-                            <EditText
-                                android:id="@+id/edittext_city"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:paddingRight="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingLeft="10dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="5dp"
-                                android:hint="City"
-                                android:inputType="textCapWords"
-                                android:textColorHint="@color/secondary_text"
-                                android:background="@android:color/white"/>
-
-                            <View
-                                android:layout_width="wrap_content"
-                                android:layout_height="1dp"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="4dp"
-                                android:background="@color/black"/>
-
-                        </LinearLayout>
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:background="@color/black"/>
 
                         <LinearLayout
-                            android:id="@+id/layout_state"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <AutoCompleteTextView
-                                android:id="@+id/edittext_state"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:paddingRight="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingLeft="10dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="5dp"
-                                android:hint="State"
-                                android:inputType="textCapCharacters"
-                                android:textColorHint="@color/secondary_text"
-                                android:background="@android:color/white"/>
-
-                            <View
-                                android:layout_width="wrap_content"
-                                android:layout_height="1dp"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="4dp"
-                                android:background="@color/black"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:orientation="vertical">
-
-                            <AutoCompleteTextView
-                                android:id="@+id/edittext_country"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:paddingRight="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingLeft="10dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="5dp"
-                                android:hint="Country"
-                                android:inputType="textCapWords"
-                                android:textColorHint="@color/secondary_text"
-                                android:background="@android:color/white"/>
-
-                            <View
-                                android:id="@+id/view3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="1dp"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="4dp"
-                                android:background="@color/black"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:layout_gravity="bottom"
-                            android:orientation="vertical">
-
-                            <Switch
-                                android:id="@+id/switch_current_location"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:id="@+id/layout_city"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="8dp"
-                                android:text="Use Current Location:"
-                                android:textSize="@dimen/text_size_super_mini"
-                                android:textColor="@color/primary_text"/>
+                                android:layout_weight="2"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/edittext_city"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:paddingRight="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:paddingLeft="10dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="5dp"
+                                    android:hint="City"
+                                    android:inputType="textCapWords"
+                                    android:textColorHint="@color/secondary_text"
+                                    android:background="@android:color/white"/>
+
+                                <View
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@color/black"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_state"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/edittext_state"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:paddingRight="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:paddingLeft="10dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="5dp"
+                                    android:hint="State"
+                                    android:inputType="textCapCharacters"
+                                    android:textColorHint="@color/secondary_text"
+                                    android:background="@android:color/white"/>
+
+                                <View
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@color/black"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
                         <LinearLayout
-                            android:id="@+id/layout_distance"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <EditText
-                                android:id="@+id/edittext_distance"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:paddingRight="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingLeft="10dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="5dp"
-                                android:hint="Length"
-                                android:inputType="textCapWords"
-                                android:textColorHint="@color/secondary_text"
-                                android:background="@android:color/white"/>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
+                                android:orientation="vertical">
 
-                            <View
-                                android:layout_width="wrap_content"
-                                android:layout_height="1dp"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="4dp"
-                                android:background="@color/black"/>
+                                <AutoCompleteTextView
+                                    android:id="@+id/edittext_country"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:paddingRight="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:paddingLeft="10dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="5dp"
+                                    android:hint="Country"
+                                    android:inputType="textCapWords"
+                                    android:textColorHint="@color/secondary_text"
+                                    android:background="@android:color/white"/>
+
+                                <View
+                                    android:id="@+id/view3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@color/black"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_distance"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/edittext_distance"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:paddingLeft="10dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="5dp"
+                                    android:hint="Length"
+                                    android:inputType="textCapWords"
+                                    android:textColorHint="@color/secondary_text"
+                                    android:background="@android:color/white"/>
+
+                                <View
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@color/black"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/layout_rating"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:layout_gravity="bottom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_gravity="center_horizontal"
                             android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/text_size_small"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginRight="16dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="Skill Level: "/>
 
                             <CheckBox
                                 android:id="@+id/check_box_easy"
@@ -259,54 +244,87 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:orientation="horizontal">
+
+                            <Switch
+                                android:id="@+id/switch_current_location"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:layout_gravity="top"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginRight="32dp"
+                                android:layout_marginEnd="32dp"
+                                android:text="Use Current Location:"
+                                android:textSize="@dimen/text_size_super_mini"
+                                android:textColor="@color/primary_text"/>
+
+                            <Switch
+                                android:id="@+id/switch_private_trail"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:layout_gravity="top"
+                                android:layout_marginTop="8dp"
+                                android:text="Private Trail:"
+                                android:textSize="@dimen/text_size_super_mini"
+                                android:textColor="@color/primary_text"/>
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <Button
+                                android:id="@+id/btn_create"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/button_text_medium"
+                                android:textColor="@color/accent"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:text="Create"/>
+
+                        </RelativeLayout>
+
                     </LinearLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+            </LinearLayout>
 
-                        <Button
-                            android:id="@+id/btn_create"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/button_text_medium"
-                            android:textColor="@color/accent"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:text="Create"/>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/create_trail_map_card_view"
-                android:layout_gravity="center"
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                card_view:cardUseCompatPadding="true"
-                card_view:cardElevation="4dp"
-                card_view:cardCornerRadius="4dp"
-                android:visibility="visible">
+                android:orientation="vertical"
+                android:background="@android:color/white">
 
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:name="com.google.android.gms.maps.MapFragment"/>
+                <ImageView
+                    android:id="@+id/up_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|bottom"
+                    android:contentDescription="Up Tab Image"
+                    android:src="@mipmap/ic_up" />
 
-            </android.support.v7.widget.CardView>
+                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/map"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:name="com.google.android.gms.maps.MapFragment"/>
 
-        </LinearLayout>
+            </LinearLayout>
+
+        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
         <include layout="@layout/nav_drawer"/>
 
     </android.support.v4.widget.DrawerLayout>
-
 
 </RelativeLayout>

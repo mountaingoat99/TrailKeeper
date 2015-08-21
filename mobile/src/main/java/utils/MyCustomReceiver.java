@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
@@ -15,7 +14,6 @@ import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
@@ -24,7 +22,6 @@ import com.singlecog.trailkeeper.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import Helpers.PushNotificationHelper;
@@ -121,7 +118,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
             android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.mipmap.ic_up)
                             .setContentTitle(_Title)
                             .setContentText(trailName + " has a new comment:" + "\n" + Comment)
                             .setNumber(++numMessages);
@@ -177,7 +174,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
             final android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.mipmap.ic_up)
                             .setContentTitle(_Title)
                             .setContentText(StatusUpdate)
                             .setNumber(++numMessages);

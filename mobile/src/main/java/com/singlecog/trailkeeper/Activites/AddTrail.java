@@ -1,16 +1,16 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -26,11 +26,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.singlecog.trailkeeper.R;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import AsyncAdapters.AsyncTrailLocations;
 import Helpers.GeoLocationHelper;
@@ -46,9 +45,15 @@ public class AddTrail extends BaseActivity implements
     protected static final String TAG = "AddTrailActivity";
     private final Context context = this;
     private View view;
+    private View layout1;
+    private SlidingUpPanelLayout mlayout;
+    private ImageView up_view;
     private EditText editTextTrailName, editTextCity;
     private AutoCompleteTextView editTextState, editTextCountry;
     private Switch aSwitchCurrentLocation;
+
+    private int mainLayoutHeight = 0;
+    private int layout1Height = 0;
 
     GoogleMap googleMap;
     protected Location mLastLocation;
@@ -77,8 +82,37 @@ public class AddTrail extends BaseActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+        setPanelListener();
+        setImageClickListener();
+
         //setCreateMarkerListener();
     }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ViewTreeObserver treeObserver = view.getViewTreeObserver();
+        treeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mainLayoutHeight = view.getMeasuredHeight();
+            }
+        });
+
+        ViewTreeObserver treeObserver1 = layout1.getViewTreeObserver();
+        treeObserver1.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                layout1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                layout1Height = layout1.getMeasuredHeight();
+
+                mlayout.setPanelHeight(mainLayoutHeight - layout1Height);
+            }
+        });
+
+
+    }
+
 
     //private void setCreateMarkerListener() {
 
@@ -91,11 +125,60 @@ public class AddTrail extends BaseActivity implements
 //    }
 
     private void setUpView() {
+        mlayout = (SlidingUpPanelLayout)findViewById(R.id.sliding_layout);
+        layout1 = findViewById(R.id.layout1);
+        up_view = (ImageView)findViewById(R.id.up_image);
         editTextTrailName = (EditText)findViewById(R.id.edittext_trail_name);
         editTextCity = (EditText)findViewById(R.id.edittext_city);
         editTextState = (AutoCompleteTextView)findViewById(R.id.edittext_state);
         editTextCountry = (AutoCompleteTextView)findViewById(R.id.edittext_country);
         aSwitchCurrentLocation = (Switch)findViewById(R.id.switch_current_location);
+        mlayout.setDragView(up_view);
+    }
+
+    private void setImageClickListener(){
+        up_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    mlayout.setEnabled(true);
+                    mlayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                }
+                if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    mlayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                }
+            }
+        });
+    }
+
+    private void setPanelListener() {
+        mlayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+                mlayout.setEnabled(true);
+            }
+
+            @Override
+            public void onPanelCollapsed(View view) {
+                up_view.setImageResource(R.mipmap.ic_up);
+                mlayout.setEnabled(true);
+            }
+
+            @Override
+            public void onPanelExpanded(View view) {
+                up_view.setImageResource(R.mipmap.ic_down);
+                mlayout.setEnabled(false);
+            }
+
+            @Override
+            public void onPanelAnchored(View view) {
+
+            }
+
+            @Override
+            public void onPanelHidden(View view) {
+            }
+        });
     }
 
     @Override
