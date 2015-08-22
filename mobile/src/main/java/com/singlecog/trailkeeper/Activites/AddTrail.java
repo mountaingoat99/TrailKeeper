@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -156,6 +158,8 @@ public class AddTrail extends BaseActivity implements
             @Override
             public void onPanelSlide(View view, float v) {
                 mlayout.setEnabled(true);
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_around_center_point);
+                up_view.startAnimation(animation);
             }
 
             @Override
@@ -166,7 +170,7 @@ public class AddTrail extends BaseActivity implements
 
             @Override
             public void onPanelExpanded(View view) {
-                up_view.setImageResource(R.mipmap.ic_down);
+                //up_view.setImageResource(R.mipmap.ic_down);
                 mlayout.setEnabled(false);
             }
 
