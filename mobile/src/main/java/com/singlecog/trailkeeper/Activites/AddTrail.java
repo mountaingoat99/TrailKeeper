@@ -1,6 +1,9 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -145,12 +148,22 @@ public class AddTrail extends BaseActivity implements
                 if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     mlayout.setEnabled(true);
                     mlayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    up_view.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_up), 180));
                 }
                 if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     mlayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                    up_view.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_up), 180));
                 }
             }
         });
+    }
+
+    private Bitmap rotateImage(Bitmap src, float degree) {
+        Matrix matrix = new Matrix();
+        // setup rotation degree
+        matrix.postRotate(degree);
+        // return new bitmap rotated using matrix
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
     }
 
     private void setPanelListener() {
@@ -158,8 +171,9 @@ public class AddTrail extends BaseActivity implements
             @Override
             public void onPanelSlide(View view, float v) {
                 mlayout.setEnabled(true);
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_around_center_point);
-                up_view.startAnimation(animation);
+                //Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_around_center_point);
+                //up_view.startAnimation(animation);
+                //up_view.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_up), 180));
             }
 
             @Override
