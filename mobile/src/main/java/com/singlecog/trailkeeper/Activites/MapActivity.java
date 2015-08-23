@@ -3,12 +3,17 @@ package com.singlecog.trailkeeper.Activites;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -135,24 +140,30 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                 // 1 closed, 2 open, 3 unknown
                 if (trails.get(i).TrailStatus == 1) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .title(trails.get(i).TrailName)
+                            .snippet(trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
                     AddToMarkerList(marker, trails.get(i));
 
                 } else if (trails.get(i).TrailStatus == 2) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .title(trails.get(i).TrailName)
+                            .snippet(trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
                     AddToMarkerList(marker, trails.get(i));
                 } else {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .title(trails.get(i).TrailName)
+                            .snippet(trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                    SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
                     AddToMarkerList(marker, trails.get(i));
                 }
@@ -253,6 +264,35 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
         ModelTrails markerTrail = new ModelTrails();
         markerTrail.setObjectID(trail.ObjectID);
         markers.put(marker, markerTrail);
+    }
+
+    private void SetMultilineInfoAdapter(GoogleMap googleMap) {
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                LinearLayout info = new LinearLayout(context);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(context);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(context);
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+                return info;
+            }
+        });
     }
 
     /**

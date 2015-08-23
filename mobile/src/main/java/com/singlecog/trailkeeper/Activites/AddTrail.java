@@ -1,12 +1,12 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -61,10 +62,12 @@ public class AddTrail extends BaseActivity implements
     private int layout1Height = 0;
 
     GoogleMap googleMap;
+    Marker newLocationMarkerOptions;
     protected Location mLastLocation;
     private LatLng trailLocation;
     private String trailName, objectID;
     private int trailStatus;
+    private boolean isMapUp = true;
     private List<ModelTrails> trails;
     private LatLng home;
     protected GoogleApiClient mGoogleApiClient;
@@ -92,6 +95,8 @@ public class AddTrail extends BaseActivity implements
 
         //setCreateMarkerListener();
     }
+
+    //region setUp Activity
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -114,20 +119,7 @@ public class AddTrail extends BaseActivity implements
                 mlayout.setPanelHeight(mainLayoutHeight - layout1Height);
             }
         });
-
-
     }
-
-
-    //private void setCreateMarkerListener() {
-
-//        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//            @Override
-//            public void onMapClick(LatLng latLng) {
-//
-//            }
-//        });
-//    }
 
     private void setUpView() {
         mlayout = (SlidingUpPanelLayout)findViewById(R.id.sliding_layout);
@@ -141,29 +133,41 @@ public class AddTrail extends BaseActivity implements
         mlayout.setDragView(up_view);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_add_trail, menu);
+        return true;
+    }
+    //endregion
+
+    //region Sliding Panel
     private void setImageClickListener(){
         up_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    RotateImageViewDown();
                     mlayout.setEnabled(true);
                     mlayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                    up_view.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_up), 180));
                 }
                 if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    RotateImageViewUp();
                     mlayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-                    up_view.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_up), 180));
+                    isMapUp = true;
                 }
             }
         });
     }
 
-    private Bitmap rotateImage(Bitmap src, float degree) {
-        Matrix matrix = new Matrix();
-        // setup rotation degree
-        matrix.postRotate(degree);
-        // return new bitmap rotated using matrix
-        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+    private void RotateImageViewUp(){
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_around_center_up);
+        up_view.startAnimation(animation);
+    }
+
+    private void RotateImageViewDown() {
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_around_center_down);
+        up_view.startAnimation(animation);
     }
 
     private void setPanelListener() {
@@ -171,21 +175,21 @@ public class AddTrail extends BaseActivity implements
             @Override
             public void onPanelSlide(View view, float v) {
                 mlayout.setEnabled(true);
-                //Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_around_center_point);
-                //up_view.startAnimation(animation);
-                //up_view.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_up), 180));
+                if (!isMapUp) {
+                    RotateImageViewUp();
+                }
             }
 
             @Override
             public void onPanelCollapsed(View view) {
-                up_view.setImageResource(R.mipmap.ic_up);
                 mlayout.setEnabled(true);
+                isMapUp = false;
             }
 
             @Override
             public void onPanelExpanded(View view) {
-                //up_view.setImageResource(R.mipmap.ic_down);
                 mlayout.setEnabled(false);
+                isMapUp = true;
             }
 
             @Override
@@ -198,15 +202,23 @@ public class AddTrail extends BaseActivity implements
             }
         });
     }
+    //endregion
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_add_trail, menu);
-        return true;
-    }
+
 
     //region Google MapActivity Api Methods
+
+
+    //private void setCreateMarkerListener() {
+
+//        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//            @Override
+//            public void onMapClick(LatLng latLng) {
+//
+//            }
+//        });
+//    }
+
     private void ShowGoogleMap() {
         // even if the connection is not successful we still want to call and show the map
         MapFragment mapFragment = (MapFragment) getFragmentManager()
@@ -241,68 +253,37 @@ public class AddTrail extends BaseActivity implements
                 // 1 closed, 2 open, 3 unknown
                 if (trails.get(i).TrailStatus == 1) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .title(trails.get(i).TrailName)
+                            .snippet(trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
 
                 } else if (trails.get(i).TrailStatus == 2) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .title(trails.get(i).TrailName)
+                            .snippet(trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
                 } else {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName + "   " + trails.get(i).distance + " miles away")
+                            .title(trails.get(i).TrailName)
+                            .snippet(trails.get(i).distance + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                    SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
                 }
             }
         }
-        // if coming from the Map Button in the Main Trail Screen
-        // Should have a trailLocation and if device location is not null
-        if (trailLocation != null && mLastLocation != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(trailLocation, 13));
-
-            // 1 closed, 2 open, 3 unknown
-            if (trailStatus == 1) {
-                Marker marker = googleMap.addMarker(new MarkerOptions()
-                        .title(trailName)
-                        .position(trailLocation)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                marker.showInfoWindow();
-                ModelTrails trail = new ModelTrails();
-                trail.setObjectID(objectID);
-            } else if (trailStatus == 2) {
-                Marker marker = googleMap.addMarker(new MarkerOptions()
-                        .title(trailName)
-                        .position(trailLocation)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                marker.showInfoWindow();
-                ModelTrails trail = new ModelTrails();
-                trail.setObjectID(objectID);
-            } else {
-                Marker marker = googleMap.addMarker(new MarkerOptions()
-                        .title(trailName)
-                        .position(trailLocation)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-                marker.showInfoWindow();
-                ModelTrails trail = new ModelTrails();
-                trail.setObjectID(objectID);
-            }
-
-            googleMap.addMarker(new MarkerOptions()
-                    .title("Current Location")
-                    .position(home)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).showInfoWindow();
-        }
-        // if coming from the Menu Map Button (trailLocation should be null)
-        // and Device location is not null
-        else if (mLastLocation != null && trailLocation == null) {
+        // zoom to current location always as long as we have it
+        if (mLastLocation != null) {
             home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 9));
+
             googleMap.addMarker(new MarkerOptions()
                     .title("Current Location")
                     .position(home)
@@ -314,26 +295,47 @@ public class AddTrail extends BaseActivity implements
 
     @Override
     public void onMapClick(LatLng latLng) {
-        // Creating a marker
-        MarkerOptions markerOptions = new MarkerOptions();
+        // clear the previous marker if not null
+        if (newLocationMarkerOptions != null) {
+            newLocationMarkerOptions.remove();
 
-        // Setting the position for the marker
-        markerOptions.position(latLng);
-
-        // Setting the title for the marker.
-        // This will be displayed on taping the marker
-        markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-
-        // Clears the previously touched position
-        googleMap.clear();
-
-        // Animating to the touched position
+        }
+        newLocationMarkerOptions = googleMap.addMarker(new MarkerOptions()
+                .title("New Trail Location")
+                .snippet(latLng.latitude + " : " + latLng.longitude)
+                .position(latLng));
+        SetMultilineInfoAdapter(googleMap);
+        newLocationMarkerOptions.showInfoWindow();
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
 
-        // Placing a marker on the touched position
-        googleMap.addMarker(markerOptions);
+    private void SetMultilineInfoAdapter(GoogleMap googleMap) {
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
 
-        //Toast.makeText(this,"You tapped the map yo!", Toast.LENGTH_SHORT).show();
+            @Override
+            public View getInfoContents(Marker marker) {
+                LinearLayout info = new LinearLayout(context);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(context);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(context);
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+                return info;
+            }
+        });
     }
 
     @Override
@@ -349,6 +351,7 @@ public class AddTrail extends BaseActivity implements
     }
     //endregion
 
+    //region Location API
     /**
      * Builds a GoogleApiClient. Uses the addApi() method to request the LocationServices API.
      */
@@ -407,4 +410,5 @@ public class AddTrail extends BaseActivity implements
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
     }
+    //endregion
 }
