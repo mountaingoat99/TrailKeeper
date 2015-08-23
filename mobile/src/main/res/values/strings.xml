@@ -114,5 +114,16 @@
     <string name="radio_button_closed">Closed</string>
     <string name="radio_button_unknown">Unknown</string>
     <string name="title_activity_add_trail">Add Trail</string>
+    <string name="create_new_trail">Create</string>
+    <string name="private_trail_switch">Private Trail:</string>
+    <string name="checkbox_hard">Hard</string>
+    <string name="use_current_location_switch">Use Current Location:</string>
+    <string name="medium_checkbox">Medium</string>
+    <string name="easy_checkbox">Easy</string>
+    <string name="skill_level_view">Skill Level:</string>
+    <string name="country_hint">Country</string>
+    <string name="state_hint">State</string>
+    <string name="city_hint">City</string>
+    <string name="trailName_hint">Trail Name</string>
 
 </resources>

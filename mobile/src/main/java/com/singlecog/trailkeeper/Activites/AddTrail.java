@@ -5,6 +5,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -12,10 +17,12 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +42,14 @@ import com.singlecog.trailkeeper.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import AsyncAdapters.AsyncTrailLocations;
 import Helpers.GeoLocationHelper;
+import Helpers.StateListHelper;
 import models.ModelTrails;
 
 public class AddTrail extends BaseActivity implements
@@ -72,6 +83,8 @@ public class AddTrail extends BaseActivity implements
     private LatLng home;
     protected GoogleApiClient mGoogleApiClient;
 
+    private Map<String, String> stateList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +105,8 @@ public class AddTrail extends BaseActivity implements
         }
         setPanelListener();
         setImageClickListener();
-
+        getCountryList();
+        getStateList();
         //setCreateMarkerListener();
     }
 
@@ -133,12 +147,97 @@ public class AddTrail extends BaseActivity implements
         mlayout.setDragView(up_view);
     }
 
+    public void btn_create_click(View view) {
+        if (editTextTrailName.getText().length() > 3) {
+            if (editTextCity.getText().length() > 1) {
+                if (editTextState.getText().length() > 1) {
+                    if (editTextCountry.getText().length() > 1) {
+                        SaveTrail();
+                    } else {
+                        Snackbar.make(view, "Country Is Not Valid", Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    Snackbar.make(view, "State Name Is Not Valid", Snackbar.LENGTH_LONG).show();
+                }
+            } else {
+                Snackbar.make(view, "City Is Not Valid", Snackbar.LENGTH_LONG).show();
+            }
+        } else {
+            Snackbar.make(view, "Trail Name Is Not Valid", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void getStateList() {
+        stateList = StateListHelper.getStates();
+        List<String> list = new ArrayList<>(stateList.values());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        editTextState.setAdapter(adapter);
+        editTextState.setThreshold(1);
+
+        editTextState.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String str = editTextState.getText().toString();
+                    ListAdapter listAdapter = editTextState.getAdapter();
+                    for (int i = 0; i < listAdapter.getCount(); i++){
+                        String temp = listAdapter.getItem(i).toString();
+                        if(str.compareTo(temp) == 0) {
+                            return;
+                        }
+                    }
+                    editTextState.setText("");
+                }
+            }
+        });
+    }
+
+    private void getCountryList() {
+        Locale[] locales = Locale.getAvailableLocales();
+        List<String> countries = new ArrayList<>();
+        for (Locale locale : locales) {
+            String country = locale.getDisplayCountry();
+            if (country.trim().length()>0 && !countries.contains(country)) {
+                countries.add(country);
+            }
+        }
+        Collections.sort(countries);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countries);
+        editTextCountry.setAdapter(adapter);
+        editTextCountry.setThreshold(1);
+
+        editTextCountry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    String str = editTextCountry.getText().toString();
+                    ListAdapter listAdapter = editTextCountry.getAdapter();
+                    for (int i = 0; i < listAdapter.getCount(); i++){
+                        String temp = listAdapter.getItem(i).toString();
+                        if(str.compareTo(temp) == 0) {
+                            return;
+                        }
+                    }
+                    editTextCountry.setText("");
+                }
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.menu_add_trail, menu);
         return true;
     }
+    //endregion
+
+    //region Save Trail
+
+    private void SaveTrail() {
+        Snackbar.make(view, "Trails Has Been Saved", Snackbar.LENGTH_LONG).show();
+    }
+
     //endregion
 
     //region Sliding Panel
@@ -204,11 +303,7 @@ public class AddTrail extends BaseActivity implements
     }
     //endregion
 
-
-
     //region Google MapActivity Api Methods
-
-
     //private void setCreateMarkerListener() {
 
 //        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -298,7 +393,6 @@ public class AddTrail extends BaseActivity implements
         // clear the previous marker if not null
         if (newLocationMarkerOptions != null) {
             newLocationMarkerOptions.remove();
-
         }
         newLocationMarkerOptions = googleMap.addMarker(new MarkerOptions()
                 .title("New Trail Location")

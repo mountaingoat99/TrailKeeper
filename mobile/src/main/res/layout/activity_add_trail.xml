@@ -46,7 +46,7 @@
                             android:paddingLeft="10dp"
                             android:paddingTop="10dp"
                             android:paddingBottom="5dp"
-                            android:hint="Trail Name"
+                            android:hint="@string/trailName_hint"
                             android:inputType="textCapWords"
                             android:textColorHint="@color/secondary_text"
                             android:background="@android:color/white"/>
@@ -83,7 +83,7 @@
                                     android:paddingLeft="10dp"
                                     android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
-                                    android:hint="City"
+                                    android:hint="@string/city_hint"
                                     android:inputType="textCapWords"
                                     android:textColorHint="@color/secondary_text"
                                     android:background="@android:color/white"/>
@@ -114,7 +114,7 @@
                                     android:paddingLeft="10dp"
                                     android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
-                                    android:hint="State"
+                                    android:hint="@string/state_hint"
                                     android:inputType="textCapCharacters"
                                     android:textColorHint="@color/secondary_text"
                                     android:background="@android:color/white"/>
@@ -153,8 +153,8 @@
                                     android:paddingLeft="10dp"
                                     android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
-                                    android:hint="Country"
-                                    android:inputType="textCapWords"
+                                    android:hint="@string/country_hint"
+                                    android:inputType="textCapCharacters"
                                     android:textColorHint="@color/secondary_text"
                                     android:background="@android:color/white"/>
 
@@ -219,28 +219,28 @@
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginRight="16dp"
                                 android:layout_gravity="center_vertical"
-                                android:text="Skill Level: "/>
+                                android:text="@string/skill_level_view"/>
 
                             <CheckBox
                                 android:id="@+id/check_box_easy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom"
-                                android:text="Easy" />
+                                android:text="@string/easy_checkbox" />
 
                             <CheckBox
                                 android:id="@+id/check_box_medium"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom"
-                                android:text="Medium" />
+                                android:text="@string/medium_checkbox" />
 
                             <CheckBox
                                 android:id="@+id/check_box_hard"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom"
-                                android:text="Hard" />
+                                android:text="@string/checkbox_hard" />
 
                         </LinearLayout>
 
@@ -260,7 +260,7 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_marginRight="32dp"
                                 android:layout_marginEnd="32dp"
-                                android:text="Use Current Location:"
+                                android:text="@string/use_current_location_switch"
                                 android:textSize="@dimen/text_size_super_mini"
                                 android:textColor="@color/primary_text"/>
 
@@ -271,7 +271,7 @@
                                 android:layout_weight="1"
                                 android:layout_gravity="top"
                                 android:layout_marginTop="8dp"
-                                android:text="Private Trail:"
+                                android:text="@string/private_trail_switch"
                                 android:textSize="@dimen/text_size_super_mini"
                                 android:textColor="@color/primary_text"/>
 
@@ -290,7 +290,8 @@
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="true"
-                                android:text="Create"/>
+                                android:text="@string/create_new_trail"
+                                android:onClick="btn_create_click" />
 
                         </RelativeLayout>
 
