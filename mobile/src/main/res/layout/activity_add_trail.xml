@@ -48,6 +48,7 @@
                             android:paddingBottom="5dp"
                             android:hint="@string/trailName_hint"
                             android:inputType="textCapWords"
+                            android:nextFocusDown="@+id/edittext_city"
                             android:textColorHint="@color/secondary_text"
                             android:background="@android:color/white"/>
 
@@ -85,6 +86,7 @@
                                     android:paddingBottom="5dp"
                                     android:hint="@string/city_hint"
                                     android:inputType="textCapWords"
+                                    android:nextFocusDown="@+id/edittext_state"
                                     android:textColorHint="@color/secondary_text"
                                     android:background="@android:color/white"/>
 
@@ -116,6 +118,7 @@
                                     android:paddingBottom="5dp"
                                     android:hint="@string/state_hint"
                                     android:inputType="textCapCharacters"
+                                    android:nextFocusDown="@+id/edittext_country"
                                     android:textColorHint="@color/secondary_text"
                                     android:background="@android:color/white"/>
 
@@ -155,6 +158,7 @@
                                     android:paddingBottom="5dp"
                                     android:hint="@string/country_hint"
                                     android:inputType="textCapCharacters"
+                                    android:nextFocusDown="@+id/edittext_distance"
                                     android:textColorHint="@color/secondary_text"
                                     android:background="@android:color/white"/>
 

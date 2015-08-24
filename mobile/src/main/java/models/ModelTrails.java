@@ -191,8 +191,9 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
-    public void CreateNewTrail(String trailName, String city, String state, String country,
+    public boolean CreateNewTrail(String trailName, String city, String state, String country,
                                String length, List<String> skillLevelList, LatLng location, boolean isPrivate) {
+        boolean valid = true;
         ParseTrails parseTrails = new ParseTrails();
 
         try {
@@ -219,10 +220,17 @@ public class ModelTrails {
             parseTrails.saveEventually();
             Log.i(LOG, "Saving New Trail");
             parseTrails.pinInBackground();
+
+            // TODO update the TrailStatus Class too
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG, "Saving New Trail Failed");
+            valid = false;
         }
+        return valid;
+    }
+
+    private void CreateNewTrailStatus() {
 
     }
 

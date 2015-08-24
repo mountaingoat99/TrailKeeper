@@ -15,8 +15,10 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
@@ -50,6 +52,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import AsyncAdapters.AsyncTrailLocations;
+import Helpers.AlertDialogHelper;
 import Helpers.GeoLocationHelper;
 import Helpers.StateListHelper;
 import models.ModelTrails;
@@ -156,6 +159,20 @@ public class AddTrail extends BaseActivity implements
         chkMedium = (CheckBox)findViewById(R.id.check_box_medium);
         chkHard = (CheckBox)findViewById(R.id.check_box_hard);
         mlayout.setDragView(up_view);
+    }
+
+    // TODO may not use this unless I add a reset button on the screen
+    private void resetEverything() {
+        editLength.setText("");
+        editTextState.setText("");
+        editTextTrailName.setText("");
+        editTextCountry.setText("");
+        editTextCity.setText("");
+        switchCurrentLocation.setChecked(false);
+        switchPrivateTrail.setChecked(false);
+        chkEasy.setChecked(false);
+        chkMedium.setChecked(false);
+        chkHard.setChecked(false);
     }
 
     private void setSwitchListeners() {
@@ -308,6 +325,7 @@ public class AddTrail extends BaseActivity implements
     //region Save Trail
 
     private void SaveTrail() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         String tName = editTextTrailName.getText().toString().trim();
         String tCity = editTextCity.getText().toString().trim();
         String tState = editTextState.getText().toString().trim();
@@ -319,8 +337,14 @@ public class AddTrail extends BaseActivity implements
 
         // call the method to do the update to Parse
         ModelTrails modelTrails = new ModelTrails();
-        modelTrails.CreateNewTrail(tName, tCity, tState, tCountry, tLength, skillLevelList, trailLocation, isPrivateTrail);
-        Snackbar.make(view, "Trails Has Been Saved", Snackbar.LENGTH_LONG).show();
+        if (modelTrails.CreateNewTrail(tName, tCity, tState, tCountry, tLength, skillLevelList, trailLocation, isPrivateTrail)) {
+            //Snackbar.make(view, "Trails Has Been Saved", Snackbar.LENGTH_LONG).show();
+            AlertDialogHelper.showCustomAlertDialog(context, "New Trail!", tName + " Has Been Created, But It May Not Be Available For A Few Minutes Until The Cloud Has Done It's Magic.");
+            resetEverything();
+        } else {
+            AlertDialogHelper.showCustomAlertDialog(context, "Oh No!", "Oops, Try Again, We Broke Something");
+            //Snackbar.make(view, "Oops, Try Again, We Broke Something", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     //endregion
