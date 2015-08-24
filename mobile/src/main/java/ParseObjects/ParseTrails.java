@@ -48,6 +48,18 @@ public class ParseTrails extends ParseObject {
         return getDate("updatedAt");
     }
 
+    public String getCreatedBy() { return getString("createdBy"); }
+
+    public void setCreatedBy(String userName) { put("createdBy", userName); }
+
+    public Boolean getPrivate() { return getBoolean("private"); }
+
+    public void setPrivate(boolean isPrivate) { put("private", isPrivate); }
+
+    public JSONArray getSkillLevels() { return getJSONArray("skillLevels"); }
+
+    public void setSkillLevels(JSONArray skillLevels) { put("skillLevels", skillLevels); }
+
     public static ParseQuery<ParseTrails> getQuery() {
         return ParseQuery.getQuery(ParseTrails.class);
     }

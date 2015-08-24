@@ -3,12 +3,17 @@ package models;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,9 +21,11 @@ import java.util.List;
 import java.util.Set;
 
 import Helpers.PushNotificationHelper;
+import ParseObjects.ParseTrails;
 
 public class ModelTrails {
 
+    public final String LOG = "ModelTrails";
     public String ObjectID;
     public String TrailName;
     public int TrailStatus;
@@ -184,6 +191,41 @@ public class ModelTrails {
     //endregion
 
     //Region Public Methods
+    public void CreateNewTrail(String trailName, String city, String state, String country,
+                               String length, List<String> skillLevelList, LatLng location, boolean isPrivate) {
+        ParseTrails parseTrails = new ParseTrails();
+
+        try {
+            // convert the list, if anything in it, to Json Array
+            if (skillLevelList.size() > 0) {
+                //String json = new Gson().toJson(skillLevelList);
+                parseTrails.addAllUnique("skillLevels", skillLevelList);
+            }
+
+            // save the GeoPoint first
+            ParseGeoPoint point = new ParseGeoPoint(location.latitude, location.longitude);
+
+            // the update the rest if the values
+            parseTrails.put("trailName", trailName);
+            parseTrails.put("city", city);
+            parseTrails.put("state", state);
+            parseTrails.put("country", country);
+            parseTrails.put("distance", Double.valueOf(length));
+            parseTrails.put("skillLevel", skillLevelList);
+            parseTrails.put("private", isPrivate);
+            parseTrails.put("geoLocation", point);
+            parseTrails.put("status", 2);
+            parseTrails.put("createdBy", ParseUser.getCurrentUser().getUsername());
+            parseTrails.saveEventually();
+            Log.i(LOG, "Saving New Trail");
+            parseTrails.pinInBackground();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i(LOG, "Saving New Trail Failed");
+        }
+
+    }
+
     public void UpdateTrailStatus(String objectId, final int choice) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();

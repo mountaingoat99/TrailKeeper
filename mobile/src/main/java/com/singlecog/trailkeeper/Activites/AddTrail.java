@@ -19,6 +19,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,9 +67,13 @@ public class AddTrail extends BaseActivity implements
     private View layout1;
     private SlidingUpPanelLayout mlayout;
     private ImageView up_view;
-    private EditText editTextTrailName, editTextCity;
+    private EditText editTextTrailName, editTextCity, editLength;
     private AutoCompleteTextView editTextState, editTextCountry;
-    private Switch aSwitchCurrentLocation;
+    private Switch switchCurrentLocation;
+    private Switch switchPrivateTrail;
+    private CheckBox chkEasy;
+    private CheckBox chkMedium;
+    private CheckBox chkHard;
 
     private int mainLayoutHeight = 0;
     private int layout1Height = 0;
@@ -78,12 +84,11 @@ public class AddTrail extends BaseActivity implements
     private LatLng trailLocation;
     private String trailName, objectID;
     private int trailStatus;
-    private boolean isMapUp = true;
+    private boolean isMapUp = true, doUseCurrentLocation = false, isPrivateTrail = false;
     private List<ModelTrails> trails;
+    private List<String> skillLevelList;
     private LatLng home;
     protected GoogleApiClient mGoogleApiClient;
-
-    private Map<String, String> stateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +110,8 @@ public class AddTrail extends BaseActivity implements
         }
         setPanelListener();
         setImageClickListener();
+        setSwitchListeners();
+        setSkillLevelListeners();
         getCountryList();
         getStateList();
         //setCreateMarkerListener();
@@ -129,7 +136,6 @@ public class AddTrail extends BaseActivity implements
             public void onGlobalLayout() {
                 layout1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 layout1Height = layout1.getMeasuredHeight();
-
                 mlayout.setPanelHeight(mainLayoutHeight - layout1Height);
             }
         });
@@ -141,10 +147,67 @@ public class AddTrail extends BaseActivity implements
         up_view = (ImageView)findViewById(R.id.up_image);
         editTextTrailName = (EditText)findViewById(R.id.edittext_trail_name);
         editTextCity = (EditText)findViewById(R.id.edittext_city);
+        editLength = (EditText)findViewById(R.id.edittext_distance);
         editTextState = (AutoCompleteTextView)findViewById(R.id.edittext_state);
         editTextCountry = (AutoCompleteTextView)findViewById(R.id.edittext_country);
-        aSwitchCurrentLocation = (Switch)findViewById(R.id.switch_current_location);
+        switchCurrentLocation = (Switch)findViewById(R.id.switch_current_location);
+        switchPrivateTrail = (Switch)findViewById(R.id.switch_private_trail);
+        chkEasy = (CheckBox)findViewById(R.id.check_box_easy);
+        chkMedium = (CheckBox)findViewById(R.id.check_box_medium);
+        chkHard = (CheckBox)findViewById(R.id.check_box_hard);
         mlayout.setDragView(up_view);
+    }
+
+    private void setSwitchListeners() {
+        switchCurrentLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                doUseCurrentLocation = isChecked;
+            }
+        });
+
+        switchPrivateTrail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isPrivateTrail = isChecked;
+            }
+        });
+    }
+
+    private void setSkillLevelListeners() {
+        skillLevelList = new ArrayList<>();
+        chkEasy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    skillLevelList.add("easy");
+                } else {
+                    skillLevelList.remove("easy");
+                }
+            }
+        });
+
+        chkMedium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    skillLevelList.add("medium");
+                } else {
+                    skillLevelList.remove("medium");
+                }
+            }
+        });
+
+        chkHard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    skillLevelList.add("hard");
+                } else {
+                    skillLevelList.remove("hard");
+                }
+            }
+        });
     }
 
     public void btn_create_click(View view) {
@@ -152,7 +215,17 @@ public class AddTrail extends BaseActivity implements
             if (editTextCity.getText().length() > 1) {
                 if (editTextState.getText().length() > 1) {
                     if (editTextCountry.getText().length() > 1) {
-                        SaveTrail();
+                        if (doUseCurrentLocation) {
+                            trailLocation = home;
+                            SaveTrail();
+                        } else {
+                            if (newLocationMarkerOptions != null) {
+                                trailLocation = newLocationMarkerOptions.getPosition();
+                                SaveTrail();
+                            } else {
+                                Snackbar.make(view, "Please Choose A Location", Snackbar.LENGTH_LONG).show();
+                            }
+                        }
                     } else {
                         Snackbar.make(view, "Country Is Not Valid", Snackbar.LENGTH_LONG).show();
                     }
@@ -168,7 +241,7 @@ public class AddTrail extends BaseActivity implements
     }
 
     private void getStateList() {
-        stateList = StateListHelper.getStates();
+        Map<String, String> stateList = StateListHelper.getStates();
         List<String> list = new ArrayList<>(stateList.values());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         editTextState.setAdapter(adapter);
@@ -235,6 +308,18 @@ public class AddTrail extends BaseActivity implements
     //region Save Trail
 
     private void SaveTrail() {
+        String tName = editTextTrailName.getText().toString().trim();
+        String tCity = editTextCity.getText().toString().trim();
+        String tState = editTextState.getText().toString().trim();
+        String tCountry = editTextCountry.getText().toString().trim();
+        String tLength = null;
+        if (editLength.getText().length() > 0) {
+            tLength = editLength.getText().toString().trim();
+        }
+
+        // call the method to do the update to Parse
+        ModelTrails modelTrails = new ModelTrails();
+        modelTrails.CreateNewTrail(tName, tCity, tState, tCountry, tLength, skillLevelList, trailLocation, isPrivateTrail);
         Snackbar.make(view, "Trails Has Been Saved", Snackbar.LENGTH_LONG).show();
     }
 
