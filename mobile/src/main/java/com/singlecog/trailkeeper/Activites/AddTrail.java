@@ -337,7 +337,7 @@ public class AddTrail extends BaseActivity implements
 
         // call the method to do the update to Parse
         ModelTrails modelTrails = new ModelTrails();
-        if (modelTrails.CreateNewTrail(tName, tCity, tState, tCountry, tLength, skillLevelList, trailLocation, isPrivateTrail)) {
+        if (modelTrails.CreateNewTrail(context, tName, tCity, tState, tCountry, tLength, skillLevelList, trailLocation, isPrivateTrail)) {
             //Snackbar.make(view, "Trails Has Been Saved", Snackbar.LENGTH_LONG).show();
             AlertDialogHelper.showCustomAlertDialog(context, "New Trail!", tName + " Has Been Created, But It May Not Be Available For A Few Minutes Until The Cloud Has Done It's Magic.");
             resetEverything();

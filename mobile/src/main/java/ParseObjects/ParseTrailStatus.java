@@ -13,14 +13,6 @@ public class ParseTrailStatus extends ParseObject {
 
     public void setUpdateStatusPin(Integer pin) { put("updateStatusPin", pin); }
 
-    public String getTrailObjectID() {
-        return getString("trailObjectId");
-    }
-
-    public void SetTrailObjectID(String trailID) {
-        put("trailObjectId", trailID);
-    }
-
     public String getTrailName() {
         return getString("trailName");
     }

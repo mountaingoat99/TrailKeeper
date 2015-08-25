@@ -101,7 +101,7 @@ public class TrailScreen extends BaseActivity {
             objectID = b.getString("objectID");
         }
 
-        trailStatusPin = ModelTrails.GetTrailPin(objectID);
+
         CallTrailCommentsAsync();
         GetTrailData();
 
@@ -269,6 +269,7 @@ public class TrailScreen extends BaseActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        trailStatusPin = ModelTrails.GetTrailPin(trailNameString);
     }
 
     private void UpdateStatusIcon() {
@@ -400,7 +401,7 @@ public class TrailScreen extends BaseActivity {
         dialog.dismiss();
         progressDialog = ProgressDialogHelper.ShowProgressDialog(context, "Saving New Comment");
         ModelTrailComments trailComments = new ModelTrailComments(context, this);
-        trailComments.CreateNewComment(objectID, trailNameString, comment);
+        trailComments.CreateNewComment(context, objectID, trailNameString, comment);
     }
 
     public void SaveCommentWasSuccessful(Boolean success, ModelTrailComments modelTrailComments) {
@@ -495,7 +496,7 @@ public class TrailScreen extends BaseActivity {
 
     private void CallChangeTrailStatusClass(int choice) {
         progressDialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Trail Status");
-        modelTrails.UpdateTrailStatus(objectID, choice);
+        modelTrails.UpdateTrailStatus(context, objectID, choice);
     }
 
     public void TrailStatusUpdateWasSuccessful(boolean valid, String message) {
@@ -503,6 +504,7 @@ public class TrailScreen extends BaseActivity {
         if (valid) {
             Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
             UpdateStatusIcon();
+            ModelTrails.UpdateTrailStatusUser(context, trailNameString);
 
             // here we need to check if there is a connection
             // if no connection we save the push in shared preferences

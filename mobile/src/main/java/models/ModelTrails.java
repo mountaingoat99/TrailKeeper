@@ -11,6 +11,7 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
 import org.json.JSONObject;
@@ -18,14 +19,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
+import Helpers.ConnectionDetector;
 import Helpers.PushNotificationHelper;
+import ParseObjects.ParseTrailStatus;
 import ParseObjects.ParseTrails;
 
 public class ModelTrails {
 
-    public final String LOG = "ModelTrails";
+    public static final String LOG = "ModelTrails";
     public String ObjectID;
     public String TrailName;
     public int TrailStatus;
@@ -115,11 +119,11 @@ public class ModelTrails {
     }
 
     // get the trail Pin based on ObjectID
-    public static int GetTrailPin(String objectID) {
+    public static int GetTrailPin(String trailName) {
         List<ParseObject> trailPinList = new ArrayList<>();
         int trailPin = 0;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TrailStatus");
-        query.whereEqualTo("trailObjectId", objectID);
+        query.whereEqualTo("trailName", trailName);
         query.fromLocalDatastore();
 
         try {
@@ -187,65 +191,116 @@ public class ModelTrails {
         }
         return trails;
     }
-
     //endregion
 
     //Region Public Methods
-    public boolean CreateNewTrail(String trailName, String city, String state, String country,
+    public boolean CreateNewTrail(Context context, String trailName, String city, String state, String country,
                                String length, List<String> skillLevelList, LatLng location, boolean isPrivate) {
         boolean valid = true;
         ParseTrails parseTrails = new ParseTrails();
-
         try {
             // convert the list, if anything in it, to Json Array
             if (skillLevelList.size() > 0) {
                 //String json = new Gson().toJson(skillLevelList);
                 parseTrails.addAllUnique("skillLevels", skillLevelList);
             }
-
             // save the GeoPoint first
             ParseGeoPoint point = new ParseGeoPoint(location.latitude, location.longitude);
-
             // the update the rest if the values
             parseTrails.put("trailName", trailName);
             parseTrails.put("city", city);
             parseTrails.put("state", state);
             parseTrails.put("country", country);
             parseTrails.put("distance", Double.valueOf(length));
-            parseTrails.put("skillLevel", skillLevelList);
             parseTrails.put("private", isPrivate);
             parseTrails.put("geoLocation", point);
             parseTrails.put("status", 2);
             parseTrails.put("createdBy", ParseUser.getCurrentUser().getUsername());
-            parseTrails.saveEventually();
+            ConnectionDetector cd = new ConnectionDetector(context);
+            if (cd.isConnectingToInternet()) {
+                parseTrails.saveInBackground();
+            } else {
+                parseTrails.saveEventually();
+            }
             Log.i(LOG, "Saving New Trail");
             parseTrails.pinInBackground();
-
-            // TODO update the TrailStatus Class too
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG, "Saving New Trail Failed");
             valid = false;
         }
+        CreateNewTrailStatus(context, trailName);
         return valid;
     }
 
-    private void CreateNewTrailStatus() {
+    private void CreateNewTrailStatus(Context context, String trailName) {
+        // create a random number to use as a Pin
+        Random rand = new Random();
+        int min = 1000;
+        int max = 9999;
+        int trailPin = rand.nextInt((max - min) + 1) + min;
+
+        List<String> userList = new ArrayList<>();
+        userList.add(ParseUser.getCurrentUser().getUsername());
+        ParseTrailStatus trailStatus = new ParseTrailStatus();
+        try {
+            trailStatus.put("trailName", trailName);
+            trailStatus.put("updateStatusPin", trailPin);
+            trailStatus.put("authorizedUserName", ParseUser.getCurrentUser().getUsername());
+            trailStatus.addAllUnique("authorizedUserNames", userList);
+            ConnectionDetector cd = new ConnectionDetector(context);
+            if (cd.isConnectingToInternet()) {
+                trailStatus.saveInBackground();
+            } else {
+                trailStatus.saveEventually();
+            }
+            Log.i(LOG, " New TrailStatus Creation Succeeded");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i(LOG, "Saving the New TrailStatus Failed");
+        }
 
     }
 
-    public void UpdateTrailStatus(String objectId, final int choice) {
+    public void UpdateTrailStatus(Context context, String objectId, final int choice) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();
         try {
             ParseObject parseObject = query.get(objectId);
             parseObject.put("status", choice);
-            parseObject.saveEventually();
+            ConnectionDetector cd = new ConnectionDetector(context);
+            if (cd.isConnectingToInternet()) {
+                parseObject.saveInBackground();
+            } else {
+                parseObject.saveEventually();
+            }
             parseObject.pinInBackground();
             TrailStatusUpdateSuccessful(true, null);
         } catch (ParseException e) {
             e.printStackTrace();
             TrailStatusUpdateSuccessful(false, e.getMessage());
+        }
+    }
+
+    public static void UpdateTrailStatusUser(Context context, String trailName) {
+        List<String> userList = new ArrayList<>();
+        userList.add(ParseUser.getCurrentUser().getUsername());
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TrailStatus");
+        query.whereEqualTo("trailName", trailName);
+        query.fromLocalDatastore();
+        try {
+            ParseObject parseObject = query.getFirst();
+            parseObject.addAllUnique("authorizedUserNames", userList);
+            ConnectionDetector cd = new ConnectionDetector(context);
+            if (cd.isConnectingToInternet()) {
+                parseObject.saveInBackground();
+            } else {
+                parseObject.saveEventually();
+            }
+            Log.i(LOG, "TrailStatus User Update Succeeded");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.i(LOG, "TrailStatus User Update Failed");
         }
     }
 
