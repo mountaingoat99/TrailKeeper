@@ -13,9 +13,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.singlecog.trailkeeper.R;
 import java.util.List;
@@ -278,7 +281,26 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     @Override
     protected void onResume() {
         super.onResume();
+        checkGooglePlayServices();
         TrailKeeperApplication.mGoogleApiClient.connect();
+    }
+
+    private void checkGooglePlayServices() {
+        Log.i("HomeScreen", "Checking Google Play Services");
+        int connectionStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+        if (connectionStatus != ConnectionResult.SUCCESS) {
+            Log.i("HomeScreen", "Google Play Services not successfull");
+            if (connectionStatus == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
+                Log.i("HomeScreen", "Google Play Services needs and update");
+                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
+                        "You Don't have to, but this app will not work correctly without it.", true);
+            } else {
+                Log.i("HomeScreen", "Google Play Services not installed");
+                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Install Google Play Service", "Click OK to Install Google Play Services. \n" +
+                        "You Don't have to, but this app will not work correctly without it ", true);
+            }
+        }
+        Log.i("HomeScreen", "Google Play Services is installed and up to date");
     }
 
     @Override

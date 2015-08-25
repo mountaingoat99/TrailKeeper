@@ -15,7 +15,7 @@ public class GeoLocationHelper {
     public static float GetClosestTrails(ModelTrails trail, LatLng currentLocation){
         double latTrail = trail.GeoLocation.getLatitude();
         double longTrail = trail.GeoLocation.getLongitude();
-        double latLocation = currentLocation.latitude;
+        double latLocation = currentLocation.latitude;            // TODO crashes here without Google services or location turned on
         double longLocation = currentLocation.longitude;
 
         float[] dist = new float[1];
