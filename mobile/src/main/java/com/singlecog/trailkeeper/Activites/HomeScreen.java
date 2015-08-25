@@ -247,11 +247,17 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     //region Private Methods
     private void SortTrails(){
-        for (int i = 0; trails.size() > i; i++) {
-            // TODO once settings are working add Metric in here
-            trails.get(i).distance = (float)Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
+        // only go into this method if Play Services is connected and updated
+        if (TrailKeeperApplication.GetIsPlayServicesInstalled() && TrailKeeperApplication.GetIsPlayServicesUpdated()) {
+            for (int i = 0; trails.size() > i; i++) {
+                // TODO once settings are working add Metric in here
+                trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
+            }
+            GeoLocationHelper.SortTrails(trails);
+        } else {
+            AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
+                        "You Don't have to, but this app will not work correctly without it.", true);
         }
-        GeoLocationHelper.SortTrails(trails);
 
         //on the Home Screen we only will show the 5 closet trails
         int count = trails.size();
@@ -281,27 +287,27 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     @Override
     protected void onResume() {
         super.onResume();
-        checkGooglePlayServices();
+        //checkGooglePlayServices();
         TrailKeeperApplication.mGoogleApiClient.connect();
     }
 
-    private void checkGooglePlayServices() {
-        Log.i("HomeScreen", "Checking Google Play Services");
-        int connectionStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        if (connectionStatus != ConnectionResult.SUCCESS) {
-            Log.i("HomeScreen", "Google Play Services not successfull");
-            if (connectionStatus == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
-                Log.i("HomeScreen", "Google Play Services needs and update");
-                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
-                        "You Don't have to, but this app will not work correctly without it.", true);
-            } else {
-                Log.i("HomeScreen", "Google Play Services not installed");
-                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Install Google Play Service", "Click OK to Install Google Play Services. \n" +
-                        "You Don't have to, but this app will not work correctly without it ", true);
-            }
-        }
-        Log.i("HomeScreen", "Google Play Services is installed and up to date");
-    }
+//    private void checkGooglePlayServices() {
+//        Log.i("HomeScreen", "Checking Google Play Services");
+//        int connectionStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+//        if (connectionStatus != ConnectionResult.SUCCESS) {
+//            Log.i("HomeScreen", "Google Play Services not successfull");
+//            if (connectionStatus == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
+//                Log.i("HomeScreen", "Google Play Services needs and update");
+//                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
+//                        "You Don't have to, but this app will not work correctly without it.", true);
+//            } else {
+//                Log.i("HomeScreen", "Google Play Services not installed");
+//                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Install Google Play Service", "Click OK to Install Google Play Services. \n" +
+//                        "You Don't have to, but this app will not work correctly without it ", true);
+//            }
+//        }
+//        Log.i("HomeScreen", "Google Play Services is installed and up to date");
+//    }
 
     @Override
     protected void onPause() {

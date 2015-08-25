@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,6 +30,7 @@ import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllAuthorizedCommento
 import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllCommentsFromParse;
 import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllTrailStatusFromParse;
 import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncLoadAllTrailsFromParse;
+import Helpers.AlertDialogHelper;
 import Helpers.CreateAccountHelper;
 import ParseObjects.ParseAuthorizedCommentors;
 import ParseObjects.ParseComments;
@@ -49,6 +51,8 @@ public class TrailKeeperApplication extends Application implements
     public static Location mLastLocation;
     public static LatLng home;
     public static boolean isEmailVerified = false;
+    public static boolean isPlayServicesInstalled;
+    public static boolean isPlayServicesUpdated;
     private Context context = this;
 
     /*
@@ -66,9 +70,28 @@ public class TrailKeeperApplication extends Application implements
         TrailKeeperApplication.isEmailVerified = isEmailVerified;
     }
 
+    public static boolean GetIsPlayServicesInstalled() {
+        return isPlayServicesInstalled;
+    }
+
+    public static void setIsPlayServicesInstalled(boolean isPlayServicesInstalled) {
+        TrailKeeperApplication.isPlayServicesInstalled = isPlayServicesInstalled;
+    }
+
+    public static boolean GetIsPlayServicesUpdated() {
+        return isPlayServicesUpdated;
+    }
+
+    public static void setIsPlayServicesUpdated(boolean isPlayServicesUpdated) {
+        TrailKeeperApplication.isPlayServicesUpdated = isPlayServicesUpdated;
+    }
+
     @Override
     public void onCreate(){
         super.onCreate();
+
+        // see if Play Services is installed
+        checkGooglePlayServices();
 
         // get the latest device location
         buildGoogleApiClient();
@@ -109,6 +132,24 @@ public class TrailKeeperApplication extends Application implements
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("hasPushWaiting", false);
         editor.apply();
+    }
+
+    private void checkGooglePlayServices() {
+        Log.i("HomeScreen", "Checking Google Play Services");
+        int connectionStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+        if (connectionStatus != ConnectionResult.SUCCESS) {
+            Log.i("HomeScreen", "Google Play Services not successfull");
+            if (connectionStatus == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
+                Log.i("HomeScreen", "Google Play Services needs and update");
+                setIsPlayServicesUpdated(false);
+            } else {
+                Log.i("HomeScreen", "Google Play Services not installed");
+                setIsPlayServicesInstalled(false);
+            }
+        }
+        Log.i("HomeScreen", "Google Play Services is installed and up to date");
+        setIsPlayServicesUpdated(true);
+        setIsPlayServicesInstalled(true);
     }
 
     // load all the objects from Parse
