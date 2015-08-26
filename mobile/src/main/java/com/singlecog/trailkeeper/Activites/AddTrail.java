@@ -352,12 +352,15 @@ public class AddTrail extends BaseActivity implements
         up_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG, "UpDownImage Was Clicked");
                 if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    Log.i(TAG, "Panel State is Expanded and will be collapsed");
                     RotateImageViewDown();
                     mlayout.setEnabled(true);
                     mlayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 }
                 if (mlayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    Log.i(TAG, "Panel State is Collapsed and will be Expanded");
                     RotateImageViewUp();
                     mlayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                     isMapUp = true;
@@ -368,6 +371,7 @@ public class AddTrail extends BaseActivity implements
 
     private void RotateImageViewUp(){
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.rotate_around_center_up);
+
         up_view.startAnimation(animation);
     }
 
@@ -380,6 +384,7 @@ public class AddTrail extends BaseActivity implements
         mlayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
+                Log.i(TAG, "Panel State is Sliding");
                 mlayout.setEnabled(true);
                 if (!isMapUp) {
                     RotateImageViewUp();
@@ -388,23 +393,26 @@ public class AddTrail extends BaseActivity implements
 
             @Override
             public void onPanelCollapsed(View view) {
+                Log.i(TAG, "Panel State is Collapsed");
                 mlayout.setEnabled(true);
                 isMapUp = false;
             }
 
             @Override
             public void onPanelExpanded(View view) {
+                Log.i(TAG, "Panel State is Expanding");
                 mlayout.setEnabled(false);
                 isMapUp = true;
             }
 
             @Override
             public void onPanelAnchored(View view) {
-
+                Log.i(TAG, "Panel State is Anchored");
             }
 
             @Override
             public void onPanelHidden(View view) {
+                Log.i(TAG, "Panel State is Hidden");
             }
         });
     }
