@@ -127,16 +127,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
         // this only runs on every call to this activity
         // because we still want to show all the other trails when they move around
         if(trails != null) {
-            if (TrailKeeperApplication.GetIsPlayServicesUpdated() && TrailKeeperApplication.GetIsPlayServicesInstalled()) {
-                for (int i = 0; trails.size() > i; i++) {
-                    trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
-                }
-                // then sort them
-                GeoLocationHelper.SortTrails(trails);
-            } else {
-                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
-                        "You Don't have to, but this app will not work correctly without it.", true);
+            for (int i = 0; trails.size() > i; i++) {
+                trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
             }
+            // then sort them
+            GeoLocationHelper.SortTrails(trails);
 
             // for now we will show all the trail, TODO we may cut that list down as it grows
             for (int i = 0; i < trails.size(); i++) {

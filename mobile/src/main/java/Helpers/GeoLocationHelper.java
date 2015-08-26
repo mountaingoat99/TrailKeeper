@@ -13,10 +13,15 @@ import models.ModelTrails;
 public class GeoLocationHelper {
 
     public static float GetClosestTrails(ModelTrails trail, LatLng currentLocation){
+        // Here we will default the lat and long to my home location
+        double latLocation = 42.566763;
+        double longLocation = -87.887405;
         double latTrail = trail.GeoLocation.getLatitude();
         double longTrail = trail.GeoLocation.getLongitude();
-        double latLocation = currentLocation.latitude;            // TODO crashes here without Google services or location turned on
-        double longLocation = currentLocation.longitude;
+        if (currentLocation != null) {
+            latLocation = currentLocation.latitude;
+            longLocation = currentLocation.longitude;
+        }
 
         float[] dist = new float[1];
         Location.distanceBetween(latLocation, longLocation, latTrail, longTrail, dist);

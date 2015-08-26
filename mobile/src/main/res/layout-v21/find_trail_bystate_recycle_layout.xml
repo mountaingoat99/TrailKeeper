@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container_inner_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_centerVertical="true" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/state_touch_point">
+
+        <ImageView
+            android:id="@+id/image_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_action_expand"
+            android:contentDescription="@string/expand_state" />
+
+        <TextView
+            android:id="@+id/state_list"
+            android:text="Wisconsin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/image_expand"
+            android:layout_toRightOf="@+id/image_expand"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/primary_text"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/find_trail_in_state_recycler_view"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+</LinearLayout>

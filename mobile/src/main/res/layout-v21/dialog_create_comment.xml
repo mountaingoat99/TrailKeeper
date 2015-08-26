@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edittext_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="10dp"
+            android:hint="@string/edittext_new_comment"
+            android:inputType="textCapSentences"
+            android:textColorHint="@color/secondary_text"
+            android:background="@android:color/white"/>
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/black"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/button_text_small"
+                android:textColor="@color/accent"
+                style="?android:attr/borderlessButtonStyle"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:layout_toLeftOf="@+id/btn_create_comment"
+                android:layout_toStartOf="@+id/btn_create_comment"
+                android:text="@string/sign_out_cancel"/>
+
+            <Button
+                android:id="@+id/btn_create_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/button_text_small"
+                android:textColor="@color/accent"
+                style="?android:attr/borderlessButtonStyle"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/btn_save"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

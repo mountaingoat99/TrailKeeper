@@ -73,12 +73,8 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
             viewHolder.trailStatus.setImageResource(R.mipmap.yellow_unknown);
         }
 
-        if (TrailKeeperApplication.GetIsPlayServicesInstalled() && TrailKeeperApplication.GetIsPlayServicesUpdated()) {
-            int distanceAway = Math.round(GeoLocationHelper.GetClosestTrails(model, TrailKeeperApplication.home) * 100) / 100;
-            viewHolder.distance.setText(String.valueOf(distanceAway + " Miles"));
-        } else {
-            viewHolder.distance.setText("");
-        }
+        int distanceAway = Math.round(GeoLocationHelper.GetClosestTrails(model, TrailKeeperApplication.home) * 100) / 100;
+        viewHolder.distance.setText(String.valueOf(distanceAway + " Miles"));
 
         viewHolder.trailTouchPoint.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,19 +13,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.singlecog.trailkeeper.R;
 import java.util.List;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import Helpers.AlertDialogHelper;
 import Helpers.CreateAccountHelper;
@@ -98,6 +93,16 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
             }
         }
         CreateAccountHelper.CheckUserVerified();
+        CheckForGoogleServicesAndGPS();
+    }
+
+    private void CheckForGoogleServicesAndGPS() {
+        if (!TrailKeeperApplication.GetIsGPSEnabled()) {
+            AlertDialogHelper.showCustomAlertDialogForNoGPS(context, "No GPS", "Please Turn On Your GPS To Get Access To All The Features Of TrailKeeper");
+        }
+        if (!TrailKeeperApplication.GetIsPlayServicesInstalled() || !TrailKeeperApplication.GetIsPlayServicesUpdated()) {
+            AlertDialogHelper.showCustomAlertDialogForPlayServices(context, "Update Google Play Service", "Please Update Google Play Services To Have Access To All The Features Of TrailKeeper");
+        }
     }
 
     //region Activity Set up
@@ -247,17 +252,11 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     //region Private Methods
     private void SortTrails(){
-        // only go into this method if Play Services is connected and updated
-        if (TrailKeeperApplication.GetIsPlayServicesInstalled() && TrailKeeperApplication.GetIsPlayServicesUpdated()) {
-            for (int i = 0; trails.size() > i; i++) {
-                // TODO once settings are working add Metric in here
-                trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
-            }
-            GeoLocationHelper.SortTrails(trails);
-        } else {
-            AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
-                        "You Don't have to, but this app will not work correctly without it.", true);
+        for (int i = 0; trails.size() > i; i++) {
+            // TODO once settings are working add Metric in here
+            trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
         }
+        GeoLocationHelper.SortTrails(trails);
 
         //on the Home Screen we only will show the 5 closet trails
         int count = trails.size();
@@ -287,27 +286,16 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     @Override
     protected void onResume() {
         super.onResume();
-        //checkGooglePlayServices();
+        if (!TrailKeeperApplication.GetIsGPSEnabled()) {
+            TrailKeeperApplication tk = new TrailKeeperApplication(context);
+            tk.checkIfGPSIsEnabled();
+        }
+        if (!TrailKeeperApplication.GetIsPlayServicesUpdated() || !TrailKeeperApplication.GetIsPlayServicesInstalled()) {
+            TrailKeeperApplication tk = new TrailKeeperApplication(context);
+            tk.checkGooglePlayServices();
+        }
         TrailKeeperApplication.mGoogleApiClient.connect();
     }
-
-//    private void checkGooglePlayServices() {
-//        Log.i("HomeScreen", "Checking Google Play Services");
-//        int connectionStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-//        if (connectionStatus != ConnectionResult.SUCCESS) {
-//            Log.i("HomeScreen", "Google Play Services not successfull");
-//            if (connectionStatus == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
-//                Log.i("HomeScreen", "Google Play Services needs and update");
-//                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
-//                        "You Don't have to, but this app will not work correctly without it.", true);
-//            } else {
-//                Log.i("HomeScreen", "Google Play Services not installed");
-//                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Install Google Play Service", "Click OK to Install Google Play Services. \n" +
-//                        "You Don't have to, but this app will not work correctly without it ", true);
-//            }
-//        }
-//        Log.i("HomeScreen", "Google Play Services is installed and up to date");
-//    }
 
     @Override
     protected void onPause() {

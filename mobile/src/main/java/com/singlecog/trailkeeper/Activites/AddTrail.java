@@ -4,12 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -18,7 +15,6 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
@@ -124,24 +120,26 @@ public class AddTrail extends BaseActivity implements
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        ViewTreeObserver treeObserver = view.getViewTreeObserver();
-        treeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                mainLayoutHeight = view.getMeasuredHeight();
-            }
-        });
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            ViewTreeObserver treeObserver = view.getViewTreeObserver();
+            treeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    mainLayoutHeight = view.getMeasuredHeight();
+                }
+            });
 
-        ViewTreeObserver treeObserver1 = layout1.getViewTreeObserver();
-        treeObserver1.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                layout1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                layout1Height = layout1.getMeasuredHeight();
-                mlayout.setPanelHeight(mainLayoutHeight - layout1Height);
-            }
-        });
+            ViewTreeObserver treeObserver1 = layout1.getViewTreeObserver();
+            treeObserver1.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    layout1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    layout1Height = layout1.getMeasuredHeight();
+                    mlayout.setPanelHeight(mainLayoutHeight - layout1Height);
+                }
+            });
+        }
     }
 
     private void setUpView() {
@@ -443,16 +441,11 @@ public class AddTrail extends BaseActivity implements
         // this only runs on every call to this activity
         // because we still want to show all the other trails when they move around
         if(trails != null) {
-            if (TrailKeeperApplication.GetIsPlayServicesUpdated() && !TrailKeeperApplication.GetIsPlayServicesInstalled()) {
-                for (int i = 0; trails.size() > i; i++) {
-                    trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
-                }
-                // then sort them
-                GeoLocationHelper.SortTrails(trails);
-            } else {
-                AlertDialogHelper.showCustomAlertDialogNoTouchOutside(context, "Update Google Play Service", "Click OK to Update Google Play Services. \n" +
-                        "You Don't have to, but this app will not work correctly without it.", true);
+            for (int i = 0; trails.size() > i; i++) {
+                trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
             }
+            // then sort them
+            GeoLocationHelper.SortTrails(trails);
 
             // for now we will show all the trail, TODO we may cut that list down as it grows
             for (int i = 0; i < trails.size(); i++) {

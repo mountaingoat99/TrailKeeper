@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -53,7 +54,14 @@ public class TrailKeeperApplication extends Application implements
     public static boolean isEmailVerified = false;
     public static boolean isPlayServicesInstalled;
     public static boolean isPlayServicesUpdated;
+    public static boolean isGPSEnabled;
     private Context context = this;
+
+    public TrailKeeperApplication() {}
+
+    public TrailKeeperApplication(Context context) {
+        this.context = context;
+    }
 
     /*
      * Define a request code to send to Google Play services
@@ -86,12 +94,23 @@ public class TrailKeeperApplication extends Application implements
         TrailKeeperApplication.isPlayServicesUpdated = isPlayServicesUpdated;
     }
 
+    public static boolean GetIsGPSEnabled() {
+        return isGPSEnabled;
+    }
+
+    public static void setIsGPSEnabled(boolean isGPSEnabled) {
+        TrailKeeperApplication.isGPSEnabled = isGPSEnabled;
+    }
+
     @Override
     public void onCreate(){
         super.onCreate();
 
         // see if Play Services is installed
         checkGooglePlayServices();
+
+        // see if the GPS is on
+        checkIfGPSIsEnabled();
 
         // get the latest device location
         buildGoogleApiClient();
@@ -127,6 +146,11 @@ public class TrailKeeperApplication extends Application implements
         savePreferences();
     }
 
+    public void checkIfGPSIsEnabled() {
+        LocationManager mlocManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);;
+        setIsGPSEnabled(mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
+    }
+
     private void savePreferences() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
@@ -134,7 +158,7 @@ public class TrailKeeperApplication extends Application implements
         editor.apply();
     }
 
-    private void checkGooglePlayServices() {
+    public void checkGooglePlayServices() {
         Log.i("HomeScreen", "Checking Google Play Services");
         int connectionStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (connectionStatus != ConnectionResult.SUCCESS) {
@@ -146,10 +170,11 @@ public class TrailKeeperApplication extends Application implements
                 Log.i("HomeScreen", "Google Play Services not installed");
                 setIsPlayServicesInstalled(false);
             }
+        } else {
+            Log.i("HomeScreen", "Google Play Services is installed and up to date");
+            setIsPlayServicesUpdated(true);
+            setIsPlayServicesInstalled(true);
         }
-        Log.i("HomeScreen", "Google Play Services is installed and up to date");
-        setIsPlayServicesUpdated(true);
-        setIsPlayServicesInstalled(true);
     }
 
     // load all the objects from Parse

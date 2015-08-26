@@ -28,7 +28,7 @@
                 android:id="@+id/layout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
+                android:padding="16dp"
                 android:orientation="vertical">
 
                     <LinearLayout
@@ -44,7 +44,7 @@
                             android:paddingRight="10dp"
                             android:paddingEnd="10dp"
                             android:paddingLeft="10dp"
-                            android:paddingTop="4dp"
+                            android:paddingTop="10dp"
                             android:paddingBottom="5dp"
                             android:hint="@string/trailName_hint"
                             android:inputType="textCapWords"
@@ -71,6 +71,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="2"
                                 android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
                                 android:orientation="vertical">
 
                                 <EditText
@@ -81,7 +82,7 @@
                                     android:paddingRight="10dp"
                                     android:paddingEnd="10dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="@string/city_hint"
                                     android:inputType="textCapWords"
@@ -113,7 +114,7 @@
                                     android:paddingRight="10dp"
                                     android:paddingEnd="10dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="@string/state_hint"
                                     android:inputType="textCapCharacters"
@@ -153,7 +154,7 @@
                                     android:paddingRight="10dp"
                                     android:paddingEnd="10dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="@string/country_hint"
                                     android:inputType="textCapCharacters"
@@ -184,7 +185,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="Length"
                                     android:inputType="textCapWords"
@@ -212,7 +213,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -220,66 +221,62 @@
                                 android:textColor="@color/primary_text"
                                 android:textSize="@dimen/text_size_small"
                                 android:layout_marginEnd="16dp"
+                                android:layout_marginRight="16dp"
                                 android:layout_gravity="center_vertical"
                                 android:text="@string/skill_level_view"/>
 
-                            <LinearLayout
-                                android:layout_width="fill_parent"
+                            <CheckBox
+                                android:id="@+id/check_box_easy"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="bottom"
+                                android:text="@string/easy_checkbox" />
 
-                                <CheckBox
-                                    android:id="@+id/check_box_easy"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:layout_gravity="bottom"
-                                    android:text="@string/easy_checkbox" />
+                            <CheckBox
+                                android:id="@+id/check_box_medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:text="@string/medium_checkbox" />
 
-                                <CheckBox
-                                    android:id="@+id/check_box_medium"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:layout_gravity="bottom"
-                                    android:text="@string/medium_checkbox" />
-
-                                <CheckBox
-                                    android:id="@+id/check_box_hard"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:layout_gravity="bottom"
-                                    android:text="@string/checkbox_hard" />
-
-                            </LinearLayout>
+                            <CheckBox
+                                android:id="@+id/check_box_hard"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:text="@string/checkbox_hard" />
 
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="8dp"
+                            android:orientation="horizontal">
 
                             <Switch
                                 android:id="@+id/switch_current_location"
-                                android:layout_width="fill_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 android:layout_gravity="top"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginRight="32dp"
+                                android:layout_marginEnd="32dp"
                                 android:text="@string/use_current_location_switch"
-                                android:textSize="@dimen/text_size_small"
+                                android:textSize="@dimen/text_size_super_mini"
                                 android:textColor="@color/primary_text"/>
 
                             <Switch
                                 android:id="@+id/switch_private_trail"
-                                android:layout_width="fill_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 android:layout_gravity="top"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="8dp"
                                 android:text="@string/private_trail_switch"
-                                android:textSize="@dimen/text_size_small"
+                                android:textSize="@dimen/text_size_super_mini"
                                 android:textColor="@color/primary_text"/>
 
                         </LinearLayout>
@@ -296,6 +293,7 @@
                                 android:textColor="@color/accent"
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
                                 android:text="@string/create_new_trail"
                                 android:onClick="btn_create_click" />
 
@@ -314,7 +312,7 @@
 
                 <ImageView
                     android:id="@+id/up_image"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|bottom"
                     android:contentDescription="Up Tab Image"

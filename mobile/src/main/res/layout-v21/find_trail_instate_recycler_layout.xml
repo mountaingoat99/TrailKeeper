@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/container_inner_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_centerVertical="true" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/trails_in_state_list"
+            android:text="Petrified Springs Park"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="@dimen/text_size_medium" />
+
+        <ImageView
+            android:id="@+id/txt_label_trail_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/red_closed"
+            android:contentDescription="@string/trail_status"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/trails_in_state_cities"
+            android:text="Kenosha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:textSize="@dimen/text_size_mini" />
+
+        <TextView
+            android:id="@+id/trails_distance"
+            android:text="15 Miles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/trails_in_state_cities"
+            android:layout_toRightOf="@+id/trails_in_state_cities"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:textSize="@dimen/text_size_mini" />
+
+    </RelativeLayout>
+
+</LinearLayout>
