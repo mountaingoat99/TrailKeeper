@@ -84,8 +84,8 @@ public class AddTrail extends BaseActivity implements
     private String trailName, objectID;
     private int trailStatus;
     private boolean isMapUp = true, doUseCurrentLocation = false, isPrivateTrail = false;
+    private boolean isEasy = false, isMedium = false, isHard = false;
     private List<ModelTrails> trails;
-    private List<String> skillLevelList;
     private LatLng home;
     protected GoogleApiClient mGoogleApiClient;
 
@@ -190,37 +190,24 @@ public class AddTrail extends BaseActivity implements
     }
 
     private void setSkillLevelListeners() {
-        skillLevelList = new ArrayList<>();
         chkEasy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    skillLevelList.add("easy");
-                } else {
-                    skillLevelList.remove("easy");
-                }
+                isEasy = isChecked;
             }
         });
 
         chkMedium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    skillLevelList.add("medium");
-                } else {
-                    skillLevelList.remove("medium");
-                }
+                isMedium = isChecked;
             }
         });
 
         chkHard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    skillLevelList.add("hard");
-                } else {
-                    skillLevelList.remove("hard");
-                }
+                isHard = isChecked;
             }
         });
     }
@@ -324,25 +311,26 @@ public class AddTrail extends BaseActivity implements
 
     private void SaveTrail() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        String tName = editTextTrailName.getText().toString().trim();
-        String tCity = editTextCity.getText().toString().trim();
-        String tState = editTextState.getText().toString().trim();
-        String tCountry = editTextCountry.getText().toString().trim();
-        String tLength = null;
+        ModelTrails newTrail = new ModelTrails();
+        newTrail.setTrailName(editTextTrailName.getText().toString().trim());
+        newTrail.setTrailCity(editTextCity.getText().toString().trim());
+        newTrail.setTrailState(editTextState.getText().toString().trim());
+        newTrail.setTrailCountry(editTextCountry.getText().toString().trim());
         if (editLength.getText().length() > 0) {
-            tLength = editLength.getText().toString().trim();
+            newTrail.setLength(Double.valueOf(editLength.getText().toString().trim()));
         }
+        newTrail.setIsEasy(isEasy);
+        newTrail.setIsMedium(isMedium);
+        newTrail.setIsHard(isHard);
+        newTrail.setLocation(trailLocation);
+        newTrail.setIsPrivate(isPrivateTrail);
+        newTrail.setTrailStatus(2);
 
         // call the method to do the update to Parse
         ModelTrails modelTrails = new ModelTrails();
-        if (modelTrails.CreateNewTrail(context, tName, tCity, tState, tCountry, tLength, skillLevelList, trailLocation, isPrivateTrail)) {
-            //Snackbar.make(view, "Trails Has Been Saved", Snackbar.LENGTH_LONG).show();
-            AlertDialogHelper.showCustomAlertDialog(context, "New Trail!", tName + " Has Been Created, But It May Not Be Available For A Few Minutes Until The Cloud Has Done It's Magic.");
-            resetEverything();
-        } else {
-            AlertDialogHelper.showCustomAlertDialog(context, "Oh No!", "Oops, Try Again, We Broke Something");
-            //Snackbar.make(view, "Oops, Try Again, We Broke Something", Snackbar.LENGTH_LONG).show();
-        }
+        modelTrails.CreateNewTrail(context, newTrail);
+        AlertDialogHelper.showCustomAlertDialog(context, "New Trail!", newTrail.getTrailName() + " Has Been Created, But It May Not Be Available For A Few Minutes Until The Cloud Has Done It's Magic.");
+        resetEverything();
     }
 
     //endregion
@@ -450,7 +438,7 @@ public class AddTrail extends BaseActivity implements
         // because we still want to show all the other trails when they move around
         if(trails != null) {
             for (int i = 0; trails.size() > i; i++) {
-                trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
+                trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
             }
             // then sort them
             GeoLocationHelper.SortTrails(trails);
@@ -460,27 +448,27 @@ public class AddTrail extends BaseActivity implements
                 LatLng trailHomeLocation = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
 
                 // 1 closed, 2 open, 3 unknown
-                if (trails.get(i).TrailStatus == 1) {
+                if (trails.get(i).getTrailStatus() == 1) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName)
-                            .snippet(trails.get(i).distance + " miles away")
+                            .title(trails.get(i).getTrailName())
+                            .snippet(trails.get(i).distanceAway + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
 
-                } else if (trails.get(i).TrailStatus == 2) {
+                } else if (trails.get(i).getTrailStatus() == 2) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName)
-                            .snippet(trails.get(i).distance + " miles away")
+                            .title(trails.get(i).getTrailName())
+                            .snippet(trails.get(i).distanceAway + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                     SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
                 } else {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName)
-                            .snippet(trails.get(i).distance + " miles away")
+                            .title(trails.get(i).getTrailName())
+                            .snippet(trails.get(i).distanceAway + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                     SetMultilineInfoAdapter(googleMap);

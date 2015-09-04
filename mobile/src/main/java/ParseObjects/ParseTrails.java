@@ -1,12 +1,9 @@
 package ParseObjects;
 
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import org.json.JSONArray;
-
-import java.lang.reflect.Array;
 import java.util.Date;
 
 @ParseClassName("Trails")
@@ -26,6 +23,14 @@ public class ParseTrails extends ParseObject {
 
     public void setCity(String city){
         put("city", city);
+    }
+
+    public String getCountry(){
+        return getString("country");
+    }
+
+    public void setCountry(String country){
+        put("country", country);
     }
 
     public String getState(){
@@ -56,9 +61,25 @@ public class ParseTrails extends ParseObject {
 
     public void setPrivate(boolean isPrivate) { put("private", isPrivate); }
 
-    public JSONArray getSkillLevels() { return getJSONArray("skillLevels"); }
+    public boolean getSkillEasy() { return getBoolean("skillEasy"); }
 
-    public void setSkillLevels(JSONArray skillLevels) { put("skillLevels", skillLevels); }
+    public void setSkillEasy(boolean isEasy) { put("skillEasy", isEasy);}
+
+    public boolean getSkillMedium() { return getBoolean("skillMedium"); }
+
+    public void setSkillMedium(boolean isMedium) { put("skillMedium", isMedium);}
+
+    public boolean getSkillHard() { return getBoolean("skillHard"); }
+
+    public void setSkillHard(boolean isHard) { put("skillHard", isHard);}
+
+    public double getLength() {return getDouble("distance");}
+
+    public void setLength(double distance) { put("distance", distance);}
+
+    public ParseGeoPoint getLocation() {return getParseGeoPoint("geoLocation");}
+
+    public void setLocation(ParseGeoPoint geoLocation) { put("geoLocation", geoLocation);}
 
     public static ParseQuery<ParseTrails> getQuery() {
         return ParseQuery.getQuery(ParseTrails.class);

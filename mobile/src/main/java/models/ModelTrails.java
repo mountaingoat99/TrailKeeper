@@ -1,6 +1,8 @@
 package models;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -14,6 +16,8 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -22,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import AsyncAdapters.AsyncSaveOfflineTrail;
 import Helpers.ConnectionDetector;
 import Helpers.PushNotificationHelper;
 import ParseObjects.ParseTrailStatus;
@@ -29,17 +34,28 @@ import ParseObjects.ParseTrails;
 
 public class ModelTrails {
 
+    //region properties
     public static final String LOG = "ModelTrails";
-    public String ObjectID;
-    public String TrailName;
-    public int TrailStatus;
-    public String TrailCity;
-    public String TrailState;
+    private String ObjectID;
+    private String TrailName;
+    private int TrailStatus;
+    private String TrailCity;
+    private String TrailState;
+    private String TrailCountry;
+    private double Length;
+    private LatLng Location;
+    private boolean isEasy;
+    private boolean isMedium;
+    private boolean isHard;
+    private boolean IsPrivate;
+
     public ParseGeoPoint GeoLocation;
-    public float distance;
+    public float distanceAway;
     private Context context;
     private TrailScreen trailScreen;
+    //endregion
 
+    //region contruct
     public ModelTrails()
     {
 
@@ -49,7 +65,9 @@ public class ModelTrails {
         this.context = context;
         this.trailScreen = trailScreen;
     }
+    //endregion
 
+    //region gets and sets
     public String getObjectID() {
         return ObjectID;
     }
@@ -58,7 +76,100 @@ public class ModelTrails {
         ObjectID = objectID;
     }
 
-    //Region Static Methods
+    public float getDistanceAway() {
+        return distanceAway;
+    }
+
+    public int getTrailStatus() {
+        return TrailStatus;
+    }
+
+    public void setTrailStatus(int trailStatus) {
+        TrailStatus = trailStatus;
+    }
+
+    public String getTrailName() {
+        return TrailName;
+    }
+
+    public void setTrailName(String trailName) {
+        TrailName = trailName;
+    }
+
+    public String getTrailCity() {
+        return TrailCity;
+    }
+
+    public void setTrailCity(String trailCity) {
+        TrailCity = trailCity;
+    }
+
+    public String getTrailState() {
+        return TrailState;
+    }
+
+    public void setTrailState(String trailState) {
+        TrailState = trailState;
+    }
+
+    public String getTrailCountry() {
+        return TrailCountry;
+    }
+
+    public void setTrailCountry(String trailCountry) {
+        TrailCountry = trailCountry;
+    }
+
+    public double getLength() {
+        return Length;
+    }
+
+    public void setLength(double length) {
+        Length = length;
+    }
+
+    public LatLng getLocation() {
+        return Location;
+    }
+
+    public void setLocation(LatLng location) {
+        Location = location;
+    }
+
+    public boolean getIsEasy() {
+        return isEasy;
+    }
+
+    public void setIsEasy(boolean isEasy) {
+        this.isEasy = isEasy;
+    }
+
+    public boolean getIsMedium() {
+        return isMedium;
+    }
+
+    public void setIsMedium(boolean isMedium) {
+        this.isMedium = isMedium;
+    }
+
+    public boolean getIsHard() {
+        return isHard;
+    }
+
+    public void setIsHard(boolean isHard) {
+        this.isHard = isHard;
+    }
+
+    public boolean getIsPrivate() {
+        return IsPrivate;
+    }
+
+    public void setIsPrivate(boolean isPrivate) {
+        IsPrivate = isPrivate;
+    }
+    //endregion
+
+    //region Static Methods
     public static String ConvertTrailStatus(int status){
         String statusName = "";
 
@@ -193,47 +304,40 @@ public class ModelTrails {
     }
     //endregion
 
-    //Region Public Methods
-    public boolean CreateNewTrail(Context context, String trailName, String city, String state, String country,
-                               String length, List<String> skillLevelList, LatLng location, boolean isPrivate) {
-        boolean valid = true;
+    //region Public Methods
+    public void CreateNewTrail(Context context, ModelTrails newTrail) {
+        AsyncSaveOfflineTrail offlineTrail = new AsyncSaveOfflineTrail(context, newTrail);
+        offlineTrail.execute();
+    }
+
+    public void SaveNewTrail(ModelTrails modelTrails) {
         ParseTrails parseTrails = new ParseTrails();
+
+        parseTrails.put("skillEasy", modelTrails.getIsEasy());
+        parseTrails.put("skillMedium", modelTrails.getIsMedium());
+        parseTrails.put("skillHard", modelTrails.getIsHard());
+        parseTrails.put("trailName", modelTrails.getTrailName());
+        parseTrails.put("city", modelTrails.getTrailCity());
+        parseTrails.put("state", modelTrails.getTrailState());
+        parseTrails.put("country", modelTrails.getTrailCountry());
+        parseTrails.put("distance", modelTrails.getLength());
+        parseTrails.put("private", modelTrails.getIsPrivate());
+        ParseGeoPoint point = new ParseGeoPoint(modelTrails.getLocation().latitude, modelTrails.getLocation().longitude);
+        parseTrails.put("geoLocation", point);
+        parseTrails.put("status", modelTrails.getTrailStatus());
+        parseTrails.put("createdBy", ParseUser.getCurrentUser().getUsername());
         try {
-            // convert the list, if anything in it, to Json Array
-            if (skillLevelList.size() > 0) {
-                //String json = new Gson().toJson(skillLevelList);
-                parseTrails.addAllUnique("skillLevels", skillLevelList);
-            }
-            // save the GeoPoint first
-            ParseGeoPoint point = new ParseGeoPoint(location.latitude, location.longitude);
-            // the update the rest if the values
-            parseTrails.put("trailName", trailName);
-            parseTrails.put("city", city);
-            parseTrails.put("state", state);
-            parseTrails.put("country", country);
-            parseTrails.put("distance", Double.valueOf(length));
-            parseTrails.put("private", isPrivate);
-            parseTrails.put("geoLocation", point);
-            parseTrails.put("status", 2);
-            parseTrails.put("createdBy", ParseUser.getCurrentUser().getUsername());
-            ConnectionDetector cd = new ConnectionDetector(context);
-            if (cd.isConnectingToInternet()) {
-                parseTrails.saveInBackground();
-            } else {
-                parseTrails.saveEventually();
-            }
+            parseTrails.saveInBackground();
             Log.i(LOG, "Saving New Trail");
             parseTrails.pinInBackground();
+            CreateNewTrailStatus(modelTrails.getTrailName());
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG, "Saving New Trail Failed");
-            valid = false;
         }
-        CreateNewTrailStatus(context, trailName);
-        return valid;
     }
 
-    private void CreateNewTrailStatus(Context context, String trailName) {
+    private void CreateNewTrailStatus(String trailName) {
         // create a random number to use as a Pin
         Random rand = new Random();
         int min = 1000;
@@ -248,18 +352,12 @@ public class ModelTrails {
             trailStatus.put("updateStatusPin", trailPin);
             trailStatus.put("authorizedUserName", ParseUser.getCurrentUser().getUsername());
             trailStatus.addAllUnique("authorizedUserNames", userList);
-            ConnectionDetector cd = new ConnectionDetector(context);
-            if (cd.isConnectingToInternet()) {
-                trailStatus.saveInBackground();
-            } else {
-                trailStatus.saveEventually();
-            }
+            trailStatus.saveInBackground();
             Log.i(LOG, " New TrailStatus Creation Succeeded");
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG, "Saving the New TrailStatus Failed");
         }
-
     }
 
     public void UpdateTrailStatus(Context context, String objectId, final int choice) {
@@ -314,11 +412,9 @@ public class ModelTrails {
         }
     }
 
-    public float getDistance() {
-        return distance;
-    }
     //endregion
 
+    //region private methods
     private void TrailStatusUpdateSuccessful(boolean valid, String message) {
         if (valid) {
             trailScreen.TrailStatusUpdateWasSuccessful(valid, null);
@@ -326,4 +422,5 @@ public class ModelTrails {
             trailScreen.TrailStatusUpdateWasSuccessful(valid, message);
         }
     }
+    //endregion
 }

@@ -32,8 +32,8 @@ public class GeoLocationHelper {
         Collections.sort(trails, new Comparator<ModelTrails>() {
             @Override
             public int compare(ModelTrails lhs, ModelTrails rhs) {
-                Float dis1 = lhs.getDistance();
-                Float dis2 = rhs.getDistance();
+                Float dis1 = lhs.getDistanceAway();
+                Float dis2 = rhs.getDistanceAway();
 
                 if (dis1.compareTo(dis2) < 0)
                     return -1;

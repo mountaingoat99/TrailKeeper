@@ -12,6 +12,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
@@ -26,6 +28,7 @@ import java.util.List;
 
 import Helpers.PushNotificationHelper;
 import ParseObjects.ParseTrails;
+import models.ModelTrails;
 
 public class MyCustomReceiver extends BroadcastReceiver {
 
@@ -44,7 +47,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
             final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
             if (wifi.isConnected() || mobile.isConnected()) {
-                SendPushIfNeeded(context);
+                UpdateOfflineContent(context);
                 Log.i(TAG, "Network is reconnected");
             }
 
@@ -68,15 +71,39 @@ public class MyCustomReceiver extends BroadcastReceiver {
         }
     }
 
-    private void SendPushIfNeeded(Context context) {
+    private void UpdateOfflineContent(Context context) {
+        Log.i(TAG, "Attemping to update offline content");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         boolean hasPushWaiting = sp.getBoolean("hasPushWaiting", false);
+        boolean hasNewTrailWaiting = sp.getBoolean("hasNewTrailWaiting", false);
         if (hasPushWaiting) {
+            Log.i(TAG, "Notification Push is waiting");
             savePreferences(context, "hasPushWaiting", false);
             String trailNameString = sp.getString("trailNameString", "");
             int status = sp.getInt("status", 0);
             String objectID = sp.getString("objectId", "");
             PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, objectID);
+            Log.i(TAG, "Notification was sent");
+        }
+        if (hasNewTrailWaiting) {
+            Log.i(TAG, "New Trail is waiting to be updated");
+            savePreferences(context, "hasNewTrailWaiting", false);
+            ModelTrails trail = new ModelTrails();
+            trail.setIsEasy(sp.getBoolean("skillEasy", false));
+            trail.setIsMedium(sp.getBoolean("skillMedium", false));
+            trail.setIsHard(sp.getBoolean("skillHard", false));
+            trail.setTrailName(sp.getString("trailName", ""));
+            trail.setTrailCity(sp.getString("city", ""));
+            trail.setTrailState(sp.getString("state", ""));
+            trail.setTrailCountry(sp.getString("country", ""));
+            trail.setLength((double) sp.getFloat("length", 0.0f));
+            LatLng location = new LatLng((double) sp.getFloat("latitude", 0.0f), (double) sp.getFloat("longitude", 0.0f));
+            trail.setLocation(location);
+            trail.setTrailStatus(sp.getInt("status", 0));
+            ModelTrails saveTrail = new ModelTrails();
+            saveTrail.SaveNewTrail(trail);
+
+            Log.i(TAG, "New Trail was sent to Parse");
         }
     }
 

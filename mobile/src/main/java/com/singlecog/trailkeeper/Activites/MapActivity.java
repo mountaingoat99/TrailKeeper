@@ -128,7 +128,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
         // because we still want to show all the other trails when they move around
         if(trails != null) {
             for (int i = 0; trails.size() > i; i++) {
-                trails.get(i).distance = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
+                trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
             }
             // then sort them
             GeoLocationHelper.SortTrails(trails);
@@ -138,20 +138,20 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                 LatLng trailHomeLocation = new LatLng(trails.get(i).GeoLocation.getLatitude(), trails.get(i).GeoLocation.getLongitude());
 
                 // 1 closed, 2 open, 3 unknown
-                if (trails.get(i).TrailStatus == 1) {
+                if (trails.get(i).getTrailStatus() == 1) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName)
-                            .snippet(trails.get(i).distance + " miles away")
+                            .title(trails.get(i).getTrailName())
+                            .snippet(trails.get(i).distanceAway + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     SetMultilineInfoAdapter(googleMap);
                     marker.showInfoWindow();
                     AddToMarkerList(marker, trails.get(i));
 
-                } else if (trails.get(i).TrailStatus == 2) {
+                } else if (trails.get(i).getTrailStatus() == 2) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName)
-                            .snippet(trails.get(i).distance + " miles away")
+                            .title(trails.get(i).getTrailName())
+                            .snippet(trails.get(i).distanceAway + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                     SetMultilineInfoAdapter(googleMap);
@@ -159,8 +159,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                     AddToMarkerList(marker, trails.get(i));
                 } else {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
-                            .title(trails.get(i).TrailName)
-                            .snippet(trails.get(i).distance + " miles away")
+                            .title(trails.get(i).getTrailName())
+                            .snippet(trails.get(i).distanceAway + " miles away")
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                     SetMultilineInfoAdapter(googleMap);
@@ -262,7 +262,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
 
     private void AddToMarkerList(Marker marker, ModelTrails trail) {
         ModelTrails markerTrail = new ModelTrails();
-        markerTrail.setObjectID(trail.ObjectID);
+        markerTrail.setObjectID(trail.getObjectID());
         markers.put(marker, markerTrail);
     }
 

@@ -59,7 +59,7 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
     public String GetObjectID(RecyclerView.ViewHolder item) {
         int id = item.getAdapterPosition();
         ModelTrails m = items.get(id);
-        return m.ObjectID;
+        return m.getObjectID();
     }
 
 //    public ParseGeoPoint getLocation(RecyclerView.ViewHolder item){
@@ -85,15 +85,15 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
     public void onBindViewHolder(final HomeScreenListViewHolder viewHolder, int position) {
 
         model = items.get(position);
-        viewHolder.trailName.setText(model.TrailName);
-        viewHolder.trailCity.setText(model.TrailCity);
-        viewHolder.trailState.setText(model.TrailState);
-        viewHolder.trailDistance.setText(String.valueOf(model.distance));
+        viewHolder.trailName.setText(model.getTrailName());
+        viewHolder.trailCity.setText(model.getTrailCity());
+        viewHolder.trailState.setText(model.getTrailState());
+        viewHolder.trailDistance.setText(String.valueOf(model.distanceAway));
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
-        if (model.TrailStatus == 1) {
+        if (model.getTrailStatus() == 1) {
             viewHolder.trailStatus.setImageResource(R.mipmap.red_closed);
-        } else if (model.TrailStatus == 2) {
+        } else if (model.getTrailStatus() == 2) {
             viewHolder.trailStatus.setImageResource(R.mipmap.green_open);
         } else {
             viewHolder.trailStatus.setImageResource(R.mipmap.yellow_unknown);
@@ -122,9 +122,9 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
                 Intent intent = new Intent(context, MapActivity.class);
                 Bundle args = new Bundle();
                 args.putParcelable("geoPoint", geoPoint);
-                args.putString("trailName", model.TrailName);
-                args.putInt("trailStatus", model.TrailStatus);
-                args.putString("objectID", model.ObjectID);
+                args.putString("trailName", model.getTrailName());
+                args.putInt("trailStatus", model.getTrailStatus());
+                args.putString("objectID", model.getObjectID());
                 intent.putExtra("bundle", args);
                 v.getContext().startActivity(intent);
             }

@@ -47,7 +47,7 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
     public String GetObjectID(RecyclerView.ViewHolder item) {
         int id = item.getAdapterPosition();
         ModelTrails m = items.get(id);
-        return m.ObjectID;
+        return m.getObjectID();
     }
 
     @Override
@@ -61,13 +61,13 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(final ListItemViewHolder viewHolder, int position) {
         model = items.get(position);
-        viewHolder.trails.setText(model.TrailName);
-        viewHolder.cities.setText(model.TrailCity);
+        viewHolder.trails.setText(model.getTrailName());
+        viewHolder.cities.setText(model.getTrailCity());
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
-        if (model.TrailStatus == 1) {
+        if (model.getTrailStatus() == 1) {
             viewHolder.trailStatus.setImageResource(R.mipmap.red_closed);
-        } else if (model.TrailStatus == 2) {
+        } else if (model.getTrailStatus() == 2) {
             viewHolder.trailStatus.setImageResource(R.mipmap.green_open);
         } else {
             viewHolder.trailStatus.setImageResource(R.mipmap.yellow_unknown);

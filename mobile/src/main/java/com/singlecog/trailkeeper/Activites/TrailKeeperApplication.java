@@ -155,6 +155,7 @@ public class TrailKeeperApplication extends Application implements
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("hasPushWaiting", false);
+        editor.putBoolean("hasNewTrailWaiting", false);
         editor.apply();
     }
 

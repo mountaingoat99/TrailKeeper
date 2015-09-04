@@ -78,9 +78,9 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
                     for (ParseObject parseObject : trails) {
                         ModelTrails trail = new ModelTrails();
                         trail.setObjectID(parseObject.getObjectId());
-                        trail.TrailName = parseObject.get("trailName").toString();
-                        trail.TrailCity = parseObject.get("city").toString();
-                        trail.TrailStatus = parseObject.getInt("status");
+                        trail.setTrailName(parseObject.get("trailName").toString());
+                        trail.setTrailCity(parseObject.get("city").toString());
+                        trail.setTrailStatus(parseObject.getInt("status"));
                         trail.GeoLocation = parseObject.getParseGeoPoint("geoLocation");
 
                         trailsByState.add(trail);
