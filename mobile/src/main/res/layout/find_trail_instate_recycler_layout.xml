@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/red_closed"
+            android:src="@drawable/status_closed"
             android:contentDescription="@string/trail_status"/>
 
     </RelativeLayout>

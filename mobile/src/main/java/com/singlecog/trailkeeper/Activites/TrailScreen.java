@@ -20,12 +20,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -57,8 +61,8 @@ public class TrailScreen extends BaseActivity {
     private String objectID, trailSubscriptionStatus;
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
-    private TextView trailName, trailCity, trailState;
-    private ImageView trailStatus;
+    private TextView trailName, trailCity, trailState, txtdifficulty;
+    private ImageView trailStatus, imageEasy, imageMedium, imageHard;
     private Button btnComment, btnTrailStatus, btnSubscribe, btnAllCommments;
     private AlertDialog statusDialog;
     private ProgressDialog progressDialog;
@@ -68,8 +72,10 @@ public class TrailScreen extends BaseActivity {
     private boolean isEmailVerified;
     private boolean isValidCommentor = false;
     private View v;
+    private LinearLayout layoutDifficulty;
     private LatLng trailLocation;
     private String trailNameString, newTrailCommentString;
+    private boolean isEasy = false, isMedium = false, isHard = false;
     private List<ModelTrailComments> comments;
     private ModelTrails modelTrails;
     private final Context context = this;
@@ -123,6 +129,7 @@ public class TrailScreen extends BaseActivity {
         SetUpBtnSubscribeClick();
         SetUpCommentButtonClick();
         SetUpAllCommentButtonClick();
+        showTrailDifficulty();
     }
 
     private void CallTrailCommentsAsync() {
@@ -234,6 +241,22 @@ public class TrailScreen extends BaseActivity {
         });
     }
 
+    private void showTrailDifficulty() {
+
+        if (isEasy) {
+            layoutDifficulty.setVisibility(View.VISIBLE);
+            imageEasy.setVisibility(View.VISIBLE);
+        }
+        if (isMedium) {
+            layoutDifficulty.setVisibility(View.VISIBLE);
+            imageMedium.setVisibility(View.VISIBLE);
+        }
+        if (isHard) {
+            layoutDifficulty.setVisibility(View.VISIBLE);
+            imageHard.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void SetUpViews() {
         trailName = (TextView)findViewById(R.id.txtTrail_name);
         trailStatus = (ImageView)findViewById(R.id.txtTrail_status);
@@ -243,6 +266,11 @@ public class TrailScreen extends BaseActivity {
         btnTrailStatus = (Button)findViewById(R.id.btn_set_trail_status);
         btnSubscribe = (Button)findViewById(R.id.btn_subscribe);
         btnAllCommments = (Button)findViewById(R.id.btn_all_comments);
+        layoutDifficulty = (LinearLayout)findViewById(R.id.layout_skill_level);
+        txtdifficulty = (TextView)findViewById(R.id.txt_difficulty);
+        imageEasy = (ImageView)findViewById(R.id.image_easy);
+        imageMedium = (ImageView)findViewById(R.id.image_medium);
+        imageHard = (ImageView)findViewById(R.id.image_hard);
     }
 
     private void GetTrailData() {
@@ -260,6 +288,9 @@ public class TrailScreen extends BaseActivity {
                     trailCity.setText(object.get("city").toString());
                     trailState.setText(object.get("state").toString());
                     trailLocation = new LatLng(object.getParseGeoPoint("geoLocation").getLatitude(), object.getParseGeoPoint("geoLocation").getLongitude());
+                    isEasy = object.getBoolean("skillEasy");
+                    isMedium = object.getBoolean("skillMedium");
+                    isHard = object.getBoolean("skillHard");
 
                     UpdateStatusIcon();
                 }
@@ -274,11 +305,11 @@ public class TrailScreen extends BaseActivity {
 
     private void UpdateStatusIcon() {
         if (status == 1) {
-            trailStatus.setImageResource(R.mipmap.red_closed);
+            trailStatus.setImageResource(R.drawable.status_closed);
         } else if (status == 2) {
-            trailStatus.setImageResource(R.mipmap.green_open);
+            trailStatus.setImageResource(R.drawable.status_open);
         } else {
-            trailStatus.setImageResource(R.mipmap.yellow_unknown);
+            trailStatus.setImageResource(R.drawable.status_caution);
         }
         ChangeStatusButtonText();
     }
@@ -426,33 +457,39 @@ public class TrailScreen extends BaseActivity {
         trailStatusDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         trailStatusDialog.setContentView(R.layout.dialog_update_trail_status);
         final EditText pinText = (EditText)trailStatusDialog.findViewById(R.id.edit_text_pin);
-        RadioGroup statusGroup = (RadioGroup)trailStatusDialog.findViewById(R.id.radio_trail_status);
         rdoOpen = (RadioButton)trailStatusDialog.findViewById(R.id.status_open);
         rdoClosed = (RadioButton)trailStatusDialog.findViewById(R.id.status_closed);
         rdoUnknown = (RadioButton)trailStatusDialog.findViewById(R.id.status_unknown);
 
         DoATextWatcher(pinText);
 
-        statusGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rdoOpen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.status_open:                      // Open Trail
-                        status = 2;
-                        ChangeTrailStatus(status);
-                        break;
-                    case R.id.status_closed:                   // Close Trail
-                        status = 1;
-                        ChangeTrailStatus(status);
-                        break;
-                    case R.id.status_unknown:                   // Unknown
-                        status = 3;
-                        ChangeTrailStatus(status);
-                        break;
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                status = 2;
+                ChangeTrailStatus(status);
                 trailStatusDialog.dismiss();
             }
         });
+
+        rdoClosed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                status = 1;
+                ChangeTrailStatus(status);
+                trailStatusDialog.dismiss();
+            }
+        });
+
+        rdoUnknown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                status = 3;
+                ChangeTrailStatus(status);
+                trailStatusDialog.dismiss();
+            }
+        });
+
         trailStatusDialog.show();
     }
 

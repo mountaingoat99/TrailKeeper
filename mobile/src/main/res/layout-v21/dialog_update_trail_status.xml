@@ -27,7 +27,6 @@
         android:layout_marginTop="4dp"
         android:hint="@string/trail_pin_hint"
         android:textColorHint="@color/secondary_text"
-        android:drawableLeft="@mipmap/ic_action_accounts"
         android:drawableStart="@mipmap/ic_action_accounts"
         android:background="@android:color/white"/>
 
@@ -39,40 +38,84 @@
         android:layout_marginRight="16dp"
         android:background="@color/black"/>
 
-    <RadioGroup
-        android:id="@+id/radio_trail_status"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        android:orientation="vertical">
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
 
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/radio_button_open"
             android:layout_marginBottom="8dp"
             android:id="@+id/status_open"
             android:enabled="false"/>
 
-        <RadioButton
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/trail_status_open"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/status_open"
+            android:contentDescription="@string/trail_status"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/radio_button_closed"
             android:id="@+id/status_closed"
             android:layout_marginBottom="8dp"
             android:enabled="false"/>
 
-        <RadioButton
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/trail_status_closed"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/status_closed"
+            android:contentDescription="@string/trail_status"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/radio_button_unknown"
             android:id="@+id/status_unknown"
             android:layout_marginBottom="8dp"
             android:enabled="false"/>
-    </RadioGroup>
+
+        <ImageView
+            android:id="@+id/trail_status_caution"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/status_caution"
+            android:contentDescription="@string/trail_status"/>
+
+    </LinearLayout>
 
 </LinearLayout>

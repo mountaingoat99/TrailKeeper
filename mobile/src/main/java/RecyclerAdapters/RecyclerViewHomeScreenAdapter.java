@@ -92,11 +92,11 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
         if (model.getTrailStatus() == 1) {
-            viewHolder.trailStatus.setImageResource(R.mipmap.red_closed);
+            viewHolder.trailStatus.setImageResource(R.drawable.status_closed);
         } else if (model.getTrailStatus() == 2) {
-            viewHolder.trailStatus.setImageResource(R.mipmap.green_open);
+            viewHolder.trailStatus.setImageResource(R.drawable.status_open);
         } else {
-            viewHolder.trailStatus.setImageResource(R.mipmap.yellow_unknown);
+            viewHolder.trailStatus.setImageResource(R.drawable.status_caution);
         }
 
         setAnimation(viewHolder, position);

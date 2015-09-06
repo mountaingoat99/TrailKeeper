@@ -36,9 +36,10 @@
                     android:paddingRight="8dp"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -51,24 +52,16 @@
                             android:layout_gravity="center"
                             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-                        <TextView
-                            android:id="@+id/dash"
-                            android:text="-"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="0dp"
-                            android:layout_marginRight="0dp"
-                            android:layout_gravity="center"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
-
                         <ImageView
                             android:id="@+id/txtTrail_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/red_closed"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:src="@drawable/status_closed"
                             android:contentDescription="@string/trail_status"/>
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -103,9 +96,59 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_skill_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/txt_difficulty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Skill Level: "/>
+
+                        <ImageView
+                            android:id="@+id/image_easy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/trail_difficult_easy"
+                            android:contentDescription="@string/trail_status"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/image_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/trail_difficult_medium"
+                            android:contentDescription="@string/trail_status"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/image_hard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/trail_difficulty_hard"
+                            android:contentDescription="@string/trail_status"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-
 
                         <Button
                             android:id="@+id/btn_subscribe"
