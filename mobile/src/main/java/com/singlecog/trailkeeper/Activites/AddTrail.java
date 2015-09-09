@@ -69,7 +69,7 @@ public class AddTrail extends BaseActivity implements
     private EditText editTextTrailName, editTextCity, editLength;
     private AutoCompleteTextView editTextState, editTextCountry;
     private Switch switchCurrentLocation;
-    private Switch switchPrivateTrail;
+    //private Switch switchPrivateTrail;
     private CheckBox chkEasy;
     private CheckBox chkMedium;
     private CheckBox chkHard;
@@ -152,7 +152,7 @@ public class AddTrail extends BaseActivity implements
         editTextState = (AutoCompleteTextView)findViewById(R.id.edittext_state);
         editTextCountry = (AutoCompleteTextView)findViewById(R.id.edittext_country);
         switchCurrentLocation = (Switch)findViewById(R.id.switch_current_location);
-        switchPrivateTrail = (Switch)findViewById(R.id.switch_private_trail);
+        //switchPrivateTrail = (Switch)findViewById(R.id.switch_private_trail);
         chkEasy = (CheckBox)findViewById(R.id.check_box_easy);
         chkMedium = (CheckBox)findViewById(R.id.check_box_medium);
         chkHard = (CheckBox)findViewById(R.id.check_box_hard);
@@ -167,7 +167,7 @@ public class AddTrail extends BaseActivity implements
         editTextCountry.setText("");
         editTextCity.setText("");
         switchCurrentLocation.setChecked(false);
-        switchPrivateTrail.setChecked(false);
+        //switchPrivateTrail.setChecked(false);
         chkEasy.setChecked(false);
         chkMedium.setChecked(false);
         chkHard.setChecked(false);
@@ -181,12 +181,12 @@ public class AddTrail extends BaseActivity implements
             }
         });
 
-        switchPrivateTrail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isPrivateTrail = isChecked;
-            }
-        });
+//        switchPrivateTrail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                isPrivateTrail = isChecked;
+//            }
+//        });
     }
 
     private void setSkillLevelListeners() {

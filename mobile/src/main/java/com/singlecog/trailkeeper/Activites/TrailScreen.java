@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -28,8 +27,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -61,7 +58,7 @@ public class TrailScreen extends BaseActivity {
     private String objectID, trailSubscriptionStatus;
     private RecyclerView mTrailCommentRecyclerView;
     private RecyclerViewOneTrailCommentAdapter mTrailCommentAdapter;
-    private TextView trailName, trailCity, trailState, txtdifficulty;
+    private TextView trailName, trailCity, trailState;
     private ImageView trailStatus, imageEasy, imageMedium, imageHard;
     private Button btnComment, btnTrailStatus, btnSubscribe, btnAllCommments;
     private AlertDialog statusDialog;
@@ -267,7 +264,6 @@ public class TrailScreen extends BaseActivity {
         btnSubscribe = (Button)findViewById(R.id.btn_subscribe);
         btnAllCommments = (Button)findViewById(R.id.btn_all_comments);
         layoutDifficulty = (LinearLayout)findViewById(R.id.layout_skill_level);
-        txtdifficulty = (TextView)findViewById(R.id.txt_difficulty);
         imageEasy = (ImageView)findViewById(R.id.image_easy);
         imageMedium = (ImageView)findViewById(R.id.image_medium);
         imageHard = (ImageView)findViewById(R.id.image_hard);

@@ -71,7 +71,6 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="2"
                                 android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
                                 android:orientation="vertical">
 
                                 <EditText
@@ -143,7 +142,6 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
                                 android:orientation="vertical">
 
                                 <AutoCompleteTextView
@@ -184,7 +182,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:paddingLeft="10dp"
                                     android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="Length"
@@ -221,7 +218,6 @@
                                 android:textColor="@color/primary_text"
                                 android:textSize="@dimen/text_size_small"
                                 android:layout_marginEnd="16dp"
-                                android:layout_marginRight="16dp"
                                 android:layout_gravity="center_vertical"
                                 android:text="@string/skill_level_view"/>
 
@@ -262,22 +258,21 @@
                                 android:layout_weight="1"
                                 android:layout_gravity="top"
                                 android:layout_marginTop="8dp"
-                                android:layout_marginRight="32dp"
                                 android:layout_marginEnd="32dp"
                                 android:text="@string/use_current_location_switch"
                                 android:textSize="@dimen/text_size_super_mini"
                                 android:textColor="@color/primary_text"/>
 
-                            <Switch
-                                android:id="@+id/switch_private_trail"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:layout_gravity="top"
-                                android:layout_marginTop="8dp"
-                                android:text="@string/private_trail_switch"
-                                android:textSize="@dimen/text_size_super_mini"
-                                android:textColor="@color/primary_text"/>
+                            <!--<Switch-->
+                                <!--android:id="@+id/switch_private_trail"-->
+                                <!--android:layout_width="0dp"-->
+                                <!--android:layout_height="match_parent"-->
+                                <!--android:layout_weight="1"-->
+                                <!--android:layout_gravity="top"-->
+                                <!--android:layout_marginTop="8dp"-->
+                                <!--android:text="@string/private_trail_switch"-->
+                                <!--android:textSize="@dimen/text_size_super_mini"-->
+                                <!--android:textColor="@color/primary_text"/>-->
 
                         </LinearLayout>
 
@@ -293,7 +288,6 @@
                                 android:textColor="@color/accent"
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
                                 android:text="@string/create_new_trail"
                                 android:onClick="btn_create_click" />
 
