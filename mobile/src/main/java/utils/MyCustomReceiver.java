@@ -27,6 +27,10 @@ import java.util.List;
 import Helpers.PushNotificationHelper;
 import ParseObjects.ParseTrails;
 import database.NewTrailDatabase;
+import database.TrailCommentDatabase;
+import database.TrailStatusDatabase;
+import models.ModelTrailComments;
+import models.ModelTrailStatus;
 import models.ModelTrails;
 
 public class MyCustomReceiver extends BroadcastReceiver {
@@ -72,37 +76,51 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
     private void UpdateOfflineContent(Context context) {
         Log.i(TAG, "Attemping to update offline content");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean hasPushWaiting = sp.getBoolean("hasPushWaiting", false);
-        if (hasPushWaiting) {
-            Log.i(TAG, "Notification Push is waiting");
-            savePreferences(context, "hasPushWaiting", false);
-            String trailNameString = sp.getString("trailNameString", "");
-            int status = sp.getInt("status", 0);
-            String objectID = sp.getString("objectId", "");
-            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, objectID);
-            Log.i(TAG, "Notification was sent");
+
+        // new Comment saved offline
+        TrailCommentDatabase cdb = new TrailCommentDatabase(context);
+        int cCount  = cdb.GetDBRowCount();
+        if (cCount > 0) {
+            Log.i(TAG, "New Trail Comment is waiting to be updated");
+            Log.i(TAG, "Offline Comment count: " + cCount);
+            for (int i = 0; cCount > i; i++) {
+                Log.i(TAG, "Looping through Offline trail Comments count: " + i);
+                ModelTrailComments trailComments = cdb.GetOffLineTrailComment();
+                ModelTrailComments saveComment = new ModelTrailComments();
+                saveComment.CreateNewComment(trailComments.getObjectID(), trailComments.getTrailName(), trailComments.getTrailComments());
+                // TODO might need to send out a push here
+            }
         }
-        // first let's see how many trails we have to save
+
+        // new trail status saved offline
+        TrailStatusDatabase sdb = new TrailStatusDatabase(context);
+        int sCount = sdb.GetDBRowCount();
+        if (sCount > 0) {
+            Log.i(TAG, "New Trail Status is waiting to be updated");
+            Log.i(TAG, "Offline status count: " + sCount);
+            for (int i = 0; sCount > i; i++) {
+                Log.i(TAG, "Looping through Offline trail Status count: " + i);
+                ModelTrailStatus trailStatus = sdb.GetOffLineTrailStatus();
+                ModelTrails saveStatus = new ModelTrails();
+                saveStatus.UpdateTrailStatus(trailStatus.getObjectID(), trailStatus.getChoice(), trailStatus.getTrailName());
+                PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailStatus.getTrailName(), trailStatus.getChoice(), trailStatus.getObjectID());
+                Log.i(TAG, "Notification was sent");
+            }
+        }
+
+        // New Trails saved offline
         NewTrailDatabase db = new NewTrailDatabase(context);
         int count = db.GetDBRowCount();
         if (count > 0) {
             Log.i(TAG, "New Trail is waiting to be updated");
             Log.i(TAG, "Offline trail count: " + count);
             for (int i = 0; count > i; i++) {
-                Log.i(TAG, "Looping through Offline trail count: " + count);
+                Log.i(TAG, "Looping through Offline trail count: " + i);
                 ModelTrails trail = db.GetOffLineTrail();
                 ModelTrails saveTrail = new ModelTrails();
                 saveTrail.SaveNewTrail(trail);
             }
         }
-    }
-
-    private void savePreferences(Context context, String key, boolean value) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean(key, value);
-        editor.apply();
     }
 
     private void generateCommentNotification(Context context, JSONObject json) {
@@ -122,6 +140,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
         }
 
         if (!ThisInstallObjectID.equals(InstallObjectID)) {
+
 
             TrailKeeperApplication.LoadAllCommentsFromParse();
 

@@ -21,6 +21,7 @@ public class TrailStatusDatabase extends DatabaseHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(getObjectId(), trailStatus.getObjectID());
+        values.put(getTrailName(), trailStatus.getTrailName());
         values.put(getCHOICE(), trailStatus.getChoice());
 
         Log.i(TAG, "Inserting new status for trail: " + trailStatus.getObjectID() + " choice: " + trailStatus.getChoice());
@@ -38,7 +39,8 @@ public class TrailStatusDatabase extends DatabaseHelper {
             do {
                 row = c.getInt(0);
                 trailStatus.setObjectID(c.getString(1));
-                trailStatus.setChoice(Integer.valueOf(c.getString(2)));
+                trailStatus.setTrailName(c.getString(2));
+                trailStatus.setChoice(Integer.valueOf(c.getString(3)));
                 Log.i(TAG, "Fetching trailStatus " + c.getString(1) + " from the DB");
             } while (c.moveToNext());
         }

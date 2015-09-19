@@ -354,27 +354,24 @@ public class ModelTrails {
         }
     }
 
-    public void UpdateTrailStatus(Context context, String objectId, final int choice) {
+    public void UpdateTrailStatus(String objectId, int choice, String trailName) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Trails");
         query.fromLocalDatastore();
         try {
             ParseObject parseObject = query.get(objectId);
             parseObject.put("status", choice);
-            ConnectionDetector cd = new ConnectionDetector(context);
-            if (cd.isConnectingToInternet()) {
-                parseObject.saveInBackground();
-            } else {
-                parseObject.saveEventually();
-            }
+            parseObject.saveInBackground();
             parseObject.pinInBackground();
-            TrailStatusUpdateSuccessful(true, null);
+            UpdateTrailStatusUser(trailName);
+            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailName, choice, objectId);
+            Log.i(LOG, "TrailStatus Update was Succeeded");
         } catch (ParseException e) {
             e.printStackTrace();
-            TrailStatusUpdateSuccessful(false, e.getMessage());
+            Log.i(LOG, "TrailStatus Update was NOT Succeeded");
         }
     }
 
-    public static void UpdateTrailStatusUser(Context context, String trailName) {
+    public static void UpdateTrailStatusUser(String trailName) {
         List<String> userList = new ArrayList<>();
         userList.add(ParseUser.getCurrentUser().getUsername());
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TrailStatus");
@@ -383,12 +380,7 @@ public class ModelTrails {
         try {
             ParseObject parseObject = query.getFirst();
             parseObject.addAllUnique("authorizedUserNames", userList);
-            ConnectionDetector cd = new ConnectionDetector(context);
-            if (cd.isConnectingToInternet()) {
-                parseObject.saveInBackground();
-            } else {
-                parseObject.saveEventually();
-            }
+            parseObject.saveInBackground();
             Log.i(LOG, "TrailStatus User Update Succeeded");
         } catch (ParseException e) {
             e.printStackTrace();
@@ -403,17 +395,6 @@ public class ModelTrails {
             ParsePush.subscribeInBackground(trailNameChannel);
         } else {
             ParsePush.unsubscribeInBackground(trailNameChannel);
-        }
-    }
-
-    //endregion
-
-    //region private methods
-    private void TrailStatusUpdateSuccessful(boolean valid, String message) {
-        if (valid) {
-            trailScreen.TrailStatusUpdateWasSuccessful(valid, null);
-        } else {
-            trailScreen.TrailStatusUpdateWasSuccessful(valid, message);
         }
     }
     //endregion

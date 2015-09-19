@@ -3,6 +3,7 @@ package models;
 public class ModelTrailStatus {
 
     private String objectID;
+    private String trailName;
     private int choice;
 
     public String getObjectID() {
@@ -11,6 +12,14 @@ public class ModelTrailStatus {
 
     public void setObjectID(String objectID) {
         this.objectID = objectID;
+    }
+
+    public String getTrailName() {
+        return trailName;
+    }
+
+    public void setTrailName(String trailName) {
+        this.trailName = trailName;
     }
 
     public int getChoice() {

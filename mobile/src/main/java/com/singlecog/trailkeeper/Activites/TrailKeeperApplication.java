@@ -142,20 +142,11 @@ public class TrailKeeperApplication extends Application implements
 
         // Check to see if the Users Email is verified
         CreateAccountHelper.CheckUserVerified();
-
-        savePreferences();
     }
 
     public void checkIfGPSIsEnabled() {
         LocationManager mlocManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);;
         setIsGPSEnabled(mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
-    }
-
-    private void savePreferences() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean("hasPushWaiting", false);
-        editor.apply();
     }
 
     public void checkGooglePlayServices() {

@@ -30,12 +30,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // offline comment table
     private static final String TABLE_OFFLINE_COMMENT = "offline_comment";
-    private static final String TRAIL_NAME = "trail_name";
     private static final String COMMENT = "comment";
 
     // shared fields
     private static final String KEY_ID = "id";
     private static final String OBJECT_ID = "object_id";
+    private static final String TRAIL_NAME = "trail_name";
 
 
     public static int getDatabaseVersion() {
@@ -127,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_OFFLINE_STATUS_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_OFFLINE_STATUS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + OBJECT_ID + " TEXT, " + CHOICE + " TEXT)";
+            + OBJECT_ID + " TEXT, " + TRAIL_NAME + " TEXT, " + CHOICE + " TEXT)";
 
     public static final String CREATE_OFFLINE_COMMENT_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_OFFLINE_COMMENT + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "

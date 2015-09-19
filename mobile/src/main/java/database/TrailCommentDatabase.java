@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import models.ModelTrailComments;
-import models.ModelTrailStatus;
 
 public class TrailCommentDatabase extends DatabaseHelper {
 
@@ -25,7 +24,7 @@ public class TrailCommentDatabase extends DatabaseHelper {
         values.put(getTrailName(), trailComments.getTrailName());
         values.put(getCOMMENT(), trailComments.getTrailComments());
 
-        Log.i(TAG, "Inserting new status for trail: " + trailComments.getTrailName());
+        Log.i(TAG, "Inserting new comment for trail: " + trailComments.getTrailName());
         db.insert(getTableOfflineComment(), null, values);
     }
 

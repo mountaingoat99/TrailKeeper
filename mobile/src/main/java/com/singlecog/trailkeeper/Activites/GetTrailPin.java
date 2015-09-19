@@ -1,4 +1,4 @@
-package com.singlecog.trailkeeper;
+package com.singlecog.trailkeeper.Activites;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.singlecog.trailkeeper.Activites.BaseActivity;
+import com.singlecog.trailkeeper.R;
 
 public class GetTrailPin extends BaseActivity {
 

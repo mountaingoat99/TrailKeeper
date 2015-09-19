@@ -7,10 +7,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,15 +34,18 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import AsyncAdapters.AsyncOneTrailComments;
+import AsyncAdapters.AsyncSaveOfflineComments;
+import AsyncAdapters.AsyncSaveOfflineStatus;
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
-import Helpers.ProgressDialogHelper;
-import Helpers.PushNotificationHelper;
 import ParseObjects.ParseAuthorizedCommentors;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
 import models.ModelTrailComments;
@@ -62,9 +63,7 @@ public class TrailScreen extends BaseActivity {
     private ImageView trailStatus, imageEasy, imageMedium, imageHard;
     private Button btnComment, btnTrailStatus, btnSubscribe, btnAllCommments;
     private AlertDialog statusDialog;
-    private ProgressDialog progressDialog;
     private Dialog trailStatusDialog;
-    private ConnectionDetector connectionDetector;
     private boolean isAnonUser;
     private boolean isEmailVerified;
     private boolean isValidCommentor = false;
@@ -91,7 +90,6 @@ public class TrailScreen extends BaseActivity {
         v = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(v, this);
 
-        connectionDetector = new ConnectionDetector(context);
         isEmailVerified = TrailKeeperApplication.isEmailVerified();
         CanComment();
 
@@ -315,10 +313,6 @@ public class TrailScreen extends BaseActivity {
         Log.i(TAG, "Setting up the trail comment card Recyclcer view");
         mTrailCommentAdapter = new RecyclerViewOneTrailCommentAdapter(comments);
         mTrailCommentRecyclerView.setAdapter(mTrailCommentAdapter);
-
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
     }
 
     private void SetupCommentCard() {
@@ -426,25 +420,19 @@ public class TrailScreen extends BaseActivity {
 
     private void SaveComment(String comment, Dialog dialog) {
         dialog.dismiss();
-        progressDialog = ProgressDialogHelper.ShowProgressDialog(context, "Saving New Comment");
-        ModelTrailComments trailComments = new ModelTrailComments(context, this);
-        trailComments.CreateNewComment(context, objectID, trailNameString, comment);
+        AsyncSaveOfflineComments offlineComments = new AsyncSaveOfflineComments(context, objectID, trailNameString, comment);
+        offlineComments.execute();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.US);
+        ModelTrailComments modelTrailComments = new ModelTrailComments();
+        modelTrailComments.CommentUserName = ParseUser.getCurrentUser().getUsername();
+        modelTrailComments.TrailComments = comment;
+        modelTrailComments.CommentDate = formatter.format(c.getTime());
+        comments.add(0, modelTrailComments);
+        mTrailCommentAdapter.notifyDataSetChanged();
     }
 
-    public void SaveCommentWasSuccessful(Boolean success, ModelTrailComments modelTrailComments) {
-        progressDialog.dismiss();
-        if (success) {
-            comments.add(0, modelTrailComments);
-            mTrailCommentAdapter.notifyDataSetChanged();
-            SendOutNewCommentPushNotification();
-        } else {
-            Snackbar.make(v, "Something Went Wrong, Please Try Again", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    private void SendOutNewCommentPushNotification() {
-        PushNotificationHelper.SendOutAPushNotificationForNewComment(trailNameString, newTrailCommentString, objectID);
-    }
     //endregion
 
     //region Trail Status Updates
@@ -528,41 +516,11 @@ public class TrailScreen extends BaseActivity {
     }
 
     private void CallChangeTrailStatusClass(int choice) {
-        progressDialog = ProgressDialogHelper.ShowProgressDialog(context, "Updating Trail Status");
-        modelTrails.UpdateTrailStatus(context, objectID, choice);
+        AsyncSaveOfflineStatus offlineStatus = new AsyncSaveOfflineStatus(context, objectID, choice, trailNameString);
+        offlineStatus.execute();
+        UpdateStatusIcon();
+        Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
     }
 
-    public void TrailStatusUpdateWasSuccessful(boolean valid, String message) {
-        progressDialog.dismiss();
-        if (valid) {
-            Snackbar.make(v, "The Trail has been changed to " + ModelTrails.ConvertTrailStatus(status), Snackbar.LENGTH_LONG).show();
-            UpdateStatusIcon();
-            ModelTrails.UpdateTrailStatusUser(context, trailNameString);
-
-            // here we need to check if there is a connection
-            // if no connection we save the push in shared preferences
-            // and use the Broadcast Receiver to wait for one
-            // if connection we send it right out
-            if (connectionDetector.isConnectingToInternet()) {
-                PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailNameString, status, objectID);
-            } else {
-                savePushToSharedPreferences();
-            }
-            Log.i(TAG, "Trail Status was changed");
-        } else {
-            Snackbar.make(v, "Something went wrong: " + message, Snackbar.LENGTH_LONG).show();
-            Log.i(TAG, "Trail Status was not changed");
-        }
-    }
-
-    private void savePushToSharedPreferences() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean("hasPushWaiting", true);
-        editor.putString("trailNameString", trailNameString);
-        editor.putInt("status", status);
-        editor.putString("objectId", objectID);
-        editor.apply();
-    }
     //endregion
 }

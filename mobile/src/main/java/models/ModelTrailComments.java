@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 import Helpers.ConnectionDetector;
+import Helpers.PushNotificationHelper;
 import ParseObjects.ParseComments;
 import ParseObjects.ParseTrailStatus;
 
@@ -163,7 +164,7 @@ public class ModelTrailComments {
     }
     //endregion
 
-    public void CreateNewComment(Context context, String trailObjectId, final String trailName, String Comment) {
+    public void CreateNewComment(String trailObjectId, final String trailName, String Comment) {
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.US);
@@ -180,19 +181,13 @@ public class ModelTrailComments {
             modelTrailComments.TrailComments = Comment;                                     //Recycler View Update
             parseComments.put("workingCreatedDate", c.getTime());
             modelTrailComments.CommentDate = formatter.format(c.getTime());
-            ConnectionDetector cd = new ConnectionDetector(context);
-            if (cd.isConnectingToInternet()) {
-                parseComments.saveInBackground();
-            } else {
-                parseComments.saveEventually();
-            }
+            parseComments.saveInBackground();
             Log.i(LOG, "Save Comment Completed");
             parseComments.pinInBackground();
-            trailScreen.SaveCommentWasSuccessful(true, modelTrailComments);
+            PushNotificationHelper.SendOutAPushNotificationForNewComment(trailName, Comment, trailObjectId);
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG, "Save Comment Failed" + e.getMessage());
-            trailScreen.SaveCommentWasSuccessful(false, null);
         }
     }
 }
