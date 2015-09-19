@@ -1,15 +1,11 @@
 package AsyncAdapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import Helpers.ConnectionDetector;
+import database.NewTrailDatabase;
 import models.ModelTrails;
 
 public class AsyncSaveOfflineTrail extends AsyncTask<String, Void, String> {
@@ -34,30 +30,14 @@ public class AsyncSaveOfflineTrail extends AsyncTask<String, Void, String> {
                 modelTrails.SaveNewTrail(newTrail);
                 Log.i(TAG, "Saving New Trail immediately");
             } else {
-                // adding these to shared preferences instead
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putBoolean("hasNewTrailWaiting", true);
-                editor.putBoolean("skillEasy", newTrail.getIsEasy());
-                editor.putBoolean("skillMedium", newTrail.getIsMedium());
-                editor.putBoolean("skillHard", newTrail.getIsHard());
-                editor.putString("trailName", newTrail.getTrailName());
-                editor.putString("city", newTrail.getTrailCity());
-                editor.putString("state", newTrail.getTrailState());
-                editor.putString("country", newTrail.getTrailCountry());
-                editor.putFloat("length", (float) newTrail.getLength());
-                editor.putFloat("latitude", (float) newTrail.getLocation().latitude);
-                editor.putFloat("longitude", (float) newTrail.getLocation().longitude);
-                editor.putInt("status", newTrail.getTrailStatus());
-                editor.apply();
+                NewTrailDatabase db = new NewTrailDatabase(context);
+                db.AddNewTrail(newTrail);
                 Log.i(TAG, "Saving New Trail later");
             }
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(TAG, "Saving New Trail Failed");
         }
-
-
         return null;
     }
 }

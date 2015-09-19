@@ -125,5 +125,8 @@
     <string name="state_hint">State</string>
     <string name="city_hint">City</string>
     <string name="trailName_hint">Trail Name</string>
+    <string name="title_activity_get_trail_pin">TrailPin</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

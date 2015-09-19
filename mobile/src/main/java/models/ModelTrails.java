@@ -1,24 +1,17 @@
 package models;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -331,6 +324,7 @@ public class ModelTrails {
             Log.i(LOG, "Saving New Trail");
             parseTrails.pinInBackground();
             CreateNewTrailStatus(modelTrails.getTrailName());
+            Log.i(LOG, "New Trail was sent to Parse");
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG, "Saving New Trail Failed");

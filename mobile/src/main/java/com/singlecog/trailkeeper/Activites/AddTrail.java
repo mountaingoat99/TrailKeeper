@@ -1,13 +1,11 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -51,7 +49,6 @@ import java.util.Map;
 
 import AsyncAdapters.AsyncTrailLocations;
 import Helpers.AlertDialogHelper;
-import Helpers.ConnectionDetector;
 import Helpers.GeoLocationHelper;
 import Helpers.StateListHelper;
 import models.ModelTrails;
@@ -314,36 +311,27 @@ public class AddTrail extends BaseActivity implements
 
     private void SaveTrail() {
         // lets make sure we are only saving one trail at a time for now offline
-        ConnectionDetector cd = new ConnectionDetector(context);
-        if (!cd.isConnectingToInternet()) {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean hasNewTrailWaiting = sp.getBoolean("hasNewTrailWaiting", false);
-            if (!hasNewTrailWaiting) {
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                ModelTrails newTrail = new ModelTrails();
-                newTrail.setTrailName(editTextTrailName.getText().toString().trim());
-                newTrail.setTrailCity(editTextCity.getText().toString().trim());
-                newTrail.setTrailState(editTextState.getText().toString().trim());
-                newTrail.setTrailCountry(editTextCountry.getText().toString().trim());
-                if (editLength.getText().length() > 0) {
-                    newTrail.setLength(Double.valueOf(editLength.getText().toString().trim()));
-                }
-                newTrail.setIsEasy(isEasy);
-                newTrail.setIsMedium(isMedium);
-                newTrail.setIsHard(isHard);
-                newTrail.setLocation(trailLocation);
-                newTrail.setIsPrivate(isPrivateTrail);
-                newTrail.setTrailStatus(2);
-
-                // call the method to do the update to Parse
-                ModelTrails modelTrails = new ModelTrails();
-                modelTrails.CreateNewTrail(context, newTrail);
-                AlertDialogHelper.showCustomAlertDialog(context, "New Trail!", newTrail.getTrailName() + " Has Been Created, But It May Not Be Available For A Few Minutes Until The Cloud Has Done It's Magic.");
-                resetEverything();
-            } else {
-                AlertDialogHelper.showCustomAlertDialog(context, "No Connection!", "You Have No Connection and Already Have One New Offline Trail Waiting To Be Saved. Please Wait To Add Another Trail Until You Are reconnected");
-            }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        ModelTrails newTrail = new ModelTrails();
+        newTrail.setTrailName(editTextTrailName.getText().toString().trim());
+        newTrail.setTrailCity(editTextCity.getText().toString().trim());
+        newTrail.setTrailState(editTextState.getText().toString().trim());
+        newTrail.setTrailCountry(editTextCountry.getText().toString().trim());
+        if (editLength.getText().length() > 0) {
+            newTrail.setLength(Double.valueOf(editLength.getText().toString().trim()));
         }
+        newTrail.setIsEasy(isEasy);
+        newTrail.setIsMedium(isMedium);
+        newTrail.setIsHard(isHard);
+        newTrail.setLocation(trailLocation);
+        newTrail.setIsPrivate(isPrivateTrail);
+        newTrail.setTrailStatus(2);
+
+        // call the method to do the update to Parse
+        ModelTrails modelTrails = new ModelTrails();
+        modelTrails.CreateNewTrail(context, newTrail);
+        AlertDialogHelper.showCustomAlertDialog(context, "New Trail!", newTrail.getTrailName() + " Has Been Created, But It May Not Be Available For A Few Minutes Until The Cloud Has Done It's Magic.");
+        resetEverything();
     }
 
     //endregion
