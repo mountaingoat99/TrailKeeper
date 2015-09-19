@@ -26,6 +26,7 @@ import ParseObjects.ParseTrailStatus;
 public class ModelTrailComments {
 
     private static final String LOG = "ModelTrailComment";
+    private String objectID;
     public String TrailName;
     public String TrailComments;
     public String CommentDate;
@@ -41,6 +42,46 @@ public class ModelTrailComments {
     public ModelTrailComments(Context context, TrailScreen trailScreen) {
         this.context = context;
         this.trailScreen = trailScreen;
+    }
+
+    public String getObjectID() {
+        return objectID;
+    }
+
+    public void setObjectID(String objectID) {
+        this.objectID = objectID;
+    }
+
+    public String getTrailName() {
+        return TrailName;
+    }
+
+    public void setTrailName(String trailName) {
+        TrailName = trailName;
+    }
+
+    public String getTrailComments() {
+        return TrailComments;
+    }
+
+    public void setTrailComments(String trailComments) {
+        TrailComments = trailComments;
+    }
+
+    public String getCommentDate() {
+        return CommentDate;
+    }
+
+    public void setCommentDate(String commentDate) {
+        CommentDate = commentDate;
+    }
+
+    public String getCommentUserName() {
+        return CommentUserName;
+    }
+
+    public void setCommentUserName(String commentUserName) {
+        CommentUserName = commentUserName;
     }
 
     //Region Static Methods
