@@ -34,7 +34,7 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:paddingTop="10dp"
                     android:paddingEnd="10dp"
@@ -116,6 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:padding="10dp"
+                        android:inputType="textCapSentences"
                         android:hint="@string/reason_text"
                         android:textColorHint="@color/secondary_text"
                         android:background="@android:color/white"/>

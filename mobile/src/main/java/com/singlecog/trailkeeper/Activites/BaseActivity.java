@@ -111,7 +111,7 @@ public class BaseActivity extends AppCompatActivity {
                         getString(R.string.comments),
                         getString(R.string.map),
                         getString(R.string.add_trail),
-                        getString(R.string.create_group),
+                        //getString(R.string.create_group),
                         getString(R.string.trail_subscriptions),
                         getString(R.string.account_settings),
                         getString(R.string.request_trail_pin),
@@ -175,11 +175,11 @@ public class BaseActivity extends AppCompatActivity {
                                     }
                                 }
                                 break;
-                            case 5:   // Create Group
+                            //case 5:   // Create Group
                                 //intent = new Intent(BaseActivity.this, Profile.class);
                                 //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-                                break;
-                            case 6:   // Subscriptions
+                                //break;
+                            case 5:   // Subscriptions
                                 if (isAnonUser) {
                                     Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                                 } else {
@@ -195,7 +195,7 @@ public class BaseActivity extends AppCompatActivity {
                                     }
                                 }
                                 break;
-                            case 7:   // Account Settings
+                            case 6:   // Account Settings
                                 if (!activityName.equalsIgnoreCase("Activites.AccountSettings")) {
                                     intent = new Intent(BaseActivity.this, AccountSettings.class);
                                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
@@ -203,7 +203,7 @@ public class BaseActivity extends AppCompatActivity {
                                     mDrawerLayout.closeDrawer(GravityCompat.START);
                                 }
                                 break;
-                            case 8:   // Request trail Pin
+                            case 7:   // Request trail Pin
                                 if (isAnonUser) {
                                     Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                                 } else {
@@ -212,7 +212,7 @@ public class BaseActivity extends AppCompatActivity {
                                 }
 
                                 break;
-                            case 9:   // Contact us
+                            case 8:   // Contact us
 
 
                                 break;
