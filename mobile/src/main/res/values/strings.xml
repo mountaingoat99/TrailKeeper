@@ -128,5 +128,11 @@
     <string name="title_activity_get_trail_pin">TrailPin</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="get_pin">Get Pin</string>
+    <string name="request_pin_text">In order to ensure only the correct users are changing the status of a trail, we
+                                    ask that you provide us with your name, trail name, and explanation why you are qualified to changes the trail status -
+                                    Owner, Admin, Park Manager, etc... After receiving your request, we will email you the trail pin within 24 hours.</string>
+    <string name="reason_text">Reason</string>
+    <string name="name_string">Name</string>
 
 </resources>

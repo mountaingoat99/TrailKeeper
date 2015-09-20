@@ -207,8 +207,8 @@ public class BaseActivity extends AppCompatActivity {
                                 if (isAnonUser) {
                                     Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                                 } else {
-                                        //intent = new Intent(BaseActivity.this, Notifications.class);
-                                        //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                        intent = new Intent(BaseActivity.this, GetTrailPin.class);
+                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 }
 
                                 break;

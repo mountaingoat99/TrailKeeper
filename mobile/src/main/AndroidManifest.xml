@@ -175,7 +175,7 @@
         <activity
             android:name=".Activites.GetTrailPin"
             android:label="@string/title_activity_get_trail_pin"
-            android:parentActivityName=".Activites.HomeScreen" >
+            android:parentActivityName=".Activites.HomeScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
