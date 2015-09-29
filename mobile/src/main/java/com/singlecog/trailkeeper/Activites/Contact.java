@@ -7,46 +7,42 @@ import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+import com.singlecog.trailkeeper.Activites.BaseActivity;
 import com.singlecog.trailkeeper.R;
 
-import java.util.List;
+import Helpers.CreateAccountHelper;
 
-import models.ModelTrails;
 
-public class GetTrailPin extends BaseActivity {
+public class Contact extends BaseActivity {
 
     private RelativeLayout mainLayout;
-    private TextView txtName, txtEmail, txtReason;
-    private AutoCompleteTextView txtTrailName;
-    private Button btnGetPin;
-    private List<String> trailNames;
+    private TextView txtName, txtFeedback;
+    private Button btnSendEmail;
+    private boolean isAnonUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_get_trail_pin);
+        setContentView(R.layout.activity_contact);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
         super.onCreateDrawer(mainLayout, this);
-
-        trailNames = ModelTrails.GetTrailNames();
+        isAnonUser = CreateAccountHelper.IsAnonUser();
 
         setUpViews();
         setUpOnClick();
     }
 
     private void setUpOnClick() {
-        btnGetPin.setOnClickListener(new View.OnClickListener() {
+        btnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (txtName.getText().length() > 0 && txtTrailName.getText().length() > 0
-                        && txtEmail.getText().length() > 0 && txtReason.getText().length() > 0) {
+                if (txtName.getText().length() > 0 && txtFeedback.getText().length() > 0) {
                     SendEmail(v);
                 } else {
                     Snackbar.make(v, "Please Enter All Fields", Snackbar.LENGTH_LONG).show();
@@ -56,15 +52,20 @@ public class GetTrailPin extends BaseActivity {
     }
 
     private void SendEmail(View v) {
-        String emailBody = txtName.getText().toString().trim() +  " - Email: " + txtEmail.getText().toString().trim()
-                            + " - is requesting a Trail Pin for Trail: " + txtTrailName.getText().toString().trim()
-                            + " because \"" + txtReason.getText().toString().trim() + "\"";
+        String emailBody;
+        if(!isAnonUser) {
+            emailBody = txtName.getText().toString().trim() + ", Username : " + ParseUser.getCurrentUser().getUsername()
+                    + " sent Feedback: \"" + txtFeedback.getText().toString().trim() + "\"";
+            } else {
+            emailBody = txtName.getText().toString().trim() + ", No UserName"
+                    + " sent Feedback: \"" + txtFeedback.getText().toString().trim() + "\"";
+        }
 
         Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
         // prompts email clients only
         email.setType("message/rfc822");
         email.putExtra(Intent.EXTRA_EMAIL, new String[]{"singlecogsoftware@outlook.com"});
-        email.putExtra(Intent.EXTRA_SUBJECT, "Trail Pin Request: " + txtTrailName.getText().toString().trim());
+        email.putExtra(Intent.EXTRA_SUBJECT, "Feedback about Trail Keeper");
         email.putExtra(Intent.EXTRA_TEXT, emailBody);
         try {
             // the user can choose the email client
@@ -77,28 +78,21 @@ public class GetTrailPin extends BaseActivity {
 
     private void ClearFieldsShowMessage(){
         txtName.setText("");
-        txtEmail.setText("");
-        txtTrailName.setText("");
-        txtReason.setText("");
+        txtFeedback.setText("");
     }
 
     private void setUpViews() {
         txtName = (TextView)findViewById(R.id.edittext_name);
-        txtEmail = (TextView)findViewById(R.id.edittext_email);
-        txtReason = (TextView)findViewById(R.id.edittext_reason);
-        txtTrailName = (AutoCompleteTextView)findViewById(R.id.edittext_trail_name);
-        btnGetPin = (Button)findViewById(R.id.btn_get_pin);
-
-        // set the adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, trailNames);
-        txtTrailName.setAdapter(adapter);
-        txtTrailName.setThreshold(1);
+        txtFeedback = (TextView)findViewById(R.id.edittext_feedback);
+        btnSendEmail = (Button)findViewById(R.id.btn_send_email);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_get_trail_pin, menu);
+        // right now we won't show anything here, but we may add menu items
+        // to the individual layouts so we won't move this to the super class
+        //getMenuInflater().inflate(R.menu.menu_find_trail, menu);
         return true;
     }
 }

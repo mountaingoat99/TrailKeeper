@@ -17,5 +17,6 @@
     <dimen name="tablet_button_text">24sp</dimen>
     <dimen name="spinner_text">16sp</dimen>
     <dimen name="spinner_text_phone">18sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

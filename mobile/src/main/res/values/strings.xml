@@ -134,5 +134,9 @@
                                     Owner, Admin, Park Manager, etc... After receiving your request, we will email you the trail pin within 24 hours.</string>
     <string name="reason_text">Reason</string>
     <string name="name_string">Name</string>
+    <string name="title_activity_contact">Contact</string>
+    <string name="contact_text">Contact us</string>
+    <string name="feedback_text">Feedback</string>
+    <string name="button_send_email">Send Email</string>
 
 </resources>

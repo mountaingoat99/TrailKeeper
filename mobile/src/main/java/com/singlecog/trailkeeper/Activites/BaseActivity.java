@@ -1,7 +1,6 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -14,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,8 +20,6 @@ import android.widget.ListView;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.singlecog.trailkeeper.R;
-
-import java.lang.reflect.Method;
 
 import Helpers.CreateAccountHelper;
 import Helpers.PushNotificationHelper;
@@ -204,17 +200,24 @@ public class BaseActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 7:   // Request trail Pin
-                                if (isAnonUser) {
-                                    Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
-                                } else {
+                                if (!activityName.equalsIgnoreCase("Activites.GetTrailPin")) {
+                                    if (isAnonUser) {
+                                        Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
+                                    } else {
                                         intent = new Intent(BaseActivity.this, GetTrailPin.class);
                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                    }
+                                } else {
+                                    mDrawerLayout.closeDrawer(GravityCompat.START);
                                 }
-
                                 break;
                             case 8:   // Contact us
-
-
+                                if (!activityName.equalsIgnoreCase("Activites.Contact")) {
+                                    intent = new Intent(BaseActivity.this, Contact.class);
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                } else {
+                                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                                }
                                 break;
                         }
                     }
