@@ -9,8 +9,10 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -135,9 +137,12 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
     private void setAnimation(HomeScreenListViewHolder viewToAnimate, int position){
         // if the bound view wasn't previously displayed on screen, it's animated
         if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            Animation fadeIn = new AlphaAnimation(0, 1);
+            fadeIn.setInterpolator(new DecelerateInterpolator());
+            fadeIn.setDuration(1000);
+            //Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
             View v = viewToAnimate.itemView;
-            v.startAnimation(animation);
+            v.startAnimation(fadeIn);
             lastPosition = position;
         }
     }
