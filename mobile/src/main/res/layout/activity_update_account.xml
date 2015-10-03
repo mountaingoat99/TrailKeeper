@@ -111,7 +111,7 @@
                             android:layout_height="wrap_content"
                             android:minWidth="0dp"
                             android:minHeight="0dp"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_alignParentEnd="true"
@@ -134,7 +134,7 @@
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:layout_weight="1"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:text="@string/update_email"/>
@@ -146,7 +146,7 @@
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:layout_weight="1"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:text="@string/verify_email"/>
@@ -169,7 +169,7 @@
                         android:minHeight="0dp"
                         android:minWidth="0dp"
                         android:layout_weight="1"
-                        android:textSize="@dimen/button_text_small"
+                        android:textSize="@dimen/button_all"
                         android:textColor="@color/accent"
                         style="?android:attr/borderlessButtonStyle"
                         android:text="@string/update_username"/>
@@ -181,7 +181,7 @@
                         android:minHeight="0dp"
                         android:minWidth="0dp"
                         android:layout_weight="1"
-                        android:textSize="@dimen/button_text_small"
+                        android:textSize="@dimen/button_all"
                         android:textColor="@color/accent"
                         style="?android:attr/borderlessButtonStyle"
                         android:text="@string/update_password"/>

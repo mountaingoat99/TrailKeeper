@@ -17,9 +17,9 @@
             android:textColor="@color/primary_text"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -28,10 +28,10 @@
             android:text="This is a long message telling the user what is wrong with what they just now did"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/text_size_small"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -39,19 +39,22 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp">
 
             <Button
                 android:id="@+id/btn_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/button_text_small"
+                android:textSize="@dimen/button_all"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toLeftOf="@+id/btn_okay"
                 android:layout_toStartOf="@+id/btn_okay"
                 android:text="Cancel"/>
@@ -60,7 +63,7 @@
                 android:id="@+id/btn_okay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/button_text_small"
+                android:textSize="@dimen/button_all"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"
                 android:minHeight="0dp"

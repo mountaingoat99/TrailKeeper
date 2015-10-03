@@ -126,7 +126,11 @@ public class SignIn extends BaseActivity {
             SignInWasSuccessful();
             Log.i(LOG, "Sign In Success");
         }else{
-            Toast.makeText(this, failMessage, Toast.LENGTH_LONG).show();
+            if (failMessage.contains("parameters")) {
+                failMessage = "Something is wrong, please check your username and password!";
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            Snackbar.make(view, failMessage, Snackbar.LENGTH_LONG).show();
             Log.i(LOG, "Sign In Failed");
         }
     }

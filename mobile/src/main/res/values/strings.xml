@@ -138,5 +138,9 @@
     <string name="contact_text">Contact us</string>
     <string name="feedback_text">Feedback</string>
     <string name="button_send_email">Send Email</string>
+    <string name="sure_sign_out">Are you sure you want to sign out?</string>
+    <string name="delete_account">Are you sure you want to totally delete your account?</string>
+    <string name="not_signed_in">Not Signed In</string>
+    <string name="user">Welcome&#160;</string>
 
 </resources>

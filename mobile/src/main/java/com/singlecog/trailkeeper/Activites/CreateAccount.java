@@ -143,6 +143,8 @@ public class CreateAccount extends BaseActivity {
             CreateSuccessMessage();
             Log.i(LOG, "Account Creation Success");
         }else{
+            //AlertDialogHelper.showCustomAlertDialog(context, "Sorry!", failMessage);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
             Log.i(LOG, "Account Creation Failed");
         }

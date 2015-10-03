@@ -116,30 +116,33 @@
 
                         <ImageView
                             android:id="@+id/image_easy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginRight="8dp"
+                            android:layout_gravity="center"
                             android:src="@drawable/trail_difficult_easy"
                             android:contentDescription="@string/trail_status"
                             android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/image_medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginRight="8dp"
+                            android:layout_gravity="center"
                             android:src="@drawable/trail_difficult_medium"
                             android:contentDescription="@string/trail_status"
                             android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/image_hard"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginRight="8dp"
+                            android:layout_gravity="center"
                             android:src="@drawable/trail_difficulty_hard"
                             android:contentDescription="@string/trail_status"
                             android:visibility="gone"/>
@@ -148,7 +151,9 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
 
                         <Button
                             android:id="@+id/btn_subscribe"
@@ -158,7 +163,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="Subscribe"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 
@@ -170,7 +175,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="Close Trail"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 
@@ -197,7 +202,6 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -223,6 +227,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
                         android:layout_weight="0">
 
                         <Button
@@ -233,7 +239,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="@string/btn_show_comments"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 
@@ -246,7 +252,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="@string/btn_all_comments"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 

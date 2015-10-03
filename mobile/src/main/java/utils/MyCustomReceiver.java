@@ -155,7 +155,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
             android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.mipmap.ic_up)
+                            .setSmallIcon(R.mipmap.launcher1)
                             .setContentTitle(_Title)
                             .setContentText(trailName + " has a new comment:" + "\n" + Comment)
                             .setNumber(++numMessages);
@@ -211,7 +211,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
 
             final android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.mipmap.ic_up)
+                            .setSmallIcon(R.mipmap.launcher1)
                             .setContentTitle(_Title)
                             .setContentText(StatusUpdate)
                             .setNumber(++numMessages);

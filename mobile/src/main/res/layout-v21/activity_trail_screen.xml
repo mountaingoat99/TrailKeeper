@@ -110,8 +110,9 @@
 
                         <ImageView
                             android:id="@+id/image_easy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
                             android:layout_marginEnd="8dp"
                             android:src="@drawable/trail_difficult_easy"
                             android:contentDescription="@string/trail_status"
@@ -119,8 +120,9 @@
 
                         <ImageView
                             android:id="@+id/image_medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
                             android:layout_marginEnd="8dp"
                             android:src="@drawable/trail_difficult_medium"
                             android:contentDescription="@string/trail_status"
@@ -128,8 +130,9 @@
 
                         <ImageView
                             android:id="@+id/image_hard"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
                             android:layout_marginEnd="8dp"
                             android:src="@drawable/trail_difficulty_hard"
                             android:contentDescription="@string/trail_status"

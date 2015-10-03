@@ -1,21 +1,24 @@
 package com.singlecog.trailkeeper.Activites;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
+
 
 import Helpers.AlertDialogHelper;
 import Helpers.ConnectionDetector;
@@ -26,14 +29,13 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
 
     private final String LOG = "AccountSettings";
     private ListView settingsList;
-    String[] settingArray;
+    String[] settingsArray;
     private final Context context = this;
     private boolean isAnonUser;
     private ProgressDialog dialog;
     private View v;
     private CreateAccountHelper createAccountHelper;
     private ConnectionDetector connectionDetector;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
         connectionDetector = new ConnectionDetector(context);
         isAnonUser = CreateAccountHelper.IsAnonUser();
         settingsList = (ListView)findViewById(R.id.listViewAccountSettings);
+        CheckUserName();
         populateListView();
         settingsList.setOnItemClickListener(this);
     }
@@ -56,10 +59,22 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
     }
     //region ListItem Methods
     private void populateListView() {
-        settingArray = getResources().getStringArray(R.array.account_settings_array);
+        settingsArray = getResources().getStringArray(R.array.account_settings_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, R.layout.activity_setting_listitem, settingArray);
+                this, R.layout.activity_setting_listitem, settingsArray);
         settingsList.setAdapter(adapter);
+        adapter.isEnabled(5);
+    }
+
+    private void CheckUserName() {
+        String name;
+        TextView userText = (TextView)findViewById(R.id.username);
+        if (isAnonUser) {
+            userText.setText(getResources().getString(R.string.not_signed_in));
+        } else {
+            name = getResources().getString(R.string.user) + ParseUser.getCurrentUser().getUsername();
+            userText.setText(name);
+        }
     }
 
     @Override
@@ -106,27 +121,32 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
 
     //region Delete Account
     private void DeleteAccount() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getResources().getString(R.string.delete_account_confirm));
-        builder.setNegativeButton(getResources().getString(R.string.sign_out_cancel), new DialogInterface.OnClickListener() {
+        final Dialog deleteDialog = new Dialog(this);
+        deleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        deleteDialog.setContentView(R.layout.dialog_delete_account);
+        Button btnCancel = (Button)deleteDialog.findViewById(R.id.btn_cancel);
+        Button btnYes = (Button)deleteDialog.findViewById(R.id.btn_yes);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(View v) {
+                deleteDialog.dismiss();
             }
         });
-        builder.setPositiveButton(getResources().getString(R.string.sign_out_yes), new DialogInterface.OnClickListener() {
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 if (connectionDetector.isConnectingToInternet()) {
                     createAccountHelper = new CreateAccountHelper(context, AccountSettings.this);
                     createAccountHelper.DeleteUser(ParseUser.getCurrentUser());
                     StartDeleteDialog();
+                    deleteDialog.dismiss();
                 } else {
                     AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
-        AlertDialog deleteDialog = builder.create();
         deleteDialog.show();
     }
 
@@ -148,29 +168,34 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
 
     //region SignOut
     private void SignOut(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getResources().getString(R.string.sign_out_confirm));
-        builder.setNegativeButton(getResources().getString(R.string.sign_out_cancel), new DialogInterface.OnClickListener() {
+        final Dialog signoutDialog = new Dialog(this);
+        signoutDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        signoutDialog.setContentView(R.layout.dialog_signout);
+        Button btnCancel = (Button)signoutDialog.findViewById(R.id.btn_cancel);
+        Button btnYes = (Button)signoutDialog.findViewById(R.id.btn_yes);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(View v) {
+                signoutDialog.dismiss();
             }
         });
-        builder.setPositiveButton(getResources().getString(R.string.sign_out_yes), new DialogInterface.OnClickListener() {
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 if (connectionDetector.isConnectingToInternet()) {
                     ParseUser.logOut();
                     createAccountHelper = new CreateAccountHelper(context, AccountSettings.this);
                     createAccountHelper.CreateAnonUser();
                     StartSignOutDialog();
+                    signoutDialog.dismiss();
                 } else {
                     AlertDialogHelper.showCustomAlertDialog(context, "No Connection", "You have no wifi or data connection");
                 }
             }
         });
-        AlertDialog signOutDialog = builder.create();
-        signOutDialog.show();
+        signoutDialog.show();
     }
 
     private void StartSignOutDialog(){

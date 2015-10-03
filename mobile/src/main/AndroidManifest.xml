@@ -26,7 +26,7 @@
     <application
         android:name=".Activites.TrailKeeperApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher1"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <meta-data

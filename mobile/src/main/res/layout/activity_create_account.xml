@@ -109,7 +109,7 @@
                             android:id="@+id/btn_sign_up"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/button_text_medium"
+                            android:textSize="@dimen/button_all"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_alignParentEnd="true"

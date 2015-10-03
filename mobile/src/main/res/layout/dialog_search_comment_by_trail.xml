@@ -34,13 +34,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp">
 
             <Button
                 android:id="@+id/btn_load_comment_by_trail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/button_text_small"
+                android:textSize="@dimen/button_all"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"
                 android:minHeight="0dp"

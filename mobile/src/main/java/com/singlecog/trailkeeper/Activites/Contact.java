@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseUser;
-import com.singlecog.trailkeeper.Activites.BaseActivity;
 import com.singlecog.trailkeeper.R;
 
 import Helpers.CreateAccountHelper;
