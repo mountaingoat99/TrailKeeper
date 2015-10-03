@@ -48,7 +48,7 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_trail_map);
         view = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(view, this);
 
@@ -64,7 +64,10 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
 
     //region Activity Methods
 
-
+    public void btnContact(View v) {
+        Intent intent = new Intent(this, Contact.class);
+        startActivity(intent);
+    }
 
     // overriding this from the base class so the back button goes back the trail screen
     @Override

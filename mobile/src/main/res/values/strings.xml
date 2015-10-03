@@ -142,5 +142,6 @@
     <string name="delete_account">Are you sure you want to totally delete your account?</string>
     <string name="not_signed_in">Not Signed In</string>
     <string name="user">Welcome&#160;</string>
+    <string name="no_trail_map">No trail map for this location. Let us know if you have one we can add.</string>
 
 </resources>
