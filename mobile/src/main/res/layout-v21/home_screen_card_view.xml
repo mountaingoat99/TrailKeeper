@@ -126,7 +126,7 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:text="@string/button_home"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="@dimen/button_text_small"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 
@@ -138,7 +138,7 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:text="@string/button_map"
-                android:textSize="@dimen/text_size_small"
+                android:textSize="@dimen/button_text_small"
                 android:textColor="@color/accent"
                 style="?android:attr/borderlessButtonStyle"/>
 

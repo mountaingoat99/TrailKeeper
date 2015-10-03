@@ -344,7 +344,7 @@ public class TrailScreen extends BaseActivity {
                 startActivity(intentHome);
             break;
             case R.id.action_map_click:
-                if (mapLink.isEmpty()) {
+                if (mapLink == null) {
                     Intent intent = new Intent(context, TrailMap.class);
                     Bundle args = new Bundle();
                     args.putParcelable("geoPoint", trailLocation);

@@ -26,8 +26,9 @@
             android:layout_height="wrap_content"
             android:minHeight="0dp"
             android:minWidth="0dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/button_home"
-            android:textSize="@dimen/text_size_mini"
+            android:textSize="@dimen/button_text_small"
             android:textColor="@color/accent"
             style="?android:attr/borderlessButtonStyle"/>
 
@@ -39,7 +40,7 @@
             android:minWidth="0dp"
             android:layout_toEndOf="@+id/btn_trail_home"
             android:text="@string/unsubscribe"
-            android:textSize="@dimen/text_size_mini"
+            android:textSize="@dimen/button_text_small"
             android:textColor="@color/accent"
             style="?android:attr/borderlessButtonStyle"/>
 

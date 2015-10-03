@@ -154,7 +154,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="Subscribe"
-                            android:textSize="@dimen/button_all"
+                            android:textSize="@dimen/button_text_small"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 
@@ -166,7 +166,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="Close Trail"
-                            android:textSize="@dimen/button_all"
+                            android:textSize="@dimen/button_text_small"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 
@@ -230,7 +230,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="@string/btn_show_comments"
-                            android:textSize="@dimen/button_all"
+                            android:textSize="@dimen/button_text_small"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 
@@ -243,7 +243,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="@string/btn_all_comments"
-                            android:textSize="@dimen/button_all"
+                            android:textSize="@dimen/button_text_small"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"/>
 
