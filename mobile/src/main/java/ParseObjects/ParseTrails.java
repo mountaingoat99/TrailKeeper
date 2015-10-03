@@ -81,6 +81,14 @@ public class ParseTrails extends ParseObject {
 
     public void setLocation(ParseGeoPoint geoLocation) { put("geoLocation", geoLocation);}
 
+    public String getMapLink() {
+        return getString("mapLink");
+    }
+
+    public void setMapLink(String mapLink) {
+        put("mapLink", mapLink);
+    }
+
     public static ParseQuery<ParseTrails> getQuery() {
         return ParseQuery.getQuery(ParseTrails.class);
     }

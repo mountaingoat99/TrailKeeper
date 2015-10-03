@@ -41,6 +41,7 @@ public class ModelTrails {
     private boolean isMedium;
     private boolean isHard;
     private boolean IsPrivate;
+    private String mapLink;
 
     public ParseGeoPoint GeoLocation;
     public float distanceAway;
@@ -160,6 +161,15 @@ public class ModelTrails {
     public void setIsPrivate(boolean isPrivate) {
         IsPrivate = isPrivate;
     }
+
+    public String getMapLink() {
+        return mapLink;
+    }
+
+    public void setMapLink(String mapLink) {
+        this.mapLink = mapLink;
+    }
+
     //endregion
 
     //region Static Methods

@@ -3,6 +3,7 @@ package com.singlecog.trailkeeper.Activites;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
     private String objectID;
     private LatLng trailLocation;
     private String trailNameString;
+    private String mapLink;
     private View view;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -50,7 +52,6 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         view = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(view, this);
 
-        // get the latest device location
         buildGoogleApiClient();
 
         Bundle bundle = getIntent().getParcelableExtra("bundle");
@@ -62,6 +63,9 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
     }
 
     //region Activity Methods
+
+
+
     // overriding this from the base class so the back button goes back the trail screen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -70,7 +71,7 @@ public class TrailScreen extends BaseActivity {
     private View v;
     private LinearLayout layoutDifficulty;
     private LatLng trailLocation;
-    private String trailNameString, newTrailCommentString;
+    private String trailNameString, newTrailCommentString, mapLink;
     private boolean isEasy = false, isMedium = false, isHard = false;
     private List<ModelTrailComments> comments;
     private ModelTrails modelTrails;
@@ -285,6 +286,7 @@ public class TrailScreen extends BaseActivity {
                     isEasy = object.getBoolean("skillEasy");
                     isMedium = object.getBoolean("skillMedium");
                     isHard = object.getBoolean("skillHard");
+                    mapLink = object.getString("mapLink");
 
                     UpdateStatusIcon();
                 }
@@ -342,16 +344,27 @@ public class TrailScreen extends BaseActivity {
                 startActivity(intentHome);
             break;
             case R.id.action_map_click:
-                Intent intent = new Intent(context, TrailMap.class);
-                Bundle args = new Bundle();
-                args.putParcelable("geoPoint", trailLocation);
-                args.putString("objectID", objectID);
-                args.putString("trailName", trailNameString);
-                intent.putExtra("bundle", args);
-                startActivity(intent);
+                if (mapLink.isEmpty()) {
+                    Intent intent = new Intent(context, TrailMap.class);
+                    Bundle args = new Bundle();
+                    args.putParcelable("geoPoint", trailLocation);
+                    args.putString("objectID", objectID);
+                    args.putString("trailName", trailNameString);
+                    intent.putExtra("bundle", args);
+                    startActivity(intent);
+                } else {
+                    OpenLinkWebSite();
+                }
                 break;
         }
         return true;
+    }
+
+    private void OpenLinkWebSite() {
+        String url = mapLink;
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
     //endregion
 
