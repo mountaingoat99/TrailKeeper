@@ -15,7 +15,6 @@
         <TextView
             android:id="@+id/old_field"
             android:text="Old Field"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:layout_width="wrap_content"
@@ -31,7 +30,6 @@
             android:hint="New Field"
             android:inputType="textEmailAddress"
             android:textColorHint="@color/secondary_text"
-            android:drawableLeft="@mipmap/ic_action_email"
             android:drawableStart="@mipmap/ic_action_email"
             android:background="@android:color/white"/>
 
@@ -56,7 +54,6 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
-                android:layout_toLeftOf="@+id/btn_update_field"
                 android:layout_toStartOf="@+id/btn_update_field"
                 android:text="@string/sign_out_cancel"/>
 
@@ -70,7 +67,6 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:text="Update Field"/>
 
         </RelativeLayout>

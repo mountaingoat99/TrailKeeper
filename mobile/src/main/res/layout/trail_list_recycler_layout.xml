@@ -27,7 +27,6 @@
             android:id="@+id/txt_label_trail_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

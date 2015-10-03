@@ -17,7 +17,6 @@
         android:text="Petrified Springs Trail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
         android:layout_marginStart="4dp"
         android:textStyle="bold"
         android:textSize="@dimen/text_size_small"
@@ -28,7 +27,6 @@
         android:text="test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:textSize="@dimen/text_size_medium"
         android:textColor="@color/primary_text"/>
@@ -36,7 +34,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:orientation="horizontal">
 
@@ -45,7 +42,6 @@
             android:text="test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
             android:layout_marginEnd="4dp"
             android:textSize="@dimen/text_size_super_mini"/>
 
@@ -54,12 +50,9 @@
             android:text="mountaingoat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
             android:layout_marginEnd="4dp"
             android:textSize="@dimen/text_size_super_mini"/>
 
     </LinearLayout>
-
-
 
 </LinearLayout>

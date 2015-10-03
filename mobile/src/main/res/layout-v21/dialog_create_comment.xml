@@ -45,7 +45,6 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
-                android:layout_toLeftOf="@+id/btn_create_comment"
                 android:layout_toStartOf="@+id/btn_create_comment"
                 android:text="@string/sign_out_cancel"/>
 
@@ -59,7 +58,6 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:text="@string/btn_save"/>
 
         </RelativeLayout>

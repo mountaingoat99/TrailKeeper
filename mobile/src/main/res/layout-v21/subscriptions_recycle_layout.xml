@@ -12,15 +12,13 @@
         android:text="Silver Lake Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
         android:textSize="@dimen/text_size_large" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp">
+        android:layout_marginEnd="8dp">
 
         <Button
             android:id="@+id/btn_trail_home"
@@ -40,7 +38,6 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:layout_toEndOf="@+id/btn_trail_home"
-            android:layout_toRightOf="@+id/btn_trail_home"
             android:text="@string/unsubscribe"
             android:textSize="@dimen/text_size_mini"
             android:textColor="@color/accent"
