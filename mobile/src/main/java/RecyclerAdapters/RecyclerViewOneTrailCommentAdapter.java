@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.singlecog.trailkeeper.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import models.ModelTrailComments;

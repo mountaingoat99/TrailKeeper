@@ -83,7 +83,8 @@ public class AddTrail extends BaseActivity implements
     private LatLng trailLocation;
     private String trailName, objectID;
     private int trailStatus;
-    private boolean isMapUp = true, doUseCurrentLocation = false, isPrivateTrail = false;
+    private boolean isMapUp = true;
+    private boolean doUseCurrentLocation = false;
     private boolean isEasy = false, isMedium = false, isHard = false;
     private List<ModelTrails> trails;
     private LatLng home;
@@ -159,7 +160,6 @@ public class AddTrail extends BaseActivity implements
         mlayout.setDragView(up_view);
     }
 
-    // TODO may not use this unless I add a reset button on the screen
     private void resetEverything() {
         editLength.setText("");
         editTextState.setText("");
@@ -324,6 +324,7 @@ public class AddTrail extends BaseActivity implements
         newTrail.setIsMedium(isMedium);
         newTrail.setIsHard(isHard);
         newTrail.setLocation(trailLocation);
+        boolean isPrivateTrail = false;
         newTrail.setIsPrivate(isPrivateTrail);
         newTrail.setTrailStatus(2);
 

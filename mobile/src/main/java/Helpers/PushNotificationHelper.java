@@ -2,10 +2,8 @@ package Helpers;
 
 import android.util.Log;
 
-import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
-import com.parse.SendCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;

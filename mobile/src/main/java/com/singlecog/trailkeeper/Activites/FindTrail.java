@@ -28,7 +28,6 @@ public class FindTrail extends BaseActivity {
     private final Context context = this;
     private FloatingActionButton btnSearch;
     private RecyclerView mFindTrailByStateRecyclerView;
-    private RecyclerViewFindTrailByState mFindTrailByStateAdapter;
     private List<String> trailNames;
     private Set<String> states;
     private View view;
@@ -119,7 +118,7 @@ public class FindTrail extends BaseActivity {
         List<String> trailStates = new ArrayList<>();
         // convert the set to a List for the Recycler Adapter
         trailStates.addAll(states);
-        mFindTrailByStateAdapter = new RecyclerViewFindTrailByState(trailStates, context);
+        RecyclerViewFindTrailByState mFindTrailByStateAdapter = new RecyclerViewFindTrailByState(trailStates, context);
         mFindTrailByStateRecyclerView.setAdapter(mFindTrailByStateAdapter);
         mFindTrailByStateRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }

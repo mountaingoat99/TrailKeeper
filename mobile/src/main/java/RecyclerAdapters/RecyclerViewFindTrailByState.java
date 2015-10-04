@@ -27,7 +27,6 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
         <RecyclerViewFindTrailByState.ListItemViewHolder> {
 
     private List<String> items;
-    private static String model;
     private static List<ModelTrails> trailsByState;
     private SparseBooleanArray selectedItems;
     private Context context;
@@ -54,7 +53,7 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(final ListItemViewHolder viewHolder, int position) {
-        model = items.get(position);
+        String model = items.get(position);
         viewHolder.states.setText(StateListHelper.GetStateName(model));
         viewHolder.expand.setImageResource(R.mipmap.ic_action_expand);
         viewHolder.showTrails = false;  // decides if we show or un-show the trails

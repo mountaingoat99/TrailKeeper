@@ -25,7 +25,6 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         <RecylerViewFindTrailInState.ListItemViewHolder> {
 
     private List<ModelTrails> items;
-    private static ModelTrails model;
     private SparseBooleanArray selectedItems;
     private Context context;
 
@@ -60,7 +59,7 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(final ListItemViewHolder viewHolder, int position) {
-        model = items.get(position);
+        ModelTrails model = items.get(position);
         viewHolder.trails.setText(model.getTrailName());
         viewHolder.cities.setText(model.getTrailCity());
         viewHolder.itemView.setActivated(selectedItems.get(position, false));

@@ -34,10 +34,9 @@ import models.ModelTrails;
 public class CreateAccount extends BaseActivity {
 
     private static String LOG = "CreateAccount";
-    private LinearLayout layout;
     private EditText email, username, password;
     private Button btnSignUp;
-    private String emailString, usernameString, passwordString;
+    private String usernameString;
     private View v;
     private final Context context = this;
     private InputMethodManager imm;
@@ -53,18 +52,18 @@ public class CreateAccount extends BaseActivity {
         super.onCreateDrawer(v, this);
         SetUpViews();
         if (savedInstanceState != null) {
-            emailString = savedInstanceState.getString("email");
+            String emailString = savedInstanceState.getString("email");
             email.setText(emailString);
             usernameString = savedInstanceState.getString("username");
             username.setText(usernameString);
-            passwordString = savedInstanceState.getString("password");
+            String passwordString = savedInstanceState.getString("password");
             password.setText(passwordString);
         }
         connectionDetector = new ConnectionDetector(getApplicationContext());
         email.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        layout = (LinearLayout)findViewById(R.id.layout1);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout1);
         v = layout;
         SetUpClickEvent();
     }

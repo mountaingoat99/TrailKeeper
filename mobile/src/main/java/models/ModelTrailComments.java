@@ -3,26 +3,20 @@ package models;
 import android.content.Context;
 import android.util.Log;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
-import com.singlecog.trailkeeper.Activites.AllComments;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import Helpers.ConnectionDetector;
 import Helpers.PushNotificationHelper;
 import ParseObjects.ParseComments;
-import ParseObjects.ParseTrailStatus;
 
 public class ModelTrailComments {
 

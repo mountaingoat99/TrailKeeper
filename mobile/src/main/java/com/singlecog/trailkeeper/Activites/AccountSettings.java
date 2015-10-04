@@ -27,7 +27,6 @@ import Helpers.ProgressDialogHelper;
 
 public class AccountSettings extends BaseActivity implements AdapterView.OnItemClickListener {
 
-    private final String LOG = "AccountSettings";
     private ListView settingsList;
     String[] settingsArray;
     private final Context context = this;
@@ -79,6 +78,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String LOG = "AccountSettings";
         Log.i(LOG, "User clicked item: " + id + " at position: " + position);
         switch (position){
             case 0:  // Create Account

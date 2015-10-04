@@ -19,7 +19,6 @@ import Helpers.CreateAccountHelper;
 
 public class Contact extends BaseActivity {
 
-    private RelativeLayout mainLayout;
     private TextView txtName, txtFeedback;
     private Button btnSendEmail;
     private boolean isAnonUser;
@@ -29,7 +28,7 @@ public class Contact extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
+        RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         super.onCreateDrawer(mainLayout, this);
         isAnonUser = CreateAccountHelper.IsAnonUser();
 

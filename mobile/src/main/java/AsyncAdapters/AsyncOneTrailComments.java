@@ -15,7 +15,6 @@ import models.ModelTrailComments;
 
 public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, Integer, List<ModelTrailComments>> {
 
-    private final String TAG = "AsyncOneTrailComment";
     private String trailObectID;
 
     public AsyncOneTrailComments(String trailObectID) {
@@ -30,6 +29,7 @@ public class AsyncOneTrailComments extends AsyncTask<List<ModelTrailComments>, I
     @SafeVarargs
     @Override
     protected final List<ModelTrailComments> doInBackground(List<ModelTrailComments>... comments) {
+        String TAG = "AsyncOneTrailComment";
         Log.i(TAG, "Doing the Async Fetch of the Trail Comments");
         final List<ModelTrailComments> passedComments = comments[0];
         ParseQuery<ParseObject> cQuery = ParseQuery.getQuery("Comments");

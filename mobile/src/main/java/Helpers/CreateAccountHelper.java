@@ -37,7 +37,6 @@ public class CreateAccountHelper {
     private AccountSettings settingsActivity;
     private SignIn signInActivity;
     private final String SIGNINACTIVITY = "SignIn";
-    private final String UPDATEACCOUNTACTIVITY = "UpdateAccount";
     private String whichActivity;
     private UpdateAccount updateAccountActivity;
     private static Boolean emailVerified = false;
@@ -62,6 +61,7 @@ public class CreateAccountHelper {
     public CreateAccountHelper(Context context, UpdateAccount activity) {
         this.context = context;
         this.updateAccountActivity = activity;
+        String UPDATEACCOUNTACTIVITY = "UpdateAccount";
         whichActivity = UPDATEACCOUNTACTIVITY;
     }
 
@@ -163,7 +163,7 @@ public class CreateAccountHelper {
         user.setUsername(username);
         user.setPassword(password);
         // TODO Debug Password
-        user.put("DebugPassword", password);
+        //user.put("DebugPassword", password);
         // every user can start out as a canComment user
         user.setEmail(email);
 

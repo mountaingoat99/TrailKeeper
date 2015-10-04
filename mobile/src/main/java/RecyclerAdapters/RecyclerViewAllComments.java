@@ -18,12 +18,10 @@ public class RecyclerViewAllComments extends RecyclerView.Adapter
             <RecyclerViewAllComments.ListItemViewHolder> {
 
     private List<ModelTrailComments> items;
-    private static ModelTrailComments model;
-    private Context context;
 
     public RecyclerViewAllComments(List<ModelTrailComments> modelData, Context context) {
         this.items = modelData;
-        this.context = context;
+        Context context1 = context;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class RecyclerViewAllComments extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
-        model = items.get(position);
+        ModelTrailComments model = items.get(position);
         viewHolder.trailName.setText(model.TrailName);
         viewHolder.commentDate.setText(model.CommentDate);
         viewHolder.userName.setText(model.CommentUserName);

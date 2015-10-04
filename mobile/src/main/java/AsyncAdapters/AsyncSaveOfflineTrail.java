@@ -10,7 +10,6 @@ import models.ModelTrails;
 
 public class AsyncSaveOfflineTrail extends AsyncTask<String, Void, String> {
 
-    private final String TAG = "AsyncSaveOfflineTrail";
     private ModelTrails newTrail;
     private Context context;
 
@@ -21,6 +20,7 @@ public class AsyncSaveOfflineTrail extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
+        String TAG = "AsyncSaveOfflineTrail";
         try {
             // lets check if we have a current connection
             ConnectionDetector cd = new ConnectionDetector(context);

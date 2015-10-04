@@ -42,7 +42,6 @@ public class AllComments extends BaseActivity {
     private String LOG = "AllComments";
     private final Context context = this;
     private RecyclerView mAllCommentsRecyclerView;
-    private RecyclerViewAllComments mRecyclerViewAllComments;
     private List<String> trailNames;
     private List<String> userNames;
     private List<ModelTrailComments> comments;
@@ -110,7 +109,7 @@ public class AllComments extends BaseActivity {
     }
 
     public void SetUpCommentView() {
-        mRecyclerViewAllComments = new RecyclerViewAllComments(comments, context);
+        RecyclerViewAllComments mRecyclerViewAllComments = new RecyclerViewAllComments(comments, context);
         mAllCommentsRecyclerView.setAdapter(mRecyclerViewAllComments);
         mAllCommentsRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }

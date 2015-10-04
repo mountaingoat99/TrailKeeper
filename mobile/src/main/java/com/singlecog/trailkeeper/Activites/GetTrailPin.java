@@ -21,7 +21,6 @@ import models.ModelTrails;
 
 public class GetTrailPin extends BaseActivity {
 
-    private RelativeLayout mainLayout;
     private TextView txtName, txtEmail, txtReason;
     private AutoCompleteTextView txtTrailName;
     private Button btnGetPin;
@@ -32,7 +31,7 @@ public class GetTrailPin extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_trail_pin);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
+        RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         super.onCreateDrawer(mainLayout, this);
 
         trailNames = ModelTrails.GetTrailNames();

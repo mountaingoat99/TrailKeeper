@@ -4,8 +4,6 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import org.json.JSONArray;
-
 import java.util.Date;
 
 @ParseClassName("Comments")

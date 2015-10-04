@@ -26,10 +26,8 @@ import models.ModelTrails;
 public class RecyclerViewNotifications extends RecyclerView.Adapter
         <RecyclerViewNotifications.ListItemViewHolder> {
 
-    private final String LOG = "RecyclerVNotification";
     private List<String> items;
     private SparseBooleanArray selectedItems;
-    private ConnectionDetector connectionDetector;
     private Context context;
     private ProgressDialog dialog;
     private String trailNameString;
@@ -43,7 +41,7 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         this.notificationActivity = notificationActivity;
         this.context = context;
         this.v = v;
-        connectionDetector = new ConnectionDetector(context);
+        ConnectionDetector connectionDetector = new ConnectionDetector(context);
     }
 
     private String GetTrailName(RecyclerView.ViewHolder item) {
@@ -65,6 +63,7 @@ public class RecyclerViewNotifications extends RecyclerView.Adapter
         if (getItemCount() == 0) {
             notificationActivity.finish();
         }
+        String LOG = "RecyclerVNotification";
         Log.i(LOG, "Subscription for " + trailNameString + " was updated");
     }
 

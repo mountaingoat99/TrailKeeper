@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import AsyncAdapters.AsyncTrailLocations;
-import Helpers.AlertDialogHelper;
 import Helpers.GeoLocationHelper;
 import models.ModelTrails;
 
@@ -60,14 +59,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
     private final Context context = this;
     private List<ModelTrails> trails;
     private Map<Marker, ModelTrails> markers;
-    private View view;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        view = findViewById(R.id.linearlayout_root_main);
+        View view = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(view, this);
         markers = new HashMap<>();
 

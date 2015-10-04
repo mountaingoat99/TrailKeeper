@@ -145,7 +145,7 @@ public class TrailKeeperApplication extends Application implements
     }
 
     public void checkIfGPSIsEnabled() {
-        LocationManager mlocManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);;
+        LocationManager mlocManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         setIsGPSEnabled(mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
     }
 
@@ -242,7 +242,7 @@ public class TrailKeeperApplication extends Application implements
             home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             // calls the AsyncTask for the Trails
         } else {
-            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();  //TODO make a call to send out a global message
+            Toast.makeText(this, "Please Turn On GPS", Toast.LENGTH_LONG).show();
         }
     }
 

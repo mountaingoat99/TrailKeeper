@@ -28,7 +28,6 @@ import Helpers.ProgressDialogHelper;
 
 public class SignIn extends BaseActivity {
 
-    private static String LOG = "SignIn";
     private EditText username, password;
     private Button btnSignIn, btnResetPassword, btnFindUsername;
     private String userNameString, passwordString;
@@ -122,6 +121,7 @@ public class SignIn extends BaseActivity {
 
     public void SignInSuccess(boolean valid, String failMessage) {
         dialog.dismiss();
+        String LOG = "SignIn";
         if (valid){
             SignInWasSuccessful();
             Log.i(LOG, "Sign In Success");

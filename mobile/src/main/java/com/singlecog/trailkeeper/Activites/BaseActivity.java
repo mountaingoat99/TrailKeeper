@@ -248,7 +248,6 @@ public class BaseActivity extends AppCompatActivity {
 
         // here we want to see if this is the root activity or not
         // if root show the drawer icon, if not show the back to home arrow
-        //TODO Might want to add all the drawer classes on here
         if (getClass() == HomeScreen.class) {
             mDrawerToggle.setDrawerIndicatorEnabled(true);
             mDrawerLayout.setDrawerListener(mDrawerToggle);

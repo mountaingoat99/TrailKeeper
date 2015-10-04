@@ -3,7 +3,6 @@ package com.singlecog.trailkeeper.Activites;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,7 +44,6 @@ import AsyncAdapters.AsyncOneTrailComments;
 import AsyncAdapters.AsyncSaveOfflineComments;
 import AsyncAdapters.AsyncSaveOfflineStatus;
 import Helpers.AlertDialogHelper;
-import Helpers.ConnectionDetector;
 import Helpers.CreateAccountHelper;
 import ParseObjects.ParseAuthorizedCommentors;
 import RecyclerAdapters.RecyclerViewOneTrailCommentAdapter;
@@ -63,7 +61,6 @@ public class TrailScreen extends BaseActivity {
     private TextView trailName, trailCity, trailState;
     private ImageView trailStatus, imageEasy, imageMedium, imageHard;
     private Button btnComment, btnTrailStatus, btnSubscribe, btnAllCommments;
-    private AlertDialog statusDialog;
     private Dialog trailStatusDialog;
     private boolean isAnonUser;
     private boolean isEmailVerified;
@@ -392,7 +389,7 @@ public class TrailScreen extends BaseActivity {
                 dialog.dismiss();
             }
         });
-        statusDialog = builder.create();
+        AlertDialog statusDialog = builder.create();
         statusDialog.show();
     }
 

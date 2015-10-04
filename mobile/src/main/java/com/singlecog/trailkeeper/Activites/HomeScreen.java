@@ -37,11 +37,9 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     private RecyclerView mTrailOpenRecyclerView;
     private RecyclerViewHomeScreenAdapter mTrailOpenAdapter;
     private List<ModelTrails> trails;
-    private Bundle bundle;
     // this will let shared preference know if it needs to take longer for the first time load and
     // if we need to ask them to create an account for the first time
     private boolean firstTimeLoad = true;
-    private String userName;
 
     //@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -51,6 +49,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_home_screen);
         super.onCreateDrawer(mSwipeLayout, this);
 
+        Bundle bundle;
         if (savedInstanceState != null)
             bundle = savedInstanceState;
 
@@ -80,7 +79,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         Bundle b = getIntent().getExtras();
         if (b != null){
             View v = mTrailOpenRecyclerView;
-            userName = b.getString("userName");
+            String userName = b.getString("userName");
             if (getIntent().hasExtra("className")) {
                 String className = b.getString("className") ;
                 if (className != null && className.equals("CreateAccount")) {

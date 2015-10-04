@@ -12,7 +12,6 @@ import models.ModelTrails;
 
 public class AsyncSaveOfflineStatus extends AsyncTask<String, Void, String> {
 
-    private final String TAG = "AsyncSaveOfflineStatus";
     private Context context;
     private String objectID;
     private int choice;
@@ -27,6 +26,7 @@ public class AsyncSaveOfflineStatus extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
+        String TAG = "AsyncSaveOfflineStatus";
         try {
             ConnectionDetector cd = new ConnectionDetector(context);
             if (cd.isConnectingToInternet()) {

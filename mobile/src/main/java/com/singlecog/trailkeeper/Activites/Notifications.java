@@ -18,8 +18,6 @@ import RecyclerAdapters.RecyclerViewNotifications;
 public class Notifications extends BaseActivity {
 
     private final Context context = this;
-    private RecyclerView mSubsciptionsRecyclerView;
-    private RecyclerViewNotifications mSubsciptionsAdapter;
     private List<String>  formattedSubscriptions;
     private View v;
 
@@ -45,10 +43,10 @@ public class Notifications extends BaseActivity {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
 
-        mSubsciptionsRecyclerView = (RecyclerView) findViewById(R.id.notifications_recycler_view);
+        RecyclerView mSubsciptionsRecyclerView = (RecyclerView) findViewById(R.id.notifications_recycler_view);
         mSubsciptionsRecyclerView.setLayoutManager(layoutManager);
         mSubsciptionsRecyclerView.setHasFixedSize(true);
-        mSubsciptionsAdapter = new RecyclerViewNotifications(formattedSubscriptions, context, v, this);
+        RecyclerViewNotifications mSubsciptionsAdapter = new RecyclerViewNotifications(formattedSubscriptions, context, v, this);
         mSubsciptionsRecyclerView.setAdapter(mSubsciptionsAdapter);
     }
 

@@ -3,7 +3,6 @@ package com.singlecog.trailkeeper.Activites;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,19 +36,17 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
      * Represents a geographical location.
      */
     protected Location mLastLocation;
-    private LatLng home;
     private String objectID;
     private LatLng trailLocation;
     private String trailNameString;
     private String mapLink;
-    private View view;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_map);
-        view = findViewById(R.id.linearlayout_root_main);
+        View view = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(view, this);
 
         buildGoogleApiClient();
@@ -147,7 +144,7 @@ public class TrailMap extends BaseActivity implements OnMapReadyCallback,
         // in rare cases when a location is not available.
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
-            home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            LatLng home = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         } else {
             Toast.makeText(this,"Please Turn On GPS", Toast.LENGTH_LONG).show();
         }

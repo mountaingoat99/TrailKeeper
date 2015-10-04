@@ -1,10 +1,8 @@
 package ParseObjects;
 
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 @ParseClassName("AuthorizedCommentors")
 public class ParseAuthorizedCommentors extends ParseObject {

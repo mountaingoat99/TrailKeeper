@@ -20,7 +20,6 @@ import java.util.Random;
 import java.util.Set;
 
 import AsyncAdapters.AsyncSaveOfflineTrail;
-import Helpers.ConnectionDetector;
 import Helpers.PushNotificationHelper;
 import ParseObjects.ParseTrailStatus;
 import ParseObjects.ParseTrails;
@@ -45,8 +44,6 @@ public class ModelTrails {
 
     public ParseGeoPoint GeoLocation;
     public float distanceAway;
-    private Context context;
-    private TrailScreen trailScreen;
     //endregion
 
     //region contruct
@@ -56,8 +53,8 @@ public class ModelTrails {
     }
 
     public ModelTrails(Context context, TrailScreen trailScreen) {
-        this.context = context;
-        this.trailScreen = trailScreen;
+        Context context1 = context;
+        TrailScreen trailScreen1 = trailScreen;
     }
     //endregion
 

@@ -11,7 +11,6 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
-import ParseObjects.ParseComments;
 import ParseObjects.ParseTrails;
 
 public class AsyncLoadAllTrailsFromParse extends AsyncTask<Void, Void, Void>{

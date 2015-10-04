@@ -10,7 +10,6 @@ import models.ModelTrailComments;
 
 public class AsyncSaveOfflineComments extends AsyncTask<String, Void, String> {
 
-    private final String TAG = "AsyncSaveOLComments";
     private Context context;
     private String objectID;
     private String trailName;
@@ -25,6 +24,7 @@ public class AsyncSaveOfflineComments extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
+        String TAG = "AsyncSaveOLComments";
         try {
             ConnectionDetector cd = new ConnectionDetector(context);
             if (cd.isConnectingToInternet()) {
