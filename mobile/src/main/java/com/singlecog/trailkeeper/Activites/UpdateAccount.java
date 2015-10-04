@@ -366,8 +366,12 @@ public class UpdateAccount extends BaseActivity {
             emailString = email;
             SignInWasSuccessful();
         }else{
+            if (failMessage.contains("parameters")) {
+                failMessage = "Something is wrong, please check your username and password!";
+            }
+            imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
+            Snackbar.make(mainLayout, failMessage, Snackbar.LENGTH_LONG).show();
             Log.i(LOG, "Sign In Failed");
-            Toast.makeText(this, failMessage, Toast.LENGTH_LONG).show();
         }
     }
 
