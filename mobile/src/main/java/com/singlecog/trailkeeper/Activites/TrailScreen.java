@@ -40,6 +40,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncRefreshCurrentUser;
 import AsyncAdapters.AsyncOneTrailComments;
 import AsyncAdapters.AsyncSaveOfflineComments;
 import AsyncAdapters.AsyncSaveOfflineStatus;
@@ -63,7 +64,7 @@ public class TrailScreen extends BaseActivity {
     private Button btnComment, btnTrailStatus, btnSubscribe, btnAllCommments;
     private Dialog trailStatusDialog;
     private boolean isAnonUser;
-    private boolean isEmailVerified;
+    //private boolean isEmailVerified;
     private boolean isValidCommentor = false;
     private View v;
     private LinearLayout layoutDifficulty;
@@ -88,7 +89,13 @@ public class TrailScreen extends BaseActivity {
         v = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(v, this);
 
-        isEmailVerified = TrailKeeperApplication.isEmailVerified();
+        if (!TrailKeeperApplication.isEmailVerified()) {
+            Log.i(TAG, "User Not email Verified, refreshing them just in case");
+            AsyncRefreshCurrentUser refreshCurrentUser = new AsyncRefreshCurrentUser();
+            refreshCurrentUser.execute();
+        }
+        //CreateAccountHelper.CheckUserVerified();
+        //isEmailVerified = TrailKeeperApplication.isEmailVerified();
         CanComment();
 
         modelTrails = new ModelTrails(context, this);
@@ -169,10 +176,10 @@ public class TrailScreen extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!isAnonUser) {
-                    if (isEmailVerified) {
+                    if (TrailKeeperApplication.isEmailVerified()) {
                         OpenSubscribeDialog();
                     } else {
-                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Subscribing To Notifications, Or Refresh The Screen If You've Already Done So");
+                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Subscribing To Notifications, Or Refresh The Home Screen If You've Already Done So");
                     }
                 } else {
                     AlertDialogHelper.showCustomAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Subscribing to Notifications.");
@@ -186,14 +193,14 @@ public class TrailScreen extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!isAnonUser) {
-                    if (isEmailVerified) {
+                    if (TrailKeeperApplication.isEmailVerified()) {
                         if (isValidCommentor) {
                             ShowLeaveCommentDialog();
                         } else {
                             AlertDialogHelper.showCustomAlertDialog(context, "Not Authorized", "You Have Been Banned From Leaving Comments. Please Contact Us If You Think This Is A Mistake.");
                         }
                     } else {
-                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Commenting, Or Refresh The Screen If You've Already Done So");
+                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Commenting, Or Refresh The Home Screen If You've Already Done So");
                     }
 
                 } else {
@@ -208,10 +215,10 @@ public class TrailScreen extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!isAnonUser) {
-                    if (isEmailVerified) {
+                    if (TrailKeeperApplication.isEmailVerified()) {
                         OpenTrailStatusDialog();
                     } else {
-                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Updating Trails, Or Refresh The Screen If You've Already Done So");
+                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email in Settings Before Updating Trails, Or Refresh The Home Screen If You've Already Done So");
                     }
                 } else {
                     AlertDialogHelper.showCustomAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Updating Trails");

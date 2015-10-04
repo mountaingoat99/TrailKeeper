@@ -13,15 +13,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.R;
 import java.util.List;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+
+import AsyncAdapters.AsyncAdapterLoadAllFromParse.AsyncRefreshCurrentUser;
 import Helpers.AlertDialogHelper;
 import Helpers.CreateAccountHelper;
 import Helpers.GeoLocationHelper;
@@ -32,6 +36,7 @@ import static android.support.v7.widget.RecyclerView.*;
 
 public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private final String TAG = "HomeScreen";
     private SwipeRefreshLayout mSwipeLayout;
     private final Context context = this;
     private RecyclerView mTrailOpenRecyclerView;
@@ -319,7 +324,9 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         TrailKeeperApplication.LoadAllCommentsFromParse();
         TrailKeeperApplication.LoadAllAuthorizedCommentorsFromParse();
         TrailKeeperApplication.LoadAllTrailStatusUpdatorsFromParse();
-        CreateAccountHelper.CheckUserVerified();
+        AsyncRefreshCurrentUser refreshCurrentUser = new AsyncRefreshCurrentUser();
+        Log.i(TAG, "Refreshing user from home screen");
+        refreshCurrentUser.execute();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -329,6 +336,8 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                 SetUpTrailStatusCard();
                 SetUpTrailStatusRecyclerView();
                 mSwipeLayout.setRefreshing(false);
+                CreateAccountHelper.CheckUserVerified();
+                Log.i(TAG, "User is Verified after refresh" + ParseUser.getCurrentUser().isAuthenticated());
             }
         }, 3000);
     }

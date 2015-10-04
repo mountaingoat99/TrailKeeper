@@ -39,7 +39,6 @@ public class CreateAccountHelper {
     private final String SIGNINACTIVITY = "SignIn";
     private String whichActivity;
     private UpdateAccount updateAccountActivity;
-    private static Boolean emailVerified = false;
     private Context context;
 
     public CreateAccountHelper(Context context, CreateAccount activity) {
@@ -206,6 +205,7 @@ public class CreateAccountHelper {
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
                     Log.i(LOG, "Got the User");
+                    Log.i(LOG, "user is email verified" + parseUser.getBoolean("emailVerified"));
                     TrailKeeperApplication.setIsEmailVerified(parseUser.getBoolean("emailVerified"));
                 } else {
                     Log.i(LOG, "Failed to get user");
