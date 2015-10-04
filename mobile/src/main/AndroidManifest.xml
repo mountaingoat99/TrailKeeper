@@ -38,7 +38,8 @@
 
         <activity
             android:name=".Activites.HomeScreen"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,6 +49,7 @@
         <activity
             android:name=".Activites.FindTrail"
             android:label="@string/title_activity_find_trail"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,6 +58,7 @@
         <activity
             android:name=".Activites.MapActivity"
             android:label="@string/title_activity_map"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -64,6 +67,7 @@
         <activity
             android:name=".Activites.TrailScreen"
             android:label="@string/title_activity_trail_screen"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -72,6 +76,7 @@
         <activity
             android:name=".Activites.TrailMap"
             android:label="@string/title_activity_trail_map"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.TrailScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -80,6 +85,7 @@
         <activity
             android:name=".Activites.CreateAccount"
             android:label="@string/title_activity_create_account"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.AccountSettings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -88,6 +94,7 @@
         <activity
             android:name=".Activites.SignIn"
             android:label="@string/title_activity_sign_in"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.AccountSettings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -96,6 +103,7 @@
         <activity
             android:name=".Activites.UpdateAccount"
             android:label="@string/title_activity_update_account"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.AccountSettings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -104,6 +112,7 @@
         <activity
             android:name=".Activites.AccountSettings"
             android:label="@string/title_activity_account_settings"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -112,6 +121,7 @@
         <activity
             android:name=".Activites.Notifications"
             android:label="@string/title_activity_notifications"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -120,6 +130,7 @@
         <activity
             android:name=".Activites.AllComments"
             android:label="@string/title_activity_all_comments"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -167,6 +178,7 @@
         <activity
             android:name=".Activites.AddTrail"
             android:label="@string/title_activity_add_trail"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -175,6 +187,7 @@
         <activity
             android:name=".Activites.GetTrailPin"
             android:label="@string/title_activity_get_trail_pin"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -183,6 +196,7 @@
         <activity
             android:name=".Activites.Contact"
             android:label="@string/title_activity_contact"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
