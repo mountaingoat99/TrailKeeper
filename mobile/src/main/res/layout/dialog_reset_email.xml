@@ -21,6 +21,7 @@
             android:inputType="textEmailAddress"
             android:textColorHint="@color/secondary_text"
             android:drawableStart="@mipmap/ic_action_email"
+            android:drawableLeft="@mipmap/ic_action_email"
             android:background="@android:color/white"/>
 
         <View
@@ -46,7 +47,9 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_toStartOf="@+id/btn_send_email"
+                android:layout_toLeftOf="@+id/btn_send_email"
                 android:text="@string/sign_out_cancel"/>
 
             <Button
@@ -59,6 +62,7 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:text="@string/send_email"/>
 
         </RelativeLayout>

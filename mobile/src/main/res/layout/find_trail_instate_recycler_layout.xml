@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:textSize="@dimen/text_size_medium" />
 
         <ImageView
@@ -28,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:src="@drawable/status_closed"
             android:contentDescription="@string/trail_status"/>
 
@@ -44,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:textSize="@dimen/text_size_mini" />
 
         <TextView
@@ -52,7 +55,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/trails_in_state_cities"
+            android:layout_toRightOf="@+id/trails_in_state_cities"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:textSize="@dimen/text_size_mini" />
 
     </RelativeLayout>

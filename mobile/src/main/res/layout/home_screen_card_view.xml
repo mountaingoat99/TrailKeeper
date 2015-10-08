@@ -30,8 +30,10 @@
                 android:layout_height="wrap_content"
                 android:text="Parkside Trails"
                 android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"/>
 
             <ImageView
@@ -39,7 +41,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
                 android:src="@drawable/status_closed"
                 android:contentDescription="@string/trail_status"/>
 
@@ -49,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
             android:orientation="horizontal">
 
             <TextView
@@ -75,6 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <TextView

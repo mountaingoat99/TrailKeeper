@@ -103,6 +103,7 @@
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:text="@string/button_send_email"/>

@@ -28,6 +28,7 @@
         android:hint="@string/trail_pin_hint"
         android:textColorHint="@color/secondary_text"
         android:drawableStart="@mipmap/ic_action_accounts"
+        android:drawableLeft="@mipmap/ic_action_accounts"
         android:background="@android:color/white"/>
 
     <View

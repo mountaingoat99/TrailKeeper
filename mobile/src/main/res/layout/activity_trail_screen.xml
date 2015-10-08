@@ -48,6 +48,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
                             android:layout_gravity="center"
                             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
@@ -56,6 +57,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:src="@drawable/status_closed"
                             android:contentDescription="@string/trail_status"/>
 
@@ -65,6 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -80,6 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                         <TextView
@@ -97,6 +101,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="4dp"
                         android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
 
@@ -105,6 +110,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Skill Level: "/>
 
@@ -113,6 +119,7 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
                             android:layout_gravity="center"
                             android:src="@drawable/trail_difficult_easy"
                             android:contentDescription="@string/trail_status"
@@ -123,6 +130,7 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
                             android:layout_gravity="center"
                             android:src="@drawable/trail_difficult_medium"
                             android:contentDescription="@string/trail_status"
@@ -133,6 +141,7 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
                             android:layout_gravity="center"
                             android:src="@drawable/trail_difficulty_hard"
                             android:contentDescription="@string/trail_status"

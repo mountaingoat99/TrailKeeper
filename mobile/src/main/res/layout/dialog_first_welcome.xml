@@ -18,6 +18,7 @@
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -52,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp">
 
@@ -65,7 +67,9 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_toStartOf="@+id/btn_okay"
+                android:layout_toLeftOf="@+id/btn_okay"
                 android:text="@string/dialog_not_yet"/>
 
             <Button
@@ -78,6 +82,7 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:text="@string/dialog_sign_up"/>
 
         </RelativeLayout>

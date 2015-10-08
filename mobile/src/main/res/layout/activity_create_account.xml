@@ -49,6 +49,7 @@
                         android:inputType="textEmailAddress"
                         android:textColorHint="@color/secondary_text"
                         android:drawableStart="@mipmap/ic_action_email"
+                        android:drawableLeft="@mipmap/ic_action_email"
                         android:background="@android:color/white"/>
 
                     <View
@@ -68,6 +69,7 @@
                         android:hint="@string/username_hint"
                         android:textColorHint="@color/secondary_text"
                         android:drawableStart="@mipmap/ic_action_person"
+                        android:drawableLeft="@mipmap/ic_action_person"
                         android:background="@android:color/white"/>
 
                     <View
@@ -88,6 +90,7 @@
                         android:textColorHint="@color/secondary_text"
                         android:inputType="textPassword"
                         android:drawableStart="@mipmap/ic_action_accounts"
+                        android:drawableLeft="@mipmap/ic_action_accounts"
                         android:background="@android:color/white"/>
 
                     <View
@@ -110,6 +113,7 @@
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:text="@string/signup_btn_text"/>
 
                     </RelativeLayout>

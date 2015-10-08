@@ -71,6 +71,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="2"
                                 android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
                                 android:orientation="vertical">
 
                                 <EditText
@@ -219,6 +220,7 @@
                                 android:textColor="@color/primary_text"
                                 android:textSize="@dimen/text_size_small"
                                 android:layout_marginEnd="16dp"
+                                android:layout_marginRight="16dp"
                                 android:layout_gravity="center_vertical"
                                 android:text="@string/skill_level_view"/>
 
@@ -259,6 +261,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
                             android:orientation="vertical">
 
                             <Switch
@@ -297,6 +300,7 @@
                                 android:textColor="@color/accent"
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
                                 android:text="@string/create_new_trail"
                                 android:onClick="btn_create_click" />
 
