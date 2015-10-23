@@ -65,7 +65,10 @@ public class CreateAccountHelper {
     }
 
     public static Boolean IsAnonUser() {
-        return (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser()));
+        if (ParseUser.getCurrentUser() != null) {
+            return (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser()));
+        }
+        return false;
     }
 
     public static boolean isValidEmail(CharSequence target) {

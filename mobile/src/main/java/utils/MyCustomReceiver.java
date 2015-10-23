@@ -47,6 +47,8 @@ public class MyCustomReceiver extends BroadcastReceiver {
             final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
+            //TODO check if phone or table getting null on mobile connect
+
             if (wifi.isConnected() || mobile.isConnected()) {
                 UpdateOfflineContent(context);
                 Log.i(TAG, "Network is reconnected");

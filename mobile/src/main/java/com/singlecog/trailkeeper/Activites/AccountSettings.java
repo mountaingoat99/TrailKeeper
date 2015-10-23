@@ -68,7 +68,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
     private void CheckUserName() {
         String name;
         TextView userText = (TextView)findViewById(R.id.username);
-        if (isAnonUser) {
+        if (isAnonUser || ParseUser.getCurrentUser() == null) {
             userText.setText(getResources().getString(R.string.not_signed_in));
         } else {
             name = getResources().getString(R.string.user) + ParseUser.getCurrentUser().getUsername();
@@ -82,7 +82,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
         Log.i(LOG, "User clicked item: " + id + " at position: " + position);
         switch (position){
             case 0:  // Create Account
-                if (isAnonUser) {
+                if (isAnonUser || ParseUser.getCurrentUser() == null) {
                     Intent intent = new Intent(context, CreateAccount.class);
                     startActivity(intent);
                 } else {
@@ -94,22 +94,18 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
                 startActivity(intentUpdate);
                 break;
             case 2:  // Sign in
-                if(!isAnonUser) {
-                    Snackbar.make(view, R.string.snackbar_alreadysignedin_login, Snackbar.LENGTH_LONG).show();
-                } else {
-                    Intent intent = new Intent(context, SignIn.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(context, SignIn.class);
+                startActivity(intent);
                 break;
             case 3:  // Sign out
-                if(isAnonUser) {
+                if(isAnonUser || ParseUser.getCurrentUser() == null) {
                     Snackbar.make(view, R.string.snackbar_alreadysignedin_logout, Snackbar.LENGTH_LONG).show();
                 } else {
                     SignOut();
                 }
                 break;
             case 4:  // Delete Account
-                if(isAnonUser) {
+                if(isAnonUser || ParseUser.getCurrentUser() == null) {
                     Snackbar.make(view, R.string.snackbar_alreadysignedin_delete_account, Snackbar.LENGTH_LONG).show();
                 } else {
                     DeleteAccount();

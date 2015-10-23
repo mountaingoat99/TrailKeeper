@@ -96,7 +96,9 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                 }
             }
         }
-        CreateAccountHelper.CheckUserVerified();
+        if (ParseUser.getCurrentUser() != null) {
+            CreateAccountHelper.CheckUserVerified();
+        }
         CheckForGoogleServicesAndGPS();
     }
 
@@ -324,9 +326,11 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         TrailKeeperApplication.LoadAllCommentsFromParse();
         TrailKeeperApplication.LoadAllAuthorizedCommentorsFromParse();
         TrailKeeperApplication.LoadAllTrailStatusUpdatorsFromParse();
-        AsyncRefreshCurrentUser refreshCurrentUser = new AsyncRefreshCurrentUser();
-        Log.i(TAG, "Refreshing user from home screen");
-        refreshCurrentUser.execute();
+        if (ParseUser.getCurrentUser() != null) {
+            AsyncRefreshCurrentUser refreshCurrentUser = new AsyncRefreshCurrentUser();
+            Log.i(TAG, "Refreshing user from home screen");
+            refreshCurrentUser.execute();
+        }
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -336,8 +340,9 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
                 SetUpTrailStatusCard();
                 SetUpTrailStatusRecyclerView();
                 mSwipeLayout.setRefreshing(false);
-                CreateAccountHelper.CheckUserVerified();
-                Log.i(TAG, "User is Verified after refresh" + ParseUser.getCurrentUser().isAuthenticated());
+                if (ParseUser.getCurrentUser() != null) {
+                    CreateAccountHelper.CheckUserVerified();
+                }
             }
         }, 3000);
     }

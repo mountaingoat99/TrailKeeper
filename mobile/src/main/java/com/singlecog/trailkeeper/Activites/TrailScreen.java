@@ -91,8 +91,10 @@ public class TrailScreen extends BaseActivity {
 
         if (!TrailKeeperApplication.isEmailVerified()) {
             Log.i(TAG, "User Not email Verified, refreshing them just in case");
-            AsyncRefreshCurrentUser refreshCurrentUser = new AsyncRefreshCurrentUser();
-            refreshCurrentUser.execute();
+            if (ParseUser.getCurrentUser() != null) {
+                AsyncRefreshCurrentUser refreshCurrentUser = new AsyncRefreshCurrentUser();
+                refreshCurrentUser.execute();
+            }
         }
         //CreateAccountHelper.CheckUserVerified();
         //isEmailVerified = TrailKeeperApplication.isEmailVerified();
@@ -157,17 +159,23 @@ public class TrailScreen extends BaseActivity {
     }
 
     public void CanComment() {
-        ParseQuery<ParseAuthorizedCommentors> query  =  ParseAuthorizedCommentors.getQuery();
-        query.whereEqualTo("userName", ParseUser.getCurrentUser().getUsername());
-        query.fromLocalDatastore();
-        try {
-            List<ParseAuthorizedCommentors>  parseAuthorizedCommentors = query.find();
-            if (parseAuthorizedCommentors.size() > 0 ) {
-                isValidCommentor = (Boolean) parseAuthorizedCommentors.get(0).get("canComment");
-            } else isValidCommentor = false;
+        if (ParseUser.getCurrentUser() != null) {
+            ParseQuery<ParseAuthorizedCommentors> query = ParseAuthorizedCommentors.getQuery();
+            query.whereEqualTo("userName", ParseUser.getCurrentUser().getUsername());
+            query.fromLocalDatastore();
+            try {
+                List<ParseAuthorizedCommentors> parseAuthorizedCommentors = query.find();
+                if (parseAuthorizedCommentors.size() > 0) {
+                    isValidCommentor = (Boolean) parseAuthorizedCommentors.get(0).get("canComment");
+                } else {
+                    isValidCommentor = false;
+                }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            isValidCommentor = false;
         }
     }
 

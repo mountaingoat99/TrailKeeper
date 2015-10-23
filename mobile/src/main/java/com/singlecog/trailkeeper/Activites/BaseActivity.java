@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.singlecog.trailkeeper.R;
 
@@ -160,7 +161,7 @@ public class BaseActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 4:   // Add Trail
-                                if (isAnonUser) {
+                                if (isAnonUser || ParseUser.getCurrentUser() == null) {
                                     Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                                 } else {
                                     if (!activityName.equalsIgnoreCase("Activites.AddTrail")) {
@@ -176,7 +177,7 @@ public class BaseActivity extends AppCompatActivity {
                                 //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 //break;
                             case 5:   // Subscriptions
-                                if (isAnonUser) {
+                                if (isAnonUser || ParseUser.getCurrentUser() == null) {
                                     Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                                 } else {
                                     if (PushNotificationHelper.GetUserSubscriptions() != null && PushNotificationHelper.GetUserSubscriptions().size() > 0) {
@@ -201,7 +202,7 @@ public class BaseActivity extends AppCompatActivity {
                                 break;
                             case 7:   // Request trail Pin
                                 if (!activityName.equalsIgnoreCase("Activites.GetTrailPin")) {
-                                    if (isAnonUser) {
+                                    if (isAnonUser || ParseUser.getCurrentUser() == null) {
                                         Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
                                     } else {
                                         intent = new Intent(BaseActivity.this, GetTrailPin.class);

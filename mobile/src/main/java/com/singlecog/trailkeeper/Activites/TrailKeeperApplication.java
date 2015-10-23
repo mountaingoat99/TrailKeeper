@@ -70,9 +70,10 @@ public class TrailKeeperApplication extends Application implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     public static boolean isEmailVerified() {
-        boolean v = ParseUser.getCurrentUser().getBoolean("emailVerified");
-        Log.i(TAG, "User is verified: " + v);
-        return v;
+        if (ParseUser.getCurrentUser() != null) {
+            return ParseUser.getCurrentUser().getBoolean("emailVerified");
+        }
+        return false;
     }
 
     public static void setIsEmailVerified(boolean isEmailVerified) {
@@ -130,8 +131,9 @@ public class TrailKeeperApplication extends Application implements
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
         // enable anon users, they can then be turned into
-        ParseUser.enableAutomaticUser();
-        ParseUser.getCurrentUser().saveInBackground();
+        //ParseUser.enableAutomaticUser();
+        //String name = ParseUser.getCurrentUser().getUsername();
+        //ParseUser.getCurrentUser().saveInBackground();
         ParseACL defaultACL = new ParseACL();
         defaultACL.setPublicReadAccess(true);
         defaultACL.setPublicWriteAccess(true);
@@ -143,7 +145,9 @@ public class TrailKeeperApplication extends Application implements
         LoadAllTrailStatusUpdatorsFromParse();
 
         // Check to see if the Users Email is verified
-        CreateAccountHelper.CheckUserVerified();
+        if (ParseUser.getCurrentUser() != null) {
+            CreateAccountHelper.CheckUserVerified();
+        }
     }
 
     public void checkIfGPSIsEnabled() {
