@@ -326,6 +326,7 @@ public class ModelTrails {
         parseTrails.put("geoLocation", point);
         parseTrails.put("status", modelTrails.getTrailStatus());
         parseTrails.put("createdBy", ParseUser.getCurrentUser().getUsername());
+        parseTrails.put("lastUpdatedByUserObjectId", ParseUser.getCurrentUser().getObjectId());
         try {
             parseTrails.saveInBackground();
             Log.i(LOG, "Saving New Trail");
@@ -367,10 +368,11 @@ public class ModelTrails {
         try {
             ParseObject parseObject = query.get(objectId);
             parseObject.put("status", choice);
+            parseObject.put("lastUpdatedByUserObjectId", ParseUser.getCurrentUser().getObjectId());
             parseObject.saveInBackground();
             parseObject.pinInBackground();
             UpdateTrailStatusUser(trailName);
-            PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailName, choice, objectId);
+            //PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailName, choice, objectId);
             Log.i(LOG, "TrailStatus Update was Succeeded");
         } catch (ParseException e) {
             e.printStackTrace();

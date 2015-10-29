@@ -13,6 +13,7 @@ import android.util.Log;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
 import com.singlecog.trailkeeper.R;
@@ -103,8 +104,8 @@ public class MyCustomReceiver extends BroadcastReceiver {
                 ModelTrailStatus trailStatus = sdb.GetOffLineTrailStatus();
                 ModelTrails saveStatus = new ModelTrails();
                 saveStatus.UpdateTrailStatus(trailStatus.getObjectID(), trailStatus.getChoice(), trailStatus.getTrailName());
-                PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailStatus.getTrailName(), trailStatus.getChoice(), trailStatus.getObjectID());
-                Log.i(TAG, "Notification was sent");
+                //PushNotificationHelper.SendOutAPushNotificationsForStatusUpdate(trailStatus.getTrailName(), trailStatus.getChoice(), trailStatus.getObjectID());
+                //Log.i(TAG, "Notification was sent");
             }
         }
 
@@ -127,20 +128,18 @@ public class MyCustomReceiver extends BroadcastReceiver {
         String ObjectID = null;
         String Comment = null;
         String trailName = null;
-        String InstallObjectID = null;
-        String ThisInstallObjectID = ParseInstallation.getCurrentInstallation().getObjectId();
+        String userObjectId = null;
 
         try {
             ObjectID = json != null ? json.getString("trailObjectId") : "";
             Comment = json != null ? json.getString("comment") : "";
             trailName = json != null ? json.getString("trailName") : "";
-            InstallObjectID = json != null ? json.getString("InstallationObjectId") : "";
+            userObjectId = json != null ? json.getString("userId") : "";
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if (!ThisInstallObjectID.equals(InstallObjectID)) {
-
+        if (!ParseUser.getCurrentUser().getObjectId().equals(userObjectId)) {
 
             TrailKeeperApplication.LoadAllCommentsFromParse();
 
@@ -157,7 +156,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.ic_stat_notification)
                             .setContentTitle(_Title)
-                            .setContentText(trailName + " has a new comment:" + "\n" + Comment)
+                            .setContentText(Comment)
                             .setNumber(++numMessages);
 
             mBuilder.setContentIntent(contentIntent);
@@ -170,18 +169,17 @@ public class MyCustomReceiver extends BroadcastReceiver {
     private void generateStatusNotification(Context context, JSONObject json) {
         String ObjectID = null;
         String StatusUpdate = null;
-        String InstallObjectID = null;
-        String ThisInstallObjectID = ParseInstallation.getCurrentInstallation().getObjectId();
+        String userObjectId = null;
 
         try {
             ObjectID = json != null ? json.getString("trailObjectId") : "";
             StatusUpdate = json != null ? json.getString("statusUpdate") : "";
-            InstallObjectID = json != null ? json.getString("InstallationObjectId") : "";
+            userObjectId = json != null ? json.getString("userId") : "";
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if (!ThisInstallObjectID.equals(InstallObjectID)) {
+        if (!ParseUser.getCurrentUser().getObjectId().equals(userObjectId)) {
 
             // need to unpin the trails first, then load the new trails
             ParseQuery<ParseTrails> query = new ParseQuery<>("Trails");

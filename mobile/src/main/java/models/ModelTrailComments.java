@@ -178,7 +178,7 @@ public class ModelTrailComments {
             parseComments.saveInBackground();
             Log.i(LOG, "Save Comment Completed");
             parseComments.pinInBackground();
-            PushNotificationHelper.SendOutAPushNotificationForNewComment(trailName, Comment, trailObjectId);
+            //PushNotificationHelper.SendOutAPushNotificationForNewComment(trailName, Comment, trailObjectId);
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG, "Save Comment Failed" + e.getMessage());

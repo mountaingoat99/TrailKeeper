@@ -89,6 +89,10 @@ public class ParseTrails extends ParseObject {
         put("mapLink", mapLink);
     }
 
+    public String getLastUpdateByUserObjectId() { return getString("lastUpdatedByUserObjectId"); }
+
+    public void setlastUpdatedByUserObjectId(String lastUpdatedByUserObjectId) { put("lastUpdatedByUserObjectId", lastUpdatedByUserObjectId);}
+
     public static ParseQuery<ParseTrails> getQuery() {
         return ParseQuery.getQuery(ParseTrails.class);
     }

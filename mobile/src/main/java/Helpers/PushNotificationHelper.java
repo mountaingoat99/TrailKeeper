@@ -19,8 +19,19 @@ public class PushNotificationHelper {
         String trailChannel = CreateChannelName(trailNameString);
         push.setChannel(trailChannel);
         Log.i(LOG, trailNameString + " has a new comment: " + Comment);
+        // lets build the Json object for the iOS push
+        JSONObject jsoniOSObejct = new JSONObject();
+        try {
+            jsoniOSObejct.put("alert", trailNameString + " has a new comment: \n" + Comment);
+            jsoniOSObejct.put("badge", 1);
+            jsoniOSObejct.put("sound", "default");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         JSONObject json = new JSONObject();
         try {
+            json.put("aps", jsoniOSObejct);
             json.put("action", "com.singlecog.trailkeeper.NEW_COMMENT_NOTIF");
             json.put("com.Parse.Channel", trailChannel);
             json.put("trailObjectId", ObjectID);
@@ -31,7 +42,7 @@ public class PushNotificationHelper {
             e.printStackTrace();
         }
         push.setData(json);
-        push.sendInBackground();
+        //push.sendInBackground();
     }
 
     public static void SendOutAPushNotificationsForStatusUpdate(String trailNameString, int status, String ObjectID) {
@@ -49,7 +60,18 @@ public class PushNotificationHelper {
         else
             statusUpdate = "We don't know if " + trailNameString + " trails are open or closed";
 
+        // lets build the Json object for the iOS push
+        JSONObject jsoniOSObejct = new JSONObject();
         try {
+            jsoniOSObejct.put("alert", statusUpdate);
+            jsoniOSObejct.put("badge", 1);
+            jsoniOSObejct.put("sound", "default");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            json.put("aps", jsoniOSObejct);
             json.put("action", "com.singlecog.trailkeeper.NEW_STATUS_NOTIF");
             json.put("com.Parse.Channel", trailChannel);
             json.put("trailObjectId", ObjectID);
@@ -59,7 +81,7 @@ public class PushNotificationHelper {
             e.printStackTrace();
         }
         push.setData(json);
-        push.sendInBackground();     // TODO until the javascript to send push is working we need a data connection on status change
+        //push.sendInBackground();     // TODO until the javascript to send push is working we need a data connection on status change
     }
 
     public static CharSequence[] getTrailStatusNames() {
