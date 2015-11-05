@@ -107,6 +107,15 @@
                 android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
         </activity>
         <activity
+            android:name=".Activites.GlobalUnit"
+            android:label="@string/title_activity_sign_in"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Activites.AccountSettings" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.singlecog.trailkeeper.Activites.HomeScreen" />
+        </activity>
+        <activity
             android:name=".Activites.UpdateAccount"
             android:label="@string/title_activity_update_account"
             android:screenOrientation="portrait"

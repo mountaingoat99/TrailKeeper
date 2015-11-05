@@ -111,6 +111,10 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
                     DeleteAccount();
                 }
                 break;
+            case 5:  // Global unit setup
+                Intent intentGlobalSetup = new Intent(context, GlobalUnit.class);
+                startActivity(intentGlobalSetup);
+                break;
         }
     }
     //endregion

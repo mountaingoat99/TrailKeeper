@@ -31,11 +31,15 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
     private SparseBooleanArray selectedItems;
     private Context context;
     private RecylerViewFindTrailInState mFindTrailInStateAdapter;
+    // Global unit boolean added by Anatoliy
+    private boolean globalUnitDefault;
 
-    public RecyclerViewFindTrailByState(List<String> modelData, Context context) {
+    public RecyclerViewFindTrailByState(List<String> modelData, Context context, boolean globalUnitDefault) {
         this.items = modelData;
         selectedItems = new SparseBooleanArray();
         this.context = context;
+        // Global unit added to constructor by Anatoliy
+        this.globalUnitDefault = globalUnitDefault;
     }
 
     public String GetState(RecyclerView.ViewHolder item) {
@@ -87,7 +91,7 @@ public class RecyclerViewFindTrailByState extends RecyclerView.Adapter
                     // set the show trails to true
                     viewHolder.showTrails = true;
                     // send the trail list to the next adapter
-                    mFindTrailInStateAdapter = new RecylerViewFindTrailInState(trailsByState, context);
+                    mFindTrailInStateAdapter = new RecylerViewFindTrailInState(trailsByState, context, globalUnitDefault);
                     viewHolder.trailsInState.setAdapter(mFindTrailInStateAdapter);
                     viewHolder.trailsInState.setItemAnimator(new DefaultItemAnimator());
                 } else {

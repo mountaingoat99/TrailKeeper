@@ -27,11 +27,15 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
     private List<ModelTrails> items;
     private SparseBooleanArray selectedItems;
     private Context context;
+    // Global unit boolean added by Anatoliy
+    private boolean globalUnitDefault;
 
-    public RecylerViewFindTrailInState(List<ModelTrails> modelData, Context context) {
+    public RecylerViewFindTrailInState(List<ModelTrails> modelData, Context context, boolean globalUnitDefault) {
         this.items = modelData;
         selectedItems = new SparseBooleanArray();
         this.context = context;
+        // Global unit added to constructor by Anatoliy
+        this.globalUnitDefault = globalUnitDefault;
     }
 
 //    public int getTrailID(RecyclerView.ViewHolder item){
@@ -71,9 +75,15 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         } else {
             viewHolder.trailStatus.setImageResource(R.drawable.status_caution);
         }
-
-        int distanceAway = Math.round(GeoLocationHelper.GetClosestTrails(model, TrailKeeperApplication.home) * 100) / 100;
-        viewHolder.distance.setText(String.valueOf(distanceAway + " Miles"));
+        //by Anatoliy
+        if (globalUnitDefault) {
+            int distanceAway = Math.round(GeoLocationHelper.GetClosestTrails(model, TrailKeeperApplication.home) * 100) / 100;
+            viewHolder.distance.setText(String.valueOf(distanceAway + " Miles"));
+        }
+        else {
+            int distanceAway = (int)Math.round(GeoLocationHelper.GetClosestTrails(model, TrailKeeperApplication.home)*1.609344 * 100) / 100;
+            viewHolder.distance.setText(String.valueOf(distanceAway + " Km"));
+        }
 
         viewHolder.trailTouchPoint.setOnClickListener(new View.OnClickListener() {
             @Override

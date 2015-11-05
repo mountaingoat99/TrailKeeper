@@ -36,11 +36,16 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
     private int lastPosition = -1;
     private SparseBooleanArray selectedItems;
     private Context context;
+    // Global unit boolean added by Anatoliy
+    private boolean globalUnitDefault;
 
-    public RecyclerViewHomeScreenAdapter(List<ModelTrails> modelData, Context context) {
+    public RecyclerViewHomeScreenAdapter(List<ModelTrails> modelData, Context context, boolean globalUnitDefault) {
         items = modelData;
         selectedItems = new SparseBooleanArray();
         this.context = context;
+        // Global unit added to constructor by Anatoliy
+        this.globalUnitDefault = globalUnitDefault;
+
     }
 
     //public ModelTrails getItem(int position) {
@@ -78,8 +83,10 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.home_screen_card_view, viewGroup, false);
+
         return new HomeScreenListViewHolder(itemView);
     }
+
 
     @Override
     public void onBindViewHolder(final HomeScreenListViewHolder viewHolder, int position) {
@@ -98,6 +105,8 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         } else {
             viewHolder.trailStatus.setImageResource(R.drawable.status_caution);
         }
+        //global Unit check and change text by Anatoliy
+        if (!globalUnitDefault){viewHolder.globalUnit.setText(" Km");}
 
         setAnimation(viewHolder, position);
 
@@ -158,6 +167,8 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
         TextView trailDistance;
         Button btnHome;
         Button btnMap;
+        //global unit text view by Anatoliy
+        TextView globalUnit;
 
         public HomeScreenListViewHolder(View itemView) {
             super(itemView);
@@ -168,6 +179,8 @@ public class RecyclerViewHomeScreenAdapter extends RecyclerView.Adapter
             trailDistance = (TextView)itemView.findViewById(R.id.txt_label_trail_distance);
             btnHome = (Button)itemView.findViewById(R.id.btn_trail_home);
             btnMap = (Button)itemView.findViewById(R.id.btn_trail_map);
+            //global Unit by Anatoliy
+            globalUnit = (TextView)itemView.findViewById(R.id.txt_label_miles);
         }
     }
 }

@@ -3,7 +3,9 @@ package com.singlecog.trailkeeper.Activites;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -32,6 +34,8 @@ public class FindTrail extends BaseActivity {
     private Set<String> states;
     private View view;
     private Dialog searchDialog;
+    //global unit boolean, shared preference imperial or not by Anatoliy
+    private boolean globalUnitDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class FindTrail extends BaseActivity {
         states = ModelTrails.GetTrailStates();
         SetUpStateRecyclerView();
         SetUpOnClickForFab();
+        //by Anatoliy
+        loadSavedPreferences();
     }
 
     @Override
@@ -118,8 +124,15 @@ public class FindTrail extends BaseActivity {
         List<String> trailStates = new ArrayList<>();
         // convert the set to a List for the Recycler Adapter
         trailStates.addAll(states);
-        RecyclerViewFindTrailByState mFindTrailByStateAdapter = new RecyclerViewFindTrailByState(trailStates, context);
+        RecyclerViewFindTrailByState mFindTrailByStateAdapter = new RecyclerViewFindTrailByState(trailStates, context, globalUnitDefault);
         mFindTrailByStateRecyclerView.setAdapter(mFindTrailByStateAdapter);
         mFindTrailByStateRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    //by Anatoliy
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        //by Anatoliy
+        globalUnitDefault = sp.getBoolean("Imperial", true);
     }
 }

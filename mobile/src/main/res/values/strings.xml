@@ -144,4 +144,10 @@
     <string name="user">Welcome&#160;</string>
     <string name="no_trail_map">No trail map for this location. Let us know if you have one we can add.</string>
 
+    <!-- global unit screen -->
+    <string name="imperial">Imperial</string>
+    <string name="metric">Metric</string>
+    <string name="save">Save</string>
+
+
 </resources>

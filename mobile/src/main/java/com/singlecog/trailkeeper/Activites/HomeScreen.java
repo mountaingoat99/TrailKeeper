@@ -45,6 +45,8 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     // this will let shared preference know if it needs to take longer for the first time load and
     // if we need to ask them to create an account for the first time
     private boolean firstTimeLoad = true;
+    //global unit boolean, shared preference imperial or not by Anatoliy
+    private boolean globalUnitDefault;
 
     //@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -115,6 +117,8 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     private void loadSavedPreferences(){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         firstTimeLoad = sp.getBoolean("Firsttimeload", true);
+        //by Anatoliy
+        globalUnitDefault = sp.getBoolean("Imperial", true);
     }
 
     private void savePreferences(String key, boolean value) {
@@ -191,7 +195,8 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     private void ShowTrailCards(){
         mSwipeLayout.setRefreshing(false);
-        mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails, context);
+        //passing globalUnitDefault to constructor by Anatoliy
+        mTrailOpenAdapter = new RecyclerViewHomeScreenAdapter(trails, context, globalUnitDefault);
         mTrailOpenRecyclerView.setAdapter(mTrailOpenAdapter);
         mTrailOpenRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -259,8 +264,12 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     //region Private Methods
     private void SortTrails(){
         for (int i = 0; trails.size() > i; i++) {
-            // TODO once settings are working add Metric in here
-            trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
+            // TODO once settings are working add Metric in here (done)
+        //by Anatoliy
+            if (globalUnitDefault) {
+                trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
+            }
+            else {trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home)*1.609344 * 100) / 100;}
         }
         GeoLocationHelper.SortTrails(trails);
 
@@ -347,4 +356,6 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         }, 3000);
     }
     //endregion
+
+
 }
