@@ -16,7 +16,7 @@
     <TextView
         android:id="@+id/txt_comment_trail_name"
         style="@style/TextViewMediumBold"
-        android:textSize="@dimen/text_size_small"
+        android:textSize="@dimen/text_size_mid_medium"
         android:text="Petrified Springs Trail"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"/>
@@ -38,6 +38,7 @@
         <TextView
             android:id="@+id/txt_comment_date"
             style="@style/TextViewMini"
+            android:textStyle="italic"
             android:text="test"
             android:layout_marginEnd="4dp"
             android:layout_marginStart="4dp"/>
@@ -45,6 +46,7 @@
         <TextView
             android:id="@+id/txt_comment_user"
             style="@style/TextViewMini"
+            android:textStyle="italic"
             android:text="mountaingoat"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"/>
