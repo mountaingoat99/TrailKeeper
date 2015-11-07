@@ -264,12 +264,13 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     //region Private Methods
     private void SortTrails(){
         for (int i = 0; trails.size() > i; i++) {
-            // TODO once settings are working add Metric in here (done)
         //by Anatoliy
             if (globalUnitDefault) {
                 trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home) * 100) / 100;
             }
-            else {trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home)*1.609344 * 100) / 100;}
+            else {
+                trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home)*1.609344 * 100) / 100;
+            }
         }
         GeoLocationHelper.SortTrails(trails);
 

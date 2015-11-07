@@ -3,11 +3,13 @@ package com.singlecog.trailkeeper.Activites;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -59,6 +61,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
     private final Context context = this;
     private List<ModelTrails> trails;
     private Map<Marker, ModelTrails> markers;
+    private boolean globalUnitDefault;
+    private String milesOrKs;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -78,6 +82,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
             objectID = bundle.getString("objectID");
         }
 
+        loadSavedPreferences();
+
         // get the latest device location
         buildGoogleApiClient();
 
@@ -89,6 +95,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        //by Anatoliy
+        globalUnitDefault = sp.getBoolean("Imperial", true);
     }
 
     @Override
@@ -126,7 +138,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
         // because we still want to show all the other trails when they move around
         if(trails != null) {
             for (int i = 0; trails.size() > i; i++) {
-                trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
+                if (globalUnitDefault) {
+                    milesOrKs = " miles away";
+                    trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), home) * 100) / 100;
+                } else {
+                    milesOrKs = " kilometers away";
+                    trails.get(i).distanceAway = (float) Math.round(GeoLocationHelper.GetClosestTrails(trails.get(i), TrailKeeperApplication.home)*1.609344 * 100) / 100;
+                }
             }
             // then sort them
             GeoLocationHelper.SortTrails(trails);
@@ -139,7 +157,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                 if (trails.get(i).getTrailStatus() == 1) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
                             .title(trails.get(i).getTrailName())
-                            .snippet(trails.get(i).distanceAway + " miles away")
+                            .snippet(trails.get(i).distanceAway + milesOrKs)
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     SetMultilineInfoAdapter(googleMap);
@@ -149,7 +167,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                 } else if (trails.get(i).getTrailStatus() == 2) {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
                             .title(trails.get(i).getTrailName())
-                            .snippet(trails.get(i).distanceAway + " miles away")
+                            .snippet(trails.get(i).distanceAway + milesOrKs)
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
                     SetMultilineInfoAdapter(googleMap);
@@ -158,7 +176,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
                 } else {
                     Marker marker = googleMap.addMarker(new MarkerOptions()
                             .title(trails.get(i).getTrailName())
-                            .snippet(trails.get(i).distanceAway + " miles away")
+                            .snippet(trails.get(i).distanceAway + milesOrKs)
                             .position(trailHomeLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
                     SetMultilineInfoAdapter(googleMap);
