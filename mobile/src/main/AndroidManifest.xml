@@ -63,7 +63,7 @@
         </activity>
         <activity
             android:name=".Activites.MapActivity"
-            android:label="@string/title_activity_map"
+            android:label="TrailKeeper Map"
             android:screenOrientation="portrait"
             android:parentActivityName=".Activites.HomeScreen" >
             <meta-data
@@ -108,7 +108,7 @@
         </activity>
         <activity
             android:name=".Activites.GlobalUnit"
-            android:label="@string/title_activity_sign_in"
+            android:label="Change Units"
             android:screenOrientation="portrait"
             android:parentActivityName=".Activites.AccountSettings" >
             <meta-data
