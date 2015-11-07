@@ -22,4 +22,68 @@
         <item name="background">@color/primary</item>
     </style>
 
+    <!-- Button Styles not used since we are using android borderless button style -->
+    <style name="ButtonNormal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/button_text_small</item>
+        <item name="android:textColor">@color/accent</item>
+
+    </style>
+
+    <!-- Text View Styles -->
+    <style name="TextViewLargeBold">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextViewSmall">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <!-- Edit Text Styles -->
+    <style name="EditTextRegular">
+        <item name="android:textColorHint">@color/secondary_text</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Views -->
+    <style name="ViewStyle">
+        <item name="android:background">@color/black</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/view_height</item>
+    </style>
+
+    <!-- Check Box Styles -->
+    <style name="CheckBoxStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom</item>
+    </style>
+
+    <!-- Switch Style -->
+    <style name="SwitchStyle">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">@dimen/text_size_super_mini</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">top</item>
+    </style>
+
+    <!-- FAB -->
+    <style name="FloatingActionButtonNormal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
 </resources>

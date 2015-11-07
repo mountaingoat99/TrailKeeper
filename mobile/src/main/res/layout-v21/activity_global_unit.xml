@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.singlecog.trailkeeper.Activites.SignIn"
+    tools:context="com.singlecog.trailkeeper.Activites.GlobalUnit"
     android:background="@drawable/bg_create_account"
     android:id="@+id/layout1">
 
@@ -43,95 +43,39 @@
                     android:paddingRight="10dp"
                     android:background="@android:color/white">
 
-                    <EditText
-                        android:id="@+id/edittext_username"
+                    <RadioGroup
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-2dp"
-                        android:padding="10dp"
-                        android:hint="@string/username_hint"
-                        android:textColorHint="@color/secondary_text"
-                        android:drawableStart="@mipmap/ic_action_person"
-                        android:drawableLeft="@mipmap/ic_action_person"
-                        android:background="@android:color/white"/>
+                        android:layout_height="match_parent">
 
-                    <View
-                        android:id="@+id/view1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        <RadioButton android:id="@+id/radio_imperial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/imperial" />
 
-                    <EditText
-                        android:id="@+id/edittext_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:padding="10dp"
-                        android:hint="@string/password_hint"
-                        android:textColorHint="@color/secondary_text"
-                        android:inputType="textPassword"
-                        android:drawableStart="@mipmap/ic_action_accounts"
-                        android:drawableLeft="@mipmap/ic_action_accounts"
-                        android:background="@android:color/white"/>
+                        <RadioButton android:id="@+id/radio_metric"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/metric" />
 
-                    <View
-                        android:id="@+id/view2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                    </RadioGroup>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <Button
-                            android:id="@+id/btn_sign_up"
+                            android:id="@+id/btn_save"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/button_text_medium"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
-                            android:text="@string/sign_in"/>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center">
-
-                        <Button
-                            android:id="@+id/btn_reset_password"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/button_text_tiny"
-                            android:textColor="@color/secondary_text"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:minHeight="0dp"
-                            android:minWidth="0dp"
-                            android:text="@string/reset_password"/>
-
-                        <Button
-                            android:id="@+id/btn_find_username"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toEndOf="@+id/btn_reset_password"
-                            android:layout_toRightOf="@+id/btn_reset_password"
-                            android:textSize="@dimen/button_text_tiny"
-                            android:textColor="@color/secondary_text"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:minHeight="0dp"
-                            android:minWidth="0dp"
-                            android:text="@string/find_username"/>
+                            android:text="@string/save"/>
 
                     </RelativeLayout>
 

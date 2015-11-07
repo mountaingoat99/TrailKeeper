@@ -25,6 +25,7 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/search_fab_by_all"
+                style="@style/FloatingActionButtonNormal"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end|bottom"
@@ -32,7 +33,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="193dp"
-                android:scaleType="center"
                 app:backgroundTint="@color/accent"
                 app:elevation="6dp"
                 app:borderWidth="0dp"
@@ -41,6 +41,7 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/search_fab_by_user"
+                style="@style/FloatingActionButtonNormal"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end|bottom"
@@ -48,7 +49,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="139dp"
-                android:scaleType="center"
                 app:backgroundTint="@color/accent"
                 app:elevation="6dp"
                 app:borderWidth="0dp"
@@ -57,6 +57,7 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/search_fab_by_trail"
+                style="@style/FloatingActionButtonNormal"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end|bottom"
@@ -64,7 +65,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="85dp"
-                android:scaleType="center"
                 app:backgroundTint="@color/accent"
                 app:elevation="6dp"
                 app:borderWidth="0dp"
@@ -73,6 +73,7 @@
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/search_fab"
+                style="@style/FloatingActionButtonNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
@@ -80,6 +81,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="16dp"
+                android:scaleType="centerInside"
                 app:elevation="6dp"
                 app:borderWidth="0dp"
                 android:clickable="true"

@@ -39,8 +39,7 @@
 
                         <EditText
                             android:id="@+id/edittext_trail_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            style="@style/EditTextRegular"
                             android:paddingRight="10dp"
                             android:paddingEnd="10dp"
                             android:paddingLeft="10dp"
@@ -48,17 +47,13 @@
                             android:paddingBottom="5dp"
                             android:hint="@string/trailName_hint"
                             android:inputType="textCapWords"
-                            android:nextFocusDown="@+id/edittext_city"
-                            android:textColorHint="@color/secondary_text"
-                            android:background="@android:color/white"/>
+                            android:nextFocusDown="@+id/edittext_city"/>
 
                         <View
                             android:id="@+id/view2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="1dp"
+                            style="@style/ViewStyle"
                             android:layout_marginLeft="4dp"
-                            android:layout_marginRight="4dp"
-                            android:background="@color/black"/>
+                            android:layout_marginRight="4dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -76,26 +71,21 @@
 
                                 <EditText
                                     android:id="@+id/edittext_city"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    style="@style/EditTextRegular"
                                     android:layout_marginTop="2dp"
                                     android:paddingRight="10dp"
                                     android:paddingEnd="10dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="@string/city_hint"
                                     android:inputType="textCapWords"
-                                    android:nextFocusDown="@+id/edittext_state"
-                                    android:textColorHint="@color/secondary_text"
-                                    android:background="@android:color/white"/>
+                                    android:nextFocusDown="@+id/edittext_state"/>
 
                                 <View
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="1dp"
+                                    style="@style/ViewStyle"
                                     android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:background="@color/black"/>
+                                    android:layout_marginRight="4dp"/>
 
                             </LinearLayout>
 
@@ -108,26 +98,21 @@
 
                                 <AutoCompleteTextView
                                     android:id="@+id/edittext_state"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    style="@style/EditTextRegular"
                                     android:layout_marginTop="2dp"
                                     android:paddingRight="10dp"
                                     android:paddingEnd="10dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="@string/state_hint"
                                     android:inputType="textCapCharacters"
-                                    android:nextFocusDown="@+id/edittext_country"
-                                    android:textColorHint="@color/secondary_text"
-                                    android:background="@android:color/white"/>
+                                    android:nextFocusDown="@+id/edittext_country"/>
 
                                 <View
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="1dp"
+                                    style="@style/ViewStyle"
                                     android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:background="@color/black"/>
+                                    android:layout_marginRight="4dp"/>
 
                             </LinearLayout>
 
@@ -148,27 +133,22 @@
 
                                 <AutoCompleteTextView
                                     android:id="@+id/edittext_country"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    style="@style/EditTextRegular"
                                     android:layout_marginTop="2dp"
                                     android:paddingRight="10dp"
                                     android:paddingEnd="10dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="@string/country_hint"
                                     android:inputType="textCapCharacters"
-                                    android:nextFocusDown="@+id/edittext_distance"
-                                    android:textColorHint="@color/secondary_text"
-                                    android:background="@android:color/white"/>
+                                    android:nextFocusDown="@+id/edittext_distance"/>
 
                                 <View
+                                    style="@style/ViewStyle"
                                     android:id="@+id/view3"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="1dp"
                                     android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:background="@color/black"/>
+                                    android:layout_marginRight="4dp"/>
 
                             </LinearLayout>
 
@@ -181,22 +161,17 @@
 
                                 <EditText
                                     android:id="@+id/edittext_distance"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    style="@style/EditTextRegular"
                                     android:layout_marginTop="2dp"
-                                    android:paddingTop="4dp"
+                                    android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
                                     android:hint="Length"
-                                    android:inputType="textCapWords"
-                                    android:textColorHint="@color/secondary_text"
-                                    android:background="@android:color/white"/>
+                                    android:inputType="textCapWords"/>
 
                                 <View
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="1dp"
+                                    style="@style/ViewStyle"
                                     android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:background="@color/black"/>
+                                    android:layout_marginRight="4dp"/>
 
                             </LinearLayout>
 
@@ -215,13 +190,9 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/primary_text"
-                                android:textSize="@dimen/text_size_small"
+                                style="@style/TextViewSmall"
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginRight="16dp"
-                                android:layout_gravity="center_vertical"
                                 android:text="@string/skill_level_view"/>
 
                             <LinearLayout
@@ -231,26 +202,23 @@
 
                                 <CheckBox
                                     android:id="@+id/check_box_easy"
+                                    style="@style/CheckBoxStyle"
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:layout_gravity="bottom"
                                     android:text="@string/easy_checkbox" />
 
                                 <CheckBox
                                     android:id="@+id/check_box_medium"
+                                    style="@style/CheckBoxStyle"
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:layout_gravity="bottom"
                                     android:text="@string/medium_checkbox" />
 
                                 <CheckBox
                                     android:id="@+id/check_box_hard"
+                                    style="@style/CheckBoxStyle"
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:layout_gravity="bottom"
                                     android:text="@string/checkbox_hard" />
 
                             </LinearLayout>
@@ -266,13 +234,10 @@
 
                             <Switch
                                 android:id="@+id/switch_current_location"
-                                android:layout_width="fill_parent"
-                                android:layout_height="match_parent"
+                                style="@style/SwitchStyle"
                                 android:layout_gravity="top"
                                 android:layout_marginTop="4dp"
-                                android:text="@string/use_current_location_switch"
-                                android:textSize="@dimen/text_size_small"
-                                android:textColor="@color/primary_text"/>
+                                android:text="@string/use_current_location_switch"/>
 
                             <!--<Switch-->
                                 <!--android:id="@+id/switch_private_trail"-->
