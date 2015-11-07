@@ -45,89 +45,68 @@
 
                     <TextView
                         android:id="@+id/pin_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/TextViewMedium"
+                        android:textColor="@color/secondary_text"
                         android:text="@string/request_pin_text"
-                        android:layout_margin="8dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:layout_margin="8dp"/>
 
                     <EditText
                         android:id="@+id/edittext_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/EditTextRegular"
                         android:padding="10dp"
                         android:inputType="textCapWords"
                         android:nextFocusDown="@+id/edittext_trail_name"
-                        android:hint="@string/name_string"
-                        android:textColorHint="@color/secondary_text"
-                        android:background="@android:color/white"/>
+                        android:hint="@string/name_string"/>
 
                     <View
                         android:id="@+id/view1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        style="@style/ViewStyle"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        android:layout_marginRight="4dp"/>
 
                     <AutoCompleteTextView
                         android:id="@+id/edittext_trail_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/EditTextRegular"
                         android:padding="10dp"
                         android:imeOptions="actionNext"
                         android:nextFocusDown="@+id/edittext_email"
                         android:hint="@string/trail_name_hint"
-                        android:inputType="textAutoComplete"
-                        android:textColorHint="@color/secondary_text"
-                        android:background="@android:color/white"/>
+                        android:inputType="textAutoComplete"/>
 
                     <View
                         android:id="@+id/view2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        style="@style/ViewStyle"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        android:layout_marginRight="4dp"/>
 
                     <EditText
                         android:id="@+id/edittext_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/EditTextRegular"
                         android:layout_marginTop="2dp"
                         android:padding="10dp"
                         android:nextFocusDown="@+id/edittext_reason"
                         android:hint="@string/email_hint"
-                        android:textColorHint="@color/secondary_text"
-                        android:inputType="textEmailAddress"
-                        android:background="@android:color/white"/>
+                        android:inputType="textEmailAddress"/>
 
                     <View
                         android:id="@+id/view3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        style="@style/ViewStyle"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        android:layout_marginRight="4dp"/>
 
                     <EditText
                         android:id="@+id/edittext_reason"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/EditTextRegular"
                         android:layout_marginTop="2dp"
                         android:padding="10dp"
                         android:inputType="textCapSentences"
-                        android:hint="@string/reason_text"
-                        android:textColorHint="@color/secondary_text"
-                        android:background="@android:color/white"/>
+                        android:hint="@string/reason_text"/>
 
                     <View
                         android:id="@+id/view4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        style="@style/ViewStyle"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        android:layout_marginRight="4dp"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"

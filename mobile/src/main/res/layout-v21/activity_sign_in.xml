@@ -45,42 +45,32 @@
 
                     <EditText
                         android:id="@+id/edittext_username"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/EditTextRegular"
                         android:layout_marginTop="-2dp"
                         android:padding="10dp"
                         android:hint="@string/username_hint"
-                        android:textColorHint="@color/secondary_text"
-                        android:drawableStart="@mipmap/ic_action_person"
-                        android:background="@android:color/white"/>
+                        android:drawableStart="@mipmap/ic_action_person"/>
 
                     <View
                         android:id="@+id/view1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        style="@style/ViewStyle"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        android:layout_marginRight="4dp"/>
 
                     <EditText
                         android:id="@+id/edittext_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/EditTextRegular"
                         android:layout_marginTop="2dp"
                         android:padding="10dp"
                         android:hint="@string/password_hint"
-                        android:textColorHint="@color/secondary_text"
                         android:inputType="textPassword"
-                        android:drawableStart="@mipmap/ic_action_accounts"
-                        android:background="@android:color/white"/>
+                        android:drawableStart="@mipmap/ic_action_accounts"/>
 
                     <View
                         android:id="@+id/view2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        style="@style/ViewStyle"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/black"/>
+                        android:layout_marginRight="4dp"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -90,7 +80,7 @@
                             android:id="@+id/btn_sign_up"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/button_text_small"
+                            android:textSize="@dimen/button_text_medium"
                             android:textColor="@color/accent"
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_alignParentEnd="true"
@@ -103,6 +93,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:gravity="center">
 
                         <Button

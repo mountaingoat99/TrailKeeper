@@ -5,20 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_marginStart="8dp"
     android:layout_centerVertical="true">
 
     <TextView
         android:id="@+id/subscription_trails"
+        style="@style/TextViewLarge"
+        android:textColor="@color/secondary_text"
         android:text="Silver Lake Trails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="@dimen/text_size_large" />
+        android:layout_marginStart="8dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp">
 
         <Button
@@ -29,7 +32,7 @@
             android:minWidth="0dp"
             android:layout_marginEnd="8dp"
             android:text="@string/button_home"
-            android:textSize="@dimen/button_text_small"
+            android:textSize="@dimen/text_size_mini"
             android:textColor="@color/accent"
             style="?android:attr/borderlessButtonStyle"/>
 
@@ -41,7 +44,7 @@
             android:minWidth="0dp"
             android:layout_toEndOf="@+id/btn_trail_home"
             android:text="@string/unsubscribe"
-            android:textSize="@dimen/button_text_small"
+            android:textSize="@dimen/text_size_mini"
             android:textColor="@color/accent"
             style="?android:attr/borderlessButtonStyle"/>
 

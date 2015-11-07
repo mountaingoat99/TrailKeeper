@@ -26,15 +26,13 @@
 
             <TextView
                 android:id="@+id/txt_label_trail_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TextViewLarge"
                 android:text="Parkside Trails"
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:textAppearance="?android:attr/textAppearanceLarge"/>
+                android:layout_alignParentLeft="true"/>
 
             <ImageView
                 android:id="@+id/txt_label_trail_status"
@@ -58,66 +56,39 @@
 
             <TextView
                 android:id="@+id/txt_label_trail_city"
+                style="@style/TextViewMedium"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:textColor="@color/secondary_text"/>
 
             <TextView
                 android:id="@+id/txt_label_dash"
-                android:text=", "
+                style="@style/TextViewMedium"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:textColor="@color/secondary_text"
+                android:text=", "/>
 
             <TextView
                 android:id="@+id/txt_label_trail_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                style="@style/TextViewMedium"
+                android:textColor="@color/secondary_text"
+                android:layout_width="wrap_content"/>
 
             <TextView
                 android:id="@+id/txt_label_trail_distance"
+                style="@style/TextViewMedium"
+                android:textColor="@color/secondary_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:layout_marginLeft="16dp"/>
 
             <TextView
                 android:id="@+id/txt_label_miles"
-                android:text=" Miles"
+                style="@style/TextViewMedium"
+                android:textColor="@color/secondary_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text=" Miles"/>
 
         </LinearLayout>
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/txt_label_status"-->
-                <!--android:text="@string/trail_status_label"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_vertical"-->
-                <!--android:textAppearance="?android:attr/textAppearanceMedium"/>-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/txt_label_trail_status"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="8dp"-->
-                <!--android:layout_marginStart="8dp"-->
-                <!--android:src="@mipmap/red_closed"-->
-                <!--android:contentDescription="@string/trail_status"/>-->
-
-        <!--</LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"

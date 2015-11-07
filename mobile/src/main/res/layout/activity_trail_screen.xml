@@ -44,13 +44,11 @@
 
                         <TextView
                             android:id="@+id/txtTrail_name"
+                            style="@style/TextViewLarge"
                             android:text="Name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_marginRight="8dp"
-                            android:layout_gravity="center"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:layout_gravity="center"/>
 
                         <ImageView
                             android:id="@+id/txtTrail_status"
@@ -72,26 +70,23 @@
 
                         <TextView
                             android:id="@+id/txtTrail_city"
-                            android:text="Kenosha"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"/>
+                            style="@style/TextViewSmall"
+                            android:textColor="@color/secondary_text"
+                            android:text="Kenosha"/>
 
                         <TextView
                             android:id="@+id/comma"
+                            style="@style/TextViewSmall"
+                            android:textColor="@color/secondary_text"
                             android:text=", "
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:textAppearance="?android:attr/textAppearanceMedium"/>
+                            android:layout_marginRight="8dp"/>
 
                         <TextView
                             android:id="@+id/txtTrail_state"
-                            android:text="WI"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"/>
+                            style="@style/TextViewSmall"
+                            android:textColor="@color/secondary_text"
+                            android:text="WI"/>
 
                     </LinearLayout>
 
@@ -107,11 +102,10 @@
 
                         <TextView
                             android:id="@+id/txt_difficulty"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/TextViewSmall"
+                            android:textColor="@color/secondary_text"
                             android:layout_marginEnd="8dp"
                             android:layout_marginRight="8dp"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Skill Level: "/>
 
                         <ImageView
@@ -206,9 +200,7 @@
 
                     <TextView
                         android:text="@string/latest_comments"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"/>
+                        style="@style/TextViewLarge"/>
 
                     <View
                         android:layout_width="match_parent"

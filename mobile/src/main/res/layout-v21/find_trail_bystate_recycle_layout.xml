@@ -6,6 +6,9 @@
     android:id="@+id/container_inner_item"
     android:clickable="true"
     android:focusable="true"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:background="?android:attr/selectableItemBackground"
     android:layout_centerVertical="true" >
 
@@ -24,20 +27,19 @@
 
         <TextView
             android:id="@+id/state_list"
+            style="@style/TextViewLargest"
             android:text="Wisconsin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/image_expand"
+            android:layout_toRightOf="@+id/image_expand"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textSize="@dimen/text_size_large"
-            android:textColor="@color/primary_text"/>
+            android:paddingBottom="8dp"/>
 
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/find_trail_in_state_recycler_view"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

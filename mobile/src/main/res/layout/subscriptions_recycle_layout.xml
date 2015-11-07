@@ -11,12 +11,11 @@
 
     <TextView
         android:id="@+id/subscription_trails"
+        style="@style/TextViewLarge"
+        android:textColor="@color/secondary_text"
         android:text="Silver Lake Trails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:textSize="@dimen/text_size_large" />
+        android:layout_marginStart="8dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

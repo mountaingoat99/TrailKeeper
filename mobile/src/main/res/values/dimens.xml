@@ -7,6 +7,7 @@
     <dimen name="text_size_mini">16sp</dimen>
     <dimen name="text_size_small">18sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
+    <dimen name="text_size_mid_medium">22sp</dimen>
     <dimen name="text_size_large">26sp</dimen>
     <dimen name="button_text">16sp</dimen>
     <dimen name="button_text_tiny">12sp</dimen>

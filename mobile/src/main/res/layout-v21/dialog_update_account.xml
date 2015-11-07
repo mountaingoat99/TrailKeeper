@@ -14,36 +14,29 @@
 
         <TextView
             android:id="@+id/old_field"
+            style="@style/TextViewSmall"
             android:text="Old Field"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/edittext_change_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/EditTextRegular"
             android:padding="10dp"
             android:hint="New Field"
             android:inputType="textEmailAddress"
-            android:textColorHint="@color/secondary_text"
-            android:drawableStart="@mipmap/ic_action_email"
-            android:background="@android:color/white"/>
+            android:drawableStart="@mipmap/ic_action_email"/>
 
         <View
             android:id="@+id/view1"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
+            style="@style/ViewStyle"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@color/black"/>
+            android:layout_marginRight="16dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp">
 
             <Button
                 android:id="@+id/btn_cancel"
@@ -54,6 +47,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@+id/btn_update_field"
                 android:text="@string/sign_out_cancel"/>
 

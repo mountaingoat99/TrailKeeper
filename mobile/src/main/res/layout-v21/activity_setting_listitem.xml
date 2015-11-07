@@ -2,8 +2,5 @@
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/setting_textview"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_medium"
-        android:textColor="@color/primary_text"/>
+        style="@style/TextViewMedium"/>
 

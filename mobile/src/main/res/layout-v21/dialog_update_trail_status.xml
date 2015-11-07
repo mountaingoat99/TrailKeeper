@@ -8,35 +8,26 @@
 
     <TextView
         android:id="@+id/trail_status_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/TextViewMediumBold"
         android:layout_gravity="center_horizontal|start"
-        android:textColor="@color/primary_text"
-        android:textStyle="bold"
-        android:textSize="@dimen/text_size_medium"
         android:text="@string/set_trail_status"/>
 
     <EditText
         android:id="@+id/edit_text_pin"
+        style="@style/EditTextRegular"
         android:inputType="numberPassword"
         android:maxLength="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="4dp"
         android:hint="@string/trail_pin_hint"
-        android:textColorHint="@color/secondary_text"
-        android:drawableStart="@mipmap/ic_action_accounts"
-        android:background="@android:color/white"/>
+        android:drawableStart="@mipmap/ic_action_accounts"/>
 
     <View
         android:id="@+id/view1"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        style="@style/ViewStyle"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@color/black"/>
+        android:layout_marginRight="16dp"/>
 
 
     <LinearLayout
@@ -48,12 +39,13 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/status_open"
+            style="@style/RadioButtonSmallStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/radio_button_open"
             android:layout_marginBottom="8dp"
-            android:id="@+id/status_open"
             android:enabled="false"/>
 
         <ImageView
@@ -74,11 +66,12 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/status_closed"
+            style="@style/RadioButtonSmallStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/radio_button_closed"
-            android:id="@+id/status_closed"
             android:layout_marginBottom="8dp"
             android:enabled="false"/>
 
@@ -100,11 +93,12 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/status_unknown"
+            style="@style/RadioButtonSmallStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/radio_button_unknown"
-            android:id="@+id/status_unknown"
             android:layout_marginBottom="8dp"
             android:enabled="false"/>
 

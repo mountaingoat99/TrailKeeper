@@ -50,13 +50,11 @@
                         android:layout_height="match_parent">
 
                         <RadioButton android:id="@+id/radio_imperial"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/RadioButtonStyle"
                             android:text="@string/imperial" />
 
                         <RadioButton android:id="@+id/radio_metric"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/RadioButtonStyle"
                             android:text="@string/metric" />
 
                     </RadioGroup>

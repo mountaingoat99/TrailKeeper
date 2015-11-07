@@ -16,13 +16,12 @@
 
         <TextView
             android:id="@+id/trails_in_state_list"
+            style="@style/TextViewMedium"
+            android:textColor="@color/secondary_text"
             android:text="Petrified Springs Park"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:textSize="@dimen/text_size_medium" />
+            android:layout_marginLeft="8dp"/>
 
         <ImageView
             android:id="@+id/txt_label_trail_status"
@@ -42,23 +41,21 @@
 
         <TextView
             android:id="@+id/trails_in_state_cities"
+            style="@style/TextViewSmall"
+            android:textColor="@color/secondary_text"
             android:text="Kenosha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:textSize="@dimen/text_size_mini" />
+            android:layout_marginLeft="16dp"/>
 
         <TextView
             android:id="@+id/trails_distance"
+            style="@style/TextViewSmall"
+            android:textColor="@color/secondary_text"
             android:text="15 Miles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/trails_in_state_cities"
             android:layout_toRightOf="@+id/trails_in_state_cities"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:textSize="@dimen/text_size_mini" />
+            android:layout_marginLeft="16dp"/>
 
     </RelativeLayout>
 

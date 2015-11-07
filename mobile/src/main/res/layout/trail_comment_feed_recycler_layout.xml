@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container_inner_item"
     android:layout_width="match_parent"
@@ -7,29 +7,25 @@
     android:orientation="vertical"
     android:layout_margin="8dp"
     android:layout_centerVertical="true"
-    tools:showIn="@layout/item_recycler_view"
     android:clickable="true"
     android:focusable="true"
     android:background="?android:attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/txt_trail_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        style="@style/TextViewSmall"
+        android:textColor="@color/secondary_text"/>
 
     <TextView
         android:id="@+id/txt_comment_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        style="@style/TextViewSmall"
+        android:textColor="@color/secondary_text"/>
 
     <TextView
         android:id="@+id/txt_trail_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/TextViewSmall"
+        android:textColor="@color/secondary_text"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_marginLeft="8dp"/>
 
 </LinearLayout>
