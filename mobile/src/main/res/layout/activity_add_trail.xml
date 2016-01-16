@@ -165,8 +165,10 @@
                                     android:layout_marginTop="2dp"
                                     android:paddingTop="10dp"
                                     android:paddingBottom="5dp"
+                                    android:paddingLeft="10dp"
+                                    android:paddingRight="10dp"
                                     android:hint="Length"
-                                    android:inputType="textCapWords"/>
+                                    android:inputType="numberDecimal"/>
 
                                 <View
                                     style="@style/ViewStyle"

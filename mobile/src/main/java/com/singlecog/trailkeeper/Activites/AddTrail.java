@@ -1,12 +1,15 @@
 package com.singlecog.trailkeeper.Activites;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -49,6 +52,7 @@ import java.util.Map;
 
 import AsyncAdapters.AsyncTrailLocations;
 import Helpers.AlertDialogHelper;
+import Helpers.CustomTextWatcher;
 import Helpers.GeoLocationHelper;
 import Helpers.StateListHelper;
 import models.ModelTrails;
@@ -89,6 +93,7 @@ public class AddTrail extends BaseActivity implements
     private List<ModelTrails> trails;
     private LatLng home;
     protected GoogleApiClient mGoogleApiClient;
+    private boolean globalUnitDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +119,18 @@ public class AddTrail extends BaseActivity implements
         setSkillLevelListeners();
         getCountryList();
         getStateList();
-        //setCreateMarkerListener();
+        loadSavedPreferences();
+        if (globalUnitDefault) {
+            editLength.setHint("Length - Miles");
+        } else {
+            editLength.setHint("Length - KM");
+        }
+        editLength.setRawInputType(InputType.TYPE_CLASS_NUMBER
+                | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        editLength.addTextChangedListener(new CustomTextWatcher(
+                editLength));
+
     }
 
     //region setUp Activity
@@ -299,6 +315,11 @@ public class AddTrail extends BaseActivity implements
         });
     }
 
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        globalUnitDefault = sp.getBoolean("Imperial", true);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -318,7 +339,15 @@ public class AddTrail extends BaseActivity implements
         newTrail.setTrailState(editTextState.getText().toString().trim());
         newTrail.setTrailCountry(editTextCountry.getText().toString().trim());
         if (editLength.getText().length() > 0) {
-            newTrail.setLength(Double.valueOf(editLength.getText().toString().trim()));
+            if (!globalUnitDefault) {
+                newTrail.setLength(Double.valueOf(editLength.getText().toString().trim()));
+            } else {
+                // if metric need to convert the value first
+                double length = Double.valueOf(editLength.getText().toString().trim());
+                length = length * 1.6;
+                newTrail.setLength(length);
+            }
+
         }
         newTrail.setIsEasy(isEasy);
         newTrail.setIsMedium(isMedium);
