@@ -16,7 +16,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.singlecog.trailkeeper.R;
 
 
@@ -156,6 +159,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
 
     public void DeleteSuccessOrFail(boolean valid, String failMessage) {
         if (valid) {
+            RemoveAllChannels();
             createAccountHelper = new CreateAccountHelper(context, AccountSettings.this);
             createAccountHelper.CreateAnonUser();
         } else {
@@ -186,6 +190,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
             public void onClick(View v) {
                 if (connectionDetector.isConnectingToInternet()) {
                     ParseUser.logOut();
+                    RemoveAllChannels();
                     createAccountHelper = new CreateAccountHelper(context, AccountSettings.this);
                     createAccountHelper.CreateAnonUser();
                     StartSignOutDialog();
@@ -216,6 +221,12 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
         } else {
             Snackbar.make(v, failMessage, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private void RemoveAllChannels() {
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.remove("channels");
+        installation.saveInBackground();
     }
     //endregion
 }
