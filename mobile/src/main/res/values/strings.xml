@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">TrailKeeper</string>
 
+    <!-- google admob test ad -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <!-- google admob production ad
+    <string name="banner_ad_unit_id">ca-app-pub-9150360740164586/8069526951</string> -->
+
+    <!-- test devices MotoX-->
+    <string name="TEST_DEVICE_ID">ABECD4A0D0276144E5A4D2F92512946D</string>
+
     <string name="action_settings">Settings</string>
     <string name="title_activity_find_trail">Find Trail</string>
     <string name="title_activity_trail_admin">Trail Admin</string>

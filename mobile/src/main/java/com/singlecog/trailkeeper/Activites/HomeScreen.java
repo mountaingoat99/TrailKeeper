@@ -32,6 +32,9 @@ import Helpers.GeoLocationHelper;
 import RecyclerAdapters.RecyclerViewHomeScreenAdapter;
 import models.ModelTrails;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import static android.support.v7.widget.RecyclerView.*;
 
 public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -47,6 +50,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     private boolean firstTimeLoad = true;
     //global unit boolean, shared preference imperial or not by Anatoliy
     private boolean globalUnitDefault;
+    private AdView adView;
 
     //@TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -55,6 +59,19 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         setContentView(R.layout.activity_home_screen);
         mSwipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_home_screen);
         super.onCreateDrawer(mSwipeLayout, this);
+
+        // Google AdMob
+        adView = (AdView) findViewById(R.id.adView);
+        // comment out for testing
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        // Comment out for Production
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("TEST_DEVICE_ID")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                //.addTestDevice("9C75E9349CF38EF5EB2C6C6100E96A7E") // nexus 7
+                .build();
+        // always call this
+        adView.loadAd(adRequest);
 
         Bundle bundle;
         if (savedInstanceState != null)
@@ -302,6 +319,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
     @Override
     protected void onResume() {
         super.onResume();
+        adView.resume();
         if (!TrailKeeperApplication.GetIsGPSEnabled()) {
             TrailKeeperApplication tk = new TrailKeeperApplication(context);
             tk.checkIfGPSIsEnabled();
@@ -315,6 +333,7 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
 
     @Override
     protected void onPause() {
+        adView.pause();
         super.onPause();
         if (TrailKeeperApplication.mGoogleApiClient.isConnected()) {
             TrailKeeperApplication.mGoogleApiClient.disconnect();
