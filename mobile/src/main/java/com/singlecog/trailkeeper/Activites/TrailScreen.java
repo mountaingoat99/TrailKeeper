@@ -27,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -75,8 +77,22 @@ public class TrailScreen extends BaseActivity {
     private ModelTrails modelTrails;
     private final Context context = this;
     private RadioButton rdoOpen;
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
+    }
+
     private RadioButton rdoClosed;
     private RadioButton rdoUnknown;
+    private AdView adView;
 
     //endregion
 
@@ -88,6 +104,19 @@ public class TrailScreen extends BaseActivity {
         Log.i(TAG, "Starting OnCreate Trail Screen");
         v = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(v, this);
+
+        // Google AdMob
+        adView = (AdView) findViewById(R.id.adView);
+        // comment out for testing
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        // Comment out for Production
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("TEST_DEVICE_ID")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                //.addTestDevice("9C75E9349CF38EF5EB2C6C6100E96A7E") // nexus 7
+                .build();
+        // always call this
+        adView.loadAd(adRequest);
 
         if (!TrailKeeperApplication.isEmailVerified()) {
             Log.i(TAG, "User Not email Verified, refreshing them just in case");
