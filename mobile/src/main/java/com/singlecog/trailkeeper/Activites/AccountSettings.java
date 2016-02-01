@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.util.Log;
@@ -118,6 +119,9 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
                 Intent intentGlobalSetup = new Intent(context, GlobalUnit.class);
                 startActivity(intentGlobalSetup);
                 break;
+            case 6:  // Privacy Policy
+                OpenPrivacyPolicy();
+                break;
         }
     }
     //endregion
@@ -227,6 +231,13 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.remove("channels");
         installation.saveInBackground();
+    }
+
+    private void OpenPrivacyPolicy() {
+        String url = getResources().getString(R.string.PRIVACY_POLICY_LINK);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
     //endregion
 }

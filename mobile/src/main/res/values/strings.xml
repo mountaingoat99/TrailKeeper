@@ -9,6 +9,9 @@
     <!-- test devices MotoX-->
     <string name="TEST_DEVICE_ID">ABECD4A0D0276144E5A4D2F92512946D</string>
 
+    <!-- Privacy Policy -->
+    <string name="PRIVACY_POLICY_LINK">https://www.iubenda.com/privacy-policy/7787521</string>
+
     <string name="action_settings">Settings</string>
     <string name="title_activity_find_trail">Find Trail</string>
     <string name="title_activity_trail_admin">Trail Admin</string>
