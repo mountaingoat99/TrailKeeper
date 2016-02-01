@@ -77,19 +77,6 @@ public class TrailScreen extends BaseActivity {
     private ModelTrails modelTrails;
     private final Context context = this;
     private RadioButton rdoOpen;
-
-    @Override
-    protected void onPause() {
-        adView.pause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adView.resume();
-    }
-
     private RadioButton rdoClosed;
     private RadioButton rdoUnknown;
     private AdView adView;
@@ -161,6 +148,18 @@ public class TrailScreen extends BaseActivity {
         SetUpCommentButtonClick();
         SetUpAllCommentButtonClick();
         showTrailDifficulty();
+    }
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
     }
 
     private void CallTrailCommentsAsync() {
