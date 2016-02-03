@@ -21,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.singlecog.trailkeeper.R;
@@ -54,6 +56,7 @@ public class AllComments extends BaseActivity {
     private FloatingActionButton fabAll;
     private FloatingActionButton fabSearch;
     private View snackbarView;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,20 @@ public class AllComments extends BaseActivity {
         setContentView(R.layout.activity_all_comments);
         snackbarView = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(snackbarView, this);
+
+        // Google AdMob
+        adView = (AdView) findViewById(R.id.adView);
+        // comment out for testing
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        // Comment out for Production
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("TEST_DEVICE_ID")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                //.addTestDevice("9C75E9349CF38EF5EB2C6C6100E96A7E") // nexus 7
+                .build();
+        // always call this
+        adView.loadAd(adRequest);
+
         SetUpFabs();
 
         Bundle b = getIntent().getExtras();
@@ -88,6 +105,18 @@ public class AllComments extends BaseActivity {
         setCommentRecyclerView();
         SetUpCommentView();
         SetUpOnClickForFab();
+    }
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
     }
 
     //region Activity Setup
