@@ -17,6 +17,9 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.singlecog.trailkeeper.R;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ public class FindTrail extends BaseActivity {
     private Dialog searchDialog;
     //global unit boolean, shared preference imperial or not by Anatoliy
     private boolean globalUnitDefault;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,20 @@ public class FindTrail extends BaseActivity {
         setContentView(R.layout.activity_find_trail);
         view = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(view, this);
+
+        // Google AdMob
+        adView = (AdView) findViewById(R.id.adView);
+        // comment out for testing
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        // Comment out for Production
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("TEST_DEVICE_ID")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                //.addTestDevice("9C75E9349CF38EF5EB2C6C6100E96A7E") // nexus 7
+                .build();
+        // always call this
+        adView.loadAd(adRequest);
+
         btnSearch = (FloatingActionButton)findViewById(R.id.search_fab);
 
         trailNames = ModelTrails.GetTrailNames();
@@ -55,6 +73,18 @@ public class FindTrail extends BaseActivity {
         loadSavedPreferences();
     }
 
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
