@@ -39,7 +39,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="50dp"
                     android:divider="@android:color/transparent"
-                    android:dividerHeight="20.0sp"
+                    android:dividerHeight="15.0sp"
                     android:clickable="true"
                     android:drawSelectorOnTop="true">
                 </ListView>
