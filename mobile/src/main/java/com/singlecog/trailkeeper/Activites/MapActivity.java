@@ -4,12 +4,15 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -159,6 +162,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback,
     // this gets called on the getMapAsync method
     @Override
     public void onMapReady(GoogleMap googleMap) {
+//        if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+//
+//            ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
+//                    LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION );
+//        }
+
         googleMap.setMyLocationEnabled(true);
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 

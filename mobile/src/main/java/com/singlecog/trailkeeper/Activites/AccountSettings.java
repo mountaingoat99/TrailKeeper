@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
@@ -39,6 +41,7 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
     private View v;
     private CreateAccountHelper createAccountHelper;
     private ConnectionDetector connectionDetector;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +49,38 @@ public class AccountSettings extends BaseActivity implements AdapterView.OnItemC
         setContentView(R.layout.activity_account_settings);
         v = findViewById(R.id.linearlayout_root_main);
         super.onCreateDrawer(v, this);
+
+        // Google AdMob
+        adView = (AdView) findViewById(R.id.adView);
+        // comment out for testing
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        // Comment out for Production
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("TEST_DEVICE_ID")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                //.addTestDevice("9C75E9349CF38EF5EB2C6C6100E96A7E") // nexus 7
+                .build();
+        // always call this
+        adView.loadAd(adRequest);
+
         connectionDetector = new ConnectionDetector(context);
         isAnonUser = CreateAccountHelper.IsAnonUser();
         settingsList = (ListView)findViewById(R.id.listViewAccountSettings);
         CheckUserName();
         populateListView();
         settingsList.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
     }
 
     @Override
