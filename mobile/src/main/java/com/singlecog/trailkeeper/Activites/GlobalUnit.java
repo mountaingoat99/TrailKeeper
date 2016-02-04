@@ -63,7 +63,18 @@ public class GlobalUnit extends BaseActivity {
         } else {
             rBtnMetric.toggle();
         }
+    }
 
+    @Override
+    protected void onPause() {
+        adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adView.resume();
     }
 
     private void loadSavedPreferences() {
