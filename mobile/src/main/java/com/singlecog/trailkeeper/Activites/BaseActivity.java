@@ -3,7 +3,6 @@ package com.singlecog.trailkeeper.Activites;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -13,13 +12,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.parse.ParseUser;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.singlecog.trailkeeper.R;
 
 import Helpers.CreateAccountHelper;
@@ -44,15 +41,15 @@ public class BaseActivity extends AppCompatActivity {
         setUpDrawer();
 
         // sets the status bar color on API's between 19 and > Lollipop
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // create our manager instance after the content view is set
-            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
-            // enable status bar tint
-            tintManager.setStatusBarTintEnabled(true);
-            // enable navigation bar tint
-            tintManager.setTintColor(getResources().getColor(R.color.primary_dark));
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            // create our manager instance after the content view is set
+//            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
+//            // enable status bar tint
+//            tintManager.setStatusBarTintEnabled(true);
+//            // enable navigation bar tint
+//            tintManager.setTintColor(getResources().getColor(R.color.primary_dark));
+//        }
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
