@@ -63,13 +63,13 @@ public class HomeScreen extends BaseActivity implements SwipeRefreshLayout.OnRef
         // Google AdMob
         adView = (AdView) findViewById(R.id.adView);
         // comment out for testing
-        //AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         // Comment out for Production
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("TEST_DEVICE_ID")
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                //.addTestDevice("9C75E9349CF38EF5EB2C6C6100E96A7E") // nexus 7
-                .build();
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("TEST_DEVICE_ID")
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+//                //.addTestDevice("9C75E9349CF38EF5EB2C6C6100E96A7E") // nexus 7
+//                .build();
         // always call this
         adView.loadAd(adRequest);
 
