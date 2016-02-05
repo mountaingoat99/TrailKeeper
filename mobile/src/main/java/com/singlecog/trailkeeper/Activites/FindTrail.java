@@ -65,12 +65,14 @@ public class FindTrail extends BaseActivity {
 
         trailNames = ModelTrails.GetTrailNames();
 
+        //by Anatoliy
+        loadSavedPreferences();
+
         setUpdateRecyclerView();
         states = ModelTrails.GetTrailStates();
         SetUpStateRecyclerView();
         SetUpOnClickForFab();
-        //by Anatoliy
-        loadSavedPreferences();
+
     }
 
     @Override
