@@ -1,23 +1,35 @@
 package RecyclerAdapters;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.parse.ParseGeoPoint;
+import com.singlecog.trailkeeper.Activites.MapActivity;
 import com.singlecog.trailkeeper.Activites.TrailKeeperApplication;
+import com.singlecog.trailkeeper.Activites.TrailMap;
 import com.singlecog.trailkeeper.Activites.TrailScreen;
+import com.singlecog.trailkeeper.BuildConfig;
 import com.singlecog.trailkeeper.R;
 
 import java.util.List;
 
+import Helpers.AlertDialogHelper;
 import Helpers.GeoLocationHelper;
 import models.ModelTrails;
 
@@ -63,8 +75,10 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(final ListItemViewHolder viewHolder, int position) {
-        ModelTrails model = items.get(position);
+        final ModelTrails model = items.get(position);
         viewHolder.trails.setText(model.getTrailName());
+        final String trailName = model.getTrailName();
+
         viewHolder.cities.setText(model.getTrailCity());
         viewHolder.itemView.setActivated(selectedItems.get(position, false));
 
@@ -88,10 +102,66 @@ public class RecylerViewFindTrailInState extends RecyclerView.Adapter
         viewHolder.trailTouchPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String objectId = GetObjectID(viewHolder);
-                Intent intent = new Intent(context, TrailScreen.class);
-                intent.putExtra("objectID", objectId);
-                v.getContext().startActivity(intent);
+                final String objectId = GetObjectID(viewHolder);
+                // lets add a dialog here instead letting the user either got to the trail screen
+                // map, or subscribe to the trail
+                final Dialog chooseDialog = new Dialog(context);
+                chooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                chooseDialog.setContentView(R.layout.dialog_findtrail_options);
+                Button btnTrailHome = (Button)chooseDialog.findViewById(R.id.btn_trailHome);
+                Button btnTrailMap = (Button)chooseDialog.findViewById(R.id.btn_TrailMap);
+                Button btnSubscribe = (Button)chooseDialog.findViewById(R.id.btn_subscribeToTrail);
+                Button btnCancel = (Button)chooseDialog.findViewById(R.id.btn_cancel);
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chooseDialog.dismiss();
+                    }
+                });
+
+                btnTrailHome.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, TrailScreen.class);
+                        intent.putExtra("objectID", objectId);
+                        v.getContext().startActivity(intent);
+                        chooseDialog.dismiss();
+                    }
+                });
+
+                btnTrailMap.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, MapActivity.class);
+                        Bundle args = new Bundle();
+                        ParseGeoPoint point = model.GeoLocation;
+                        final LatLng geoPoint = new LatLng(point.getLatitude(), point.getLongitude());
+                        args.putParcelable("geoPoint", geoPoint);
+                        args.putString("trailName", model.getTrailName());
+                        args.putInt("trailStatus", model.getTrailStatus());
+                        args.putString("objectID", objectId);
+                        intent.putExtra("bundle", args);
+                        v.getContext().startActivity(intent);
+                        chooseDialog.dismiss();
+                    }
+                });
+
+                btnSubscribe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chooseDialog.dismiss();
+                        ModelTrails modelTrails = new ModelTrails();
+                        modelTrails.SubscribeToChannel(trailName, 0);
+                        AlertDialogHelper.showCustomAlertDialog(context, trailName, "You will now receive notifications for " + trailName);
+                    }
+                });
+
+                chooseDialog.show();
+
+                //Intent intent = new Intent(context, TrailScreen.class);
+                //intent.putExtra("objectID", objectId);
+                //v.getContext().startActivity(intent);
             }
         });
     }
