@@ -174,9 +174,9 @@ public class BaseActivity extends AppCompatActivity {
                                 //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 //break;
                             case 5:   // Subscriptions
-                                if (isAnonUser || ParseUser.getCurrentUser() == null) {
-                                    Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
-                                } else {
+                                //if (isAnonUser || ParseUser.getCurrentUser() == null) {
+                                    //Snackbar.make(layoutView, R.string.snackbar_notifications_signin, Snackbar.LENGTH_LONG).show();
+                                //} else {
                                     if (PushNotificationHelper.GetUserSubscriptions() != null && PushNotificationHelper.GetUserSubscriptions().size() > 0) {
                                         if (!activityName.equalsIgnoreCase("Activites.Notifications")) {
                                             intent = new Intent(BaseActivity.this, Notifications.class);
@@ -187,7 +187,7 @@ public class BaseActivity extends AppCompatActivity {
                                     } else {
                                         Snackbar.make(layoutView, "You Have No Subscriptions", Snackbar.LENGTH_LONG).show();
                                     }
-                                }
+                                //}
                                 break;
                             case 6:   // Account Settings
                                 if (!activityName.equalsIgnoreCase("Activites.AccountSettings")) {

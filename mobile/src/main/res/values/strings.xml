@@ -162,6 +162,9 @@
     <string name="imperial">Imperial</string>
     <string name="metric">Metric</string>
     <string name="save">Save</string>
+    <string name="trail_home">Trail Home</string>
+    <string name="trail_location">Trail Location</string>
+    <string name="subscribe_to_trail">Subscribe to Trail</string>
 
 
 </resources>

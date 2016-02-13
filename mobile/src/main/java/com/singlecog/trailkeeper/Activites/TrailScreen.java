@@ -211,15 +211,15 @@ public class TrailScreen extends BaseActivity {
         btnSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isAnonUser) {
-                    if (TrailKeeperApplication.isEmailVerified()) {
+                //if (!isAnonUser) {
+                    //if (TrailKeeperApplication.isEmailVerified()) {
                         OpenSubscribeDialog();
-                    } else {
-                        AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Subscribing To Notifications, Or Refresh The Home Screen If You've Already Done So");
-                    }
-                } else {
-                    AlertDialogHelper.showCustomAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Subscribing to Notifications.");
-                }
+                    //} else {
+                        //AlertDialogHelper.showCustomAlertDialog(context, "Verify Email!", "Please Verify Your Email Before Subscribing To Notifications, Or Refresh The Home Screen If You've Already Done So");
+                    //}
+                //} else {
+                    //AlertDialogHelper.showCustomAlertDialog(context, "No User Account!", "Please Create an Account in Settings Before Subscribing to Notifications.");
+                //}
             }
         });
     }
